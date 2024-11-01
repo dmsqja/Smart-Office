@@ -1,0 +1,20 @@
+# application.yml
+spring:
+  application:
+    name: SmartOffice
+  profiles:
+    active: dev
+  config:
+    import: optional:file:.env[.properties]
+
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+
+#
+#logging:
+#  level:
+#    root: INFO
