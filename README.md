@@ -1,3 +1,4 @@
+[![Docker Image CI](https://github.com/Tae4an/Smart-Office/actions/workflows/ci.yml/badge.svg)](https://github.com/Tae4an/Smart-Office/actions/workflows/ci.yml)
 # 🚀 Smart Office Solution
 
 혁신적인 업무 환경의 미래를 위한 올인원 스마트 오피스 솔루션
