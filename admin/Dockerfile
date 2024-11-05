@@ -12,7 +12,7 @@ RUN mv /usr/local/tomcat/webapps /usr/local/tomcat/webapps2 && \
     mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps
 
 # WAR 파일을 Tomcat의 webapps 디렉토리에 복사
-ADD ${WAR_FILE} /usr/local/tomcat/webapps/service-springboot.war
+COPY ${WAR_FILE} /usr/local/tomcat/webapps/admin-springboot.war
 
 # 컨테이너 시작 시 실행할 명령 (옵션)
 CMD ["catalina.sh", "run"]

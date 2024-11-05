@@ -1,19 +1,33 @@
-# application-dev.yml
 server:
-  port: 80
+  port: 81
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
 
 spring:
+  mvc:
+    view:
+      prefix: /views/
+      suffix: .jsp
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_DEV_HOST}:${DB_DEV_PORT}/${DB_DEV_NAME}?characterEncoding=utf8
-    username: ${DB_DEV_USER}
-    password: ${DB_DEV_PW}
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: ENC(y4u+tyociJ1VA/RUxxsyEr3tf8ZEKfbUDuPZJnv9RJw3uiWi/YZAuRMl4k0ct+ZmhJmBwCjKXNlpZ9+FjzFlAb5rE1iba73rOo7BPp6PnA2DElgYbFbFBQ==)
+    username: ENC(koSJw3jZ7qC1qxXvJpmu4w==)
+    password: ENC(Z8QnRjbYd8zc+DI0oKHi9Q==)
 
-  # JPA 설정
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+mybatis:
+  type-aliases-package: com.office.app.dto
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+  level:
+    root: info
+
+app:
+  dir:
+    imgdir: file:///C:/SmartOffice/imgs/  # 화면 출력 용
+    uploadimgdir: C:/SmartOffice/imgs/    # 파일 Write 용
+    logdir: file:///C:/SmartOffice/logs/
+    readLogDir: C:/SmartOffice/logs/
