@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.office.app.repository.CarRepository">
+
+    <select id="selectOne" parameterType="int" resultType="carDto">
+        SELECT * FROM car WHERE car_id = #{carId}
+    </select>
+
+    <select id="select" resultType="carDto">
+        SELECT * FROM car
+    </select>
+
+    <insert id="insert" parameterType="carDto">
+        INSERT INTO car VALUES (#{carId}, #{carName}, #{carPrice}, #{carColor}, #{carType}, #{carImg}, #{productionDate})
+    </insert>
+
+    <update id="update" parameterType="carDto">
+        UPDATE car
+        SET car_name = #{carName},
+            car_price = #{carPrice},
+            car_color = #{carColor},
+            car_type = #{carType},
+            car_img = #{carImg},
+            production_date = #{productionDate}
+        WHERE car_id = #{carId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM car WHERE car_id = #{carId}
+    </delete>
+
+    <select id="findByName" resultType="CarDto" parameterType="String">
+        SELECT * FROM car WHERE car_name LIKE CONCAT('%', #{carName}, '%')
+    </select>
+
+    <select id="searchCars" parameterType="String" resultType="CarDto">
+        SELECT * FROM car
+        <where>
+            <if test="keyword != null and keyword != ''">
+                car_name LIKE CONCAT('%', #{keyword}, '%')
+                OR car_price  <![CDATA[<=]]> #{keyword}
+                OR car_color LIKE CONCAT('%', #{keyword}, '%')
+                OR car_type LIKE CONCAT('%', #{keyword}, '%')
+                OR DATE_FORMAT(production_date, '%Y년-%m월-%d일') LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY production_date DESC
+    </select>
+</mapper>
