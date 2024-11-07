@@ -26,8 +26,13 @@ mybatis:
     root: info
 
 app:
+  url:
+    server-url: ${SERVER_URL}
+
   dir:
     imgdir: file:///C:/SmartOffice/imgs/  # 화면 출력 용
     uploadimgdir: C:/SmartOffice/imgs/    # 파일 Write 용
     logdir: file:///C:/SmartOffice/logs/
     readLogDir: C:/SmartOffice/logs/
+  key:
+    algo: PBEWithMD5AndDES

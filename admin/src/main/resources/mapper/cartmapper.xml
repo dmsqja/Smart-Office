@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.office.app.repository.CartRepository">
+
+    <!--    <resultMap id="cartResultMap" type="CartDto">-->
+    <!--        <id column="cart_user_id" property="cartUserId"/>-->
+    <!--        <id column="cart_item_id" property="cartItemId"/>-->
+    <!--        <result column="cart_count" property="cartCount"/>-->
+    <!--        <result column="cart_reg_date" property="cartRegDate"/>-->
+    <!--        <association property="itemdto" javaType="ItemDto">-->
+    <!--            <id column="item_id" property="itemId"/>-->
+    <!--            <result column="item_name" property="itemName"/>-->
+    <!--            <result column="item_price" property="itemPrice"/>-->
+    <!--            <result column="img_name" property="imgName"/>-->
+    <!--            <result column="reg_date" property="regDate"/>-->
+    <!--            <result column="update_date" property="updateDate"/>-->
+    <!--        </association>-->
+    <!--    </resultMap>-->
+    <select id="findByName" resultType="cartDto" parameterType="String">
+        select
+            cust_id,
+            item_id,
+            count,
+            reg_date,
+            item_name,
+            item_price,
+            img_name
+        from cart as c
+                 inner join item i on c.item_id = i.item_id
+        where i.item_name LIKE CONCAT('%', #{itemName}, '%')
+          and c.cust_id = #{custId}
+    </select>
+
+    <select id="selectOne" parameterType="cartDto" resultType="CartDto">
+        SELECT cust_id,
+               c.item_id,
+               count,
+               c.reg_date,
+               item_name,
+               item_price,
+               img_name
+        FROM cart c
+            inner join item i on c.item_id = i.item_id
+        WHERE cust_id = #{custId}
+          and c.item_id = #{itemId}
+
+    </select>
+    <select id="select" resultType="cartDto" fetchSize="100">
+        select
+            cust_id,
+            c.item_id,
+            count,
+            c.reg_date,
+            item_name,
+            item_price,
+            img_name
+        from cart as c
+                 inner join item i on c.item_id = i.item_id
+    </select>
+    <insert id="insert" parameterType="cartDto">
+        insert into cart values (#{custId},#{itemId},#{count},SYSDATE() )
+            on duplicate key update count= count+#{count}
+    </insert>
+    <update id="update" parameterType="cartDto">
+        UPDATE cart SET count=#{count} WHERE cust_id=#{custId}
+                                                  and  item_id=#{itemId}
+    </update>
+    <delete id="delete" parameterType="cartDto">
+        DELETE FROM cart WHERE cust_id=#{custId}
+                           and  item_id=#{itemId}
+    </delete>
+</mapper>
