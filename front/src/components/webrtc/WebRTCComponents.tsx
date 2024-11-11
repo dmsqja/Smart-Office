@@ -1,4 +1,4 @@
-// WebRTCComponents.tsx
+// WebRTCComponent.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { checkWebRTCSupport } from '../../utils/webrtc.ts';
 import '../../styles/webrtc.css';
@@ -28,154 +28,6 @@ const WebRTCComponent: React.FC<WebRTCComponentProps> = ({ roomId }) => {
       }
     ]
   };
-
-  useEffect(() => {
-    const init = async () => {
-      try {
-        console.log('Checking WebRTC support...');
-        const support = checkWebRTCSupport();
-        
-        if (!support.webRTC || !support.getUserMedia) {
-          throw new Error('Your browser does not support required WebRTC features');
-        }
-
-        console.log('Initializing WebRTC...');
-        
-        // WebSocket 연결
-        websocket.current = new WebSocket('ws://210.119.34.236:80/signal');
-        
-        websocket.current.onopen = () => {
-          console.log('WebSocket connected');
-          sendSignalingMessage({
-            type: 'join',
-            roomId
-          });
-        };
-
-        // 미디어 스트림 가져오기
-        let stream: MediaStream;
-        try {
-          stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              width: { ideal: 1280 },
-              height: { ideal: 720 }
-            },
-            audio: true
-          });
-          console.log('Local media stream obtained');
-        } catch (mediaError) {
-          console.error('Media access error:', mediaError);
-          throw new Error('Unable to access camera and microphone');
-        }
-
-        setLocalStream(stream);
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-        }
-
-        // WebRTC Peer Connection 초기화
-        peerConnection.current = new RTCPeerConnection(configuration);
-        console.log('PeerConnection created with config:', configuration);
-
-        // 로컬 스트림 추가
-        stream.getTracks().forEach(track => {
-          if (peerConnection.current) {
-            console.log('Adding track to peer connection:', track.kind);
-            peerConnection.current.addTrack(track, stream);
-          }
-        });
-
-        // 원격 스트림 처리
-        peerConnection.current.ontrack = (event) => {
-          console.log('Received remote track:', event.track.kind);
-          if (remoteVideoRef.current && event.streams[0]) {
-            console.log('Setting remote stream');
-            remoteVideoRef.current.srcObject = event.streams[0];
-            setRemoteStream(event.streams[0]);
-          }
-        };
-
-        // ICE 후보 처리
-        peerConnection.current.onicecandidate = (event) => {
-          if (event.candidate) {
-            console.log('Sending ICE candidate');
-            sendSignalingMessage({
-              type: 'ice-candidate',
-              data: event.candidate,
-              roomId
-            });
-          }
-        };
-
-        // 연결 상태 모니터링
-        peerConnection.current.onconnectionstatechange = () => {
-          console.log('Connection state changed:', peerConnection.current?.connectionState);
-          setIsConnected(peerConnection.current?.connectionState === 'connected');
-        };
-
-        peerConnection.current.oniceconnectionstatechange = () => {
-          console.log('ICE connection state:', peerConnection.current?.iceConnectionState);
-        };
-
-        // WebSocket 메시지 처리
-        websocket.current.onmessage = async (event) => {
-          try {
-            const message = JSON.parse(event.data);
-            console.log('Received message:', message.type);
-
-            switch (message.type) {
-              case 'offer':
-                await handleOffer(message.data);
-                break;
-              case 'answer':
-                await handleAnswer(message.data);
-                break;
-              case 'ice-candidate':
-                await handleIceCandidate(message.data);
-                break;
-              default:
-                console.log('Unknown message type:', message.type);
-            }
-          } catch (error) {
-            console.error('Error handling WebSocket message:', error);
-          }
-        };
-
-        websocket.current.onclose = () => {
-          console.log('WebSocket disconnected');
-          setIsConnected(false);
-        };
-
-        websocket.current.onerror = (error) => {
-          console.error('WebSocket error:', error);
-          setInitError('WebSocket connection failed');
-        };
-
-      } catch (error) {
-        console.error('Error initializing WebRTC:', error);
-        setInitError(error.message);
-      }
-    };
-
-    init();
-
-    // Cleanup
-    return () => {
-      console.log('Cleaning up...');
-      localStream?.getTracks().forEach(track => {
-        console.log('Stopping track:', track.kind);
-        track.stop();
-      });
-      if (peerConnection.current) {
-        console.log('Closing peer connection');
-        peerConnection.current.close();
-      }
-      if (websocket.current) {
-        console.log('Closing WebSocket');
-        websocket.current.close();
-      }
-    };
-  }, [roomId]);
 
   const sendSignalingMessage = (message: any) => {
     if (websocket.current?.readyState === WebSocket.OPEN) {
@@ -265,6 +117,141 @@ const WebRTCComponent: React.FC<WebRTCComponentProps> = ({ roomId }) => {
       console.error('Error ending call:', error);
     }
   };
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        console.log('Checking WebRTC support...');
+        const support = checkWebRTCSupport();
+        
+        if (!support.webRTC || !support.getUserMedia) {
+          throw new Error('Your browser does not support required WebRTC features');
+        }
+
+        console.log('Initializing WebRTC...');
+        
+        websocket.current = new WebSocket('ws://210.119.34.236:80/signal');
+        
+        websocket.current.onopen = () => {
+          console.log('WebSocket connected');
+          sendSignalingMessage({
+            type: 'join',
+            roomId
+          });
+        };
+
+        let stream: MediaStream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            },
+            audio: true
+          });
+          console.log('Local media stream obtained');
+        } catch (mediaError) {
+          console.error('Media access error:', mediaError);
+          throw new Error('Unable to access camera and microphone');
+        }
+
+        setLocalStream(stream);
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+        }
+
+        peerConnection.current = new RTCPeerConnection(configuration);
+        console.log('PeerConnection created with config:', configuration);
+
+        stream.getTracks().forEach(track => {
+          if (peerConnection.current) {
+            console.log('Adding track to peer connection:', track.kind);
+            peerConnection.current.addTrack(track, stream);
+          }
+        });
+
+        peerConnection.current.ontrack = (event) => {
+          console.log('Received remote track:', event.track.kind);
+          if (remoteVideoRef.current && event.streams[0]) {
+            console.log('Setting remote stream');
+            remoteVideoRef.current.srcObject = event.streams[0];
+            setRemoteStream(event.streams[0]);
+          }
+        };
+
+        peerConnection.current.onicecandidate = (event) => {
+          if (event.candidate) {
+            console.log('Sending ICE candidate');
+            sendSignalingMessage({
+              type: 'ice-candidate',
+              data: event.candidate,
+              roomId
+            });
+          }
+        };
+
+        peerConnection.current.onconnectionstatechange = () => {
+          console.log('Connection state changed:', peerConnection.current?.connectionState);
+          setIsConnected(peerConnection.current?.connectionState === 'connected');
+        };
+
+        websocket.current.onmessage = async (event) => {
+          try {
+            const message = JSON.parse(event.data);
+            console.log('Received message:', message.type);
+
+            switch (message.type) {
+              case 'offer':
+                await handleOffer(message.data);
+                break;
+              case 'answer':
+                await handleAnswer(message.data);
+                break;
+              case 'ice-candidate':
+                await handleIceCandidate(message.data);
+                break;
+              default:
+                console.log('Unknown message type:', message.type);
+            }
+          } catch (error) {
+            console.error('Error handling WebSocket message:', error);
+          }
+        };
+
+        websocket.current.onclose = () => {
+          console.log('WebSocket disconnected');
+          setIsConnected(false);
+        };
+
+        websocket.current.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          setInitError('WebSocket connection failed');
+        };
+
+      } catch (error) {
+        console.error('Error initializing WebRTC:', error);
+        setInitError(error.message);
+      }
+    };
+
+    init();
+
+    return () => {
+      console.log('Cleaning up...');
+      localStream?.getTracks().forEach(track => {
+        console.log('Stopping track:', track.kind);
+        track.stop();
+      });
+      if (peerConnection.current) {
+        console.log('Closing peer connection');
+        peerConnection.current.close();
+      }
+      if (websocket.current) {
+        console.log('Closing WebSocket');
+        websocket.current.close();
+      }
+    };
+  }, [roomId]);
 
   if (initError) {
     return (
