@@ -7,7 +7,12 @@ import './styles/pages.css';
 
 function App() {
   return (
-    <Router>
+    <Router
+     future={{
+      v7_startTransition: true,
+      v7_relativeSplatPath: true
+     }}
+    >
     <Suspense fallback={
       <div className="loading">
         <div className="loading-spinner"></div>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import profileImage from '../../assets/profile.png';
 import '../../styles/home.css';
 
 const Hero = () => {
@@ -28,9 +29,9 @@ const Hero = () => {
                     </div>
 
                     <div className="hero-profile">
-                        <div className="pfofile">
+                        <div className="profile">
                             <img
-                             src="/assets/profile.png"
+                             src={profileImage}
                              alt="Profile"
                              className="profile-img"
                             />

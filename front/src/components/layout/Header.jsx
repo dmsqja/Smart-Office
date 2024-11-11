@@ -1,7 +1,26 @@
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import '../../styles/layout.css';
 
 const Header = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 576);
+
+    // 윈도우 리사이즈 감지
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 576) {
+                setIsMenuOpen(false);
+            }
+            setIsMobile(window.innerWidth <= 576);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+
+
     return(
         <header className="header">
             <div className="header-container">
@@ -9,7 +28,19 @@ const Header = () => {
                     <span className="brand-text">Start Bootstrap</span>
                 </NavLink>
 
-                <nav className="nav">
+                {isMobile && (
+                    <button 
+                        className="menu-toggle"
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-expanded={isMenuOpen}
+                        aria-controls="nav-menu"
+                    >
+                        <span className="visually-hidden">Toggle Menu</span>
+                        <i className={`bi ${isMenuOpen ? 'bi-x' : 'bi-list'}`}></i>
+                    </button>
+                )}
+
+                <nav id="nav-menu" className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
                     <ul className="nav-list">
                         <li className="nav-item">
                             <NavLink

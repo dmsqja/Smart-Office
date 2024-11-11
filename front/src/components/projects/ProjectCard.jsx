@@ -1,6 +1,5 @@
 // ProjectCard.jsx
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import '../../styles/projects.css';
 
 const ProjectCard = ({ project }) => {

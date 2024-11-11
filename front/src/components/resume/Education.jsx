@@ -27,7 +27,7 @@ const Education = () => {
     ];
 
     return (
-        <section classsName="education">
+        <section className="education">
             <h2 className="section-title text-secondary">Education</h2>
 
             <div className="education-list">
