@@ -24,7 +24,7 @@ pipeline {
 
         stage('Build React') {
             steps {
-                dir('frontend') {
+                dir('front') {
                     sh 'npm install'
                     sh 'npm run build'
                 }
@@ -33,8 +33,8 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker build -t myapp-backend:${BUILD_NUMBER} backend'
-                sh 'docker build -t myapp-frontend:${BUILD_NUMBER} frontend'
+                sh 'docker build -t smartoffice-service:${BUILD_NUMBER} service'
+                sh 'docker build -t smartoffice-front:${BUILD_NUMBER} front'
             }
         }
 
@@ -42,8 +42,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                    sh "docker push myapp-backend:${BUILD_NUMBER}"
-                    sh "docker push myapp-frontend:${BUILD_NUMBER}"
+                    sh "docker push smartoffice-service:${BUILD_NUMBER}"
+                    sh "docker push smartoffice-front:${BUILD_NUMBER}"
                 }
             }
         }
