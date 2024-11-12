@@ -44,8 +44,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                    sh "docker push smartoffice-service:${BUILD_NUMBER}"
-                    sh "docker push smartoffice-front:${BUILD_NUMBER}"
+                    sh "docker push tae4an/smartoffice-service:${BUILD_NUMBER}"
+                    sh "docker push tae4an/smartoffice-front:${BUILD_NUMBER}"
                 }
             }
         }
