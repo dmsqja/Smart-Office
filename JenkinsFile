@@ -59,7 +59,8 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh '/usr/local/bin/docker-compose up -d'
+                sh 'docker-compose down'
+                sh '/usr/local/bin/docker-compose up -d --build'
             }
         }
     }
