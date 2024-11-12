@@ -10,7 +10,7 @@ services:
       JASYPT_SECRET_KEY: ${JASYPT_SECRET_KEY}
   frontend:
     build:
-      context: ./frontend
+      context: ./front
       dockerfile: Dockerfile
     ports:
       - '80:80'
