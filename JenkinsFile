@@ -40,6 +40,13 @@ pipeline {
             }
         }
 
+        stage('Check Docker Images') {
+            steps {
+                sh "docker images tae4an/smartoffice-service:${BUILD_NUMBER}"
+                sh "docker images tae4an/smartoffice-front:${BUILD_NUMBER}"
+            }
+        }
+
         stage('Push Docker Images') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
