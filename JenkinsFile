@@ -36,7 +36,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 sh "docker build -t tae4an/smartoffice-service:${BUILD_NUMBER} ./service"
-                sh "docker build -t tae4an/smartoffice-front:${BUILD_NUMBER} ./frontend"
+                sh "docker build -t tae4an/smartoffice-front:${BUILD_NUMBER} ./front"
             }
         }
 
