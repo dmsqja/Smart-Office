@@ -1,12 +1,16 @@
 version: '3.8'
-
 services:
-  smartoffice:
+  service:
     build:
       context: ./service
       dockerfile: Dockerfile
     ports:
-      - "80:8080"
+      - '8080:8080'
     environment:
       JASYPT_SECRET_KEY: ${JASYPT_SECRET_KEY}
-    restart: unless-stopped
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'

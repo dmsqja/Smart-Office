@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk17'
+        gradle 'gradle'
+        nodejs 'node'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Spring Boot') {
+            steps {
+                dir('backend') {
+                    sh 'gradle clean build'
+                }
+            }
+        }
+
+        stage('Build React') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh 'docker build -t myapp-backend:${BUILD_NUMBER} backend'
+                sh 'docker build -t myapp-frontend:${BUILD_NUMBER} frontend'
+            }
+        }
+
+        stage('Push Docker Images') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                    sh "docker push myapp-backend:${BUILD_NUMBER}"
+                    sh "docker push myapp-frontend:${BUILD_NUMBER}"
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh "docker-compose up -d"
+            }
+        }
+    }
+}
