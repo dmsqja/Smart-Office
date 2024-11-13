@@ -1,8 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.12-SNAPSHOT'
+    id 'org.springframework.boot' version '3.2.11'
     id 'io.spring.dependency-management' version '1.1.6'
-    id 'com.github.node-gradle.node' version '3.5.1'
+    id 'com.github.node-gradle.node' version '2.2.4'
 }
 
 group = 'com.office'
@@ -63,38 +63,44 @@ dependencies {
 node {
     version = '22.11.0'
     download = true
-}
-tasks.named('classes') {
-    dependsOn copyReactBuild
-}
-
-tasks.named('processResources') {
-    mustRunAfter copyReactBuild
+    workDir = file("${project.buildDir}/nodejs")
+    npmWorkDir = file("${project.buildDir}/npm")
+    nodeModulesDir = file("${project.projectDir}/../front")
 }
 
-tasks.named('bootJar') {
-    dependsOn buildReact
+def frontDir = "$projectDir/../front"
+
+tasks.register('installReactDeps', NpmTask) {
+    workingDir = file(frontDir)
+    args = ['install']
 }
+
 tasks.register('buildReact', NpmTask) {
-    dependsOn npmInstall
-    workingDir = file('../front')
+    dependsOn installReactDeps
+    workingDir = file(frontDir)
     args = ['run', 'build']
 }
 
 tasks.register('copyReactBuild', Copy) {
-    from '../front/build'
-    into 'src/main/resources'
+    dependsOn buildReact
+    from("${frontDir}/build") {
+        include "**/*"
+    }
+    into "${projectDir}/src/main/resources/static"
 }
 
-bootJar {
-    dependsOn buildReact
+processResources {
     dependsOn copyReactBuild
 }
 
-tasks.named('test') {
+bootJar {
+    dependsOn copyReactBuild
+}
+
+test {
     useJUnitPlatform()
 }
 
-configurations.all {
+configurations.configureEach {
     exclude group: 'commons-logging', module: 'commons-logging'
 }
