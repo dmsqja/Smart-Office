@@ -13,16 +13,16 @@ function App() {
       v7_relativeSplatPath: true
      }}
     >
-    <Suspense fallback={
-      <div className="loading">
-        <div className="loading-spinner"></div>
-      </div>
-    }>
-      <Layout>
-        <AppRoutes />
-      </Layout>
-    </Suspense>
-  </Router>
+      <Suspense fallback={
+        <div className="loading">
+          <div className="loading-spinner"></div>
+        </div>
+      }>
+        <Layout>
+          <AppRoutes />
+        </Layout>
+      </Suspense>
+    </Router>
   );
 }
 

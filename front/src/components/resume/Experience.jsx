@@ -36,7 +36,7 @@ const Experience = () => {
 
       <div className="experience-list">
         {experienceData.map((exp, index) => (
-          <div key={index} className="experience-item card">
+          <div key={index} className="timeline-item card">
             <div className="card-body">
               <div className="timeline-info">
                 <div className="period text-primary">{exp.period}</div>
