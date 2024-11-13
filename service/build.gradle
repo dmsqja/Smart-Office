@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.12-SNAPSHOT'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.github.node-gradle.node' version '3.5.1'
 }
 
 group = 'com.office'
@@ -59,9 +60,41 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
+node {
+    version = '22.11.0'
+    download = true
+}
+tasks.named('classes') {
+    dependsOn copyReactBuild
+}
+
+tasks.named('processResources') {
+    mustRunAfter copyReactBuild
+}
+
+tasks.named('bootJar') {
+    dependsOn buildReact
+}
+tasks.register('buildReact', NpmTask) {
+    dependsOn npmInstall
+    workingDir = file('../front')
+    args = ['run', 'build']
+}
+
+tasks.register('copyReactBuild', Copy) {
+    from '../front/build'
+    into 'src/main/resources'
+}
+
+bootJar {
+    dependsOn buildReact
+    dependsOn copyReactBuild
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
+
 configurations.all {
     exclude group: 'commons-logging', module: 'commons-logging'
 }

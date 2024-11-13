@@ -8,9 +8,3 @@ services:
       - '80:80'
     environment:
       JASYPT_SECRET_KEY: ${JASYPT_SECRET_KEY}
-  front:
-    build:
-      context: ./front
-      dockerfile: Dockerfile
-    ports:
-      - '82:82'
