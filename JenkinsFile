@@ -7,10 +7,6 @@ pipeline {
         nodejs 'node'
     }
 
-    environment {
-        JASYPT_SECRET_KEY = credentials('jasypt-secret-key')
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -84,7 +80,12 @@ pipeline {
                 script {
                     try {
                         sh 'docker-compose down'
-                        sh "JASYPT_SECRET_KEY=${JASYPT_SECRET_KEY} /usr/local/bin/docker-compose up -d --build"
+                        withCredentials([string(credentialsId: 'jasypt-secret-key', variable: 'JASYPT_SECRET_KEY')]) {
+                            sh '''
+                                export JASYPT_SECRET_KEY="$JASYPT_SECRET_KEY"
+                                /usr/local/bin/docker-compose up -d --build
+                            '''
+                        }
                     } catch (Exception e) {
                         error "Deployment failed: ${e.message}"
                     }
@@ -96,6 +97,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        sh 'sleep 30'
                         sh 'docker logs smartoffice-pipeline_service_1'
                         sh 'docker logs smartoffice-pipeline_front_1'
                     } catch (Exception e) {
