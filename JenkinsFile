@@ -7,6 +7,10 @@ pipeline {
         nodejs 'node'
     }
 
+    environment {
+        JASYPT_SECRET_KEY = credentials('jasypt-secret-key')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -35,33 +39,83 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh "docker build -t tae4an/smartoffice-service:${BUILD_NUMBER} ./service"
-                sh "docker build -t tae4an/smartoffice-front:${BUILD_NUMBER} ./front"
+                script {
+                    try {
+                        sh "docker build -t tae4an/smartoffice-service:${BUILD_NUMBER} ./service"
+                        sh "docker build -t tae4an/smartoffice-front:${BUILD_NUMBER} ./front"
+                    } catch (Exception e) {
+                        error "Docker build failed: ${e.message}"
+                    }
+                }
             }
         }
 
         stage('Check Docker Images') {
             steps {
-                sh "docker images tae4an/smartoffice-service:${BUILD_NUMBER}"
-                sh "docker images tae4an/smartoffice-front:${BUILD_NUMBER}"
+                script {
+                    try {
+                        sh "docker images tae4an/smartoffice-service:${BUILD_NUMBER}"
+                        sh "docker images tae4an/smartoffice-front:${BUILD_NUMBER}"
+                    } catch (Exception e) {
+                        error "Failed to check Docker images: ${e.message}"
+                    }
+                }
             }
         }
 
         stage('Push Docker Images') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                    sh "docker push tae4an/smartoffice-service:${BUILD_NUMBER}"
-                    sh "docker push tae4an/smartoffice-front:${BUILD_NUMBER}"
+                    script {
+                        try {
+                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            sh "docker push tae4an/smartoffice-service:${BUILD_NUMBER}"
+                            sh "docker push tae4an/smartoffice-front:${BUILD_NUMBER}"
+                        } catch (Exception e) {
+                            error "Failed to push Docker images: ${e.message}"
+                        }
+                    }
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'docker-compose down'
-                sh '/usr/local/bin/docker-compose up -d --build'
+                script {
+                    try {
+                        sh 'docker-compose down'
+                        sh "JASYPT_SECRET_KEY=${JASYPT_SECRET_KEY} /usr/local/bin/docker-compose up -d --build"
+                    } catch (Exception e) {
+                        error "Deployment failed: ${e.message}"
+                    }
+                }
             }
+        }
+
+        stage('Check Logs') {
+            steps {
+                script {
+                    try {
+                        sh 'docker logs smartoffice-pipeline_service_1'
+                        sh 'docker logs smartoffice-pipeline_front_1'
+                    } catch (Exception e) {
+                        echo "Warning: Failed to retrieve logs: ${e.message}"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up...'
+            sh 'docker system prune -f'
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
