@@ -8,4 +8,4 @@ WORKDIR /app
 COPY build/libs/*.jar service.jar
 
 # Run the jar file
-ENTRYPOINT ["java","-jar", "/service/service.jar"]
+ENTRYPOINT ["java","-jar", "/app/service.jar"]
