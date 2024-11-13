@@ -1,8 +1,10 @@
 /* Header Styles */
 .header {
+    width: 100%;
     padding: 1rem 0;
-    background-color: #fff;
+    background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
 .header-container {
@@ -27,6 +29,7 @@
 
 .nav-menu {
     display: flex;
+    transition: all 0.3s ease-in-out;
     align-items: center;
 }
 
@@ -139,9 +142,13 @@
 }
 
 .main-content {
-    flex: 1 0 auto;
+    transition: transform 0.3s ease-in-out;
+    will-change: transform;
     padding-top: var(--header-height);
-    width: 100%;
+}
+
+.nav-menu.show ~ .main-content {
+    transform: translateY(300px);
 }
 
 .page-container {
@@ -153,35 +160,57 @@
 
 /* Responsive Styles */
 @media (max-width: 992px) {
+    .header-container {
+        padding: 0 1rem;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
     .menu-toggler {
         display: block;
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        transform: translateY(-50%);
     }
 
     .nav-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
         background: white;
-        padding: 1rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .nav-menu.show {
-        display: block;
-    }
-
-    .nav-item {
-        width: 100%;
-        text-align: center;
+        max-height: 300px;
+        opacity: 1;
+        padding: 1rem 0;
     }
 
     .nav-list {
         flex-direction: column;
-        gap: 1rem;
-        align-items: center;
+        padding: 0 1rem;
     }
+
+    .nav-item {
+        padding: 0.5rem 0;
+        transform: translateY(-10px);
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+        width: 100%;
+        text-align: left;
+    }
+
+    .nav-menu.show .nav-item {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .nav-menu.show .nav-item:nth-child(1) {transition-delay: 0.1s; }
+    .nav-menu.show .nav-item:nth-child(2) {transition-delay: 0.2s; }
+    .nav-menu.show .nav-item:nth-child(3) {transition-delay: 0.3s; }
+    .nav-menu.show .nav-item:nth-child(4) {transition-delay: 0.4s; }
 
 }
 
@@ -190,3 +219,4 @@
         --container-padding: 1rem;
     }
 }
+

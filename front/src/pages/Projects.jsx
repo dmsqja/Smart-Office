@@ -30,7 +30,7 @@ const Projects = () => {
   ];
 
   return (
-    <div className="projects-page">
+    <div className="page projects-page">
       <div className="projects-header">
         <h1 className="projects-title">
           <span className="gradient-text">Projects</span>

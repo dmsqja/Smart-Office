@@ -17,7 +17,7 @@ const Header = () => {
                     type="button"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     aria-expanded={isMenuOpen}
-                    aria-controls="navMenu"    
+                    aria-controls="navMenu"
                 >
                     <span className="toggler-icon"></span>
                 </button>
