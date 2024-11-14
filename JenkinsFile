@@ -4,7 +4,6 @@ pipeline {
     tools {
         jdk 'jdk17'
         gradle 'gradle'
-        nodejs 'node'
     }
 
     stages {
@@ -22,12 +21,21 @@ pipeline {
             }
         }
 
+        stage('Run Tests') {
+            steps {
+                dir('service') {
+                    sh 'gradle test'
+                }
+            }
+        }
 
         stage('Build Docker Images') {
             steps {
                 script {
+                    def branchName = env.BRANCH_NAME
+                    def imageTag = branchName == 'main' ? "${BUILD_NUMBER}" : "${branchName}-${BUILD_NUMBER}"
                     try {
-                        sh "docker build -t tae4an/smartoffice-service:${BUILD_NUMBER} ./service"
+                        sh "docker build -t smartoffice-service:${imageTag} ./service"
                     } catch (Exception e) {
                         error "Docker build failed: ${e.message}"
                     }
@@ -38,8 +46,10 @@ pipeline {
         stage('Check Docker Images') {
             steps {
                 script {
+                    def branchName = env.BRANCH_NAME
+                    def imageTag = branchName == 'main' ? "${BUILD_NUMBER}" : "${branchName}-${BUILD_NUMBER}"
                     try {
-                        sh "docker images tae4an/smartoffice-service:${BUILD_NUMBER}"
+                        sh "docker images smartoffice-service:${imageTag}"
                     } catch (Exception e) {
                         error "Failed to check Docker images: ${e.message}"
                     }
@@ -48,12 +58,20 @@ pipeline {
         }
 
         stage('Push Docker Images') {
+            when {
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                }
+            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     script {
+                        def branchName = env.BRANCH_NAME
+                        def imageTag = branchName == 'main' ? "${BUILD_NUMBER}" : "${branchName}-${BUILD_NUMBER}"
                         try {
                             sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push tae4an/smartoffice-service:${BUILD_NUMBER}"
+                            sh "docker push tae4an/smartoffice-service:${imageTag}"
                         } catch (Exception e) {
                             error "Failed to push Docker images: ${e.message}"
                         }
@@ -62,19 +80,44 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Test') {
+            when {
+                branch 'develop'
+            }
             steps {
                 script {
                     try {
-                        sh 'docker-compose down'
+                        sh 'docker-compose -f docker-compose.test.yml down'
                         withCredentials([string(credentialsId: 'jasypt-secret-key', variable: 'JASYPT_SECRET_KEY')]) {
                             sh '''
                                 export JASYPT_SECRET_KEY="$JASYPT_SECRET_KEY"
-                                /usr/local/bin/docker-compose up -d --build
+                                docker-compose -f docker-compose.test.yml up -d --build
                             '''
                         }
                     } catch (Exception e) {
-                        error "Deployment failed: ${e.message}"
+                        error "Test deployment failed: ${e.message}"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                input message: 'Deploy to production?'
+                script {
+                    try {
+                        sh 'docker-compose -f docker-compose.prod.yml down'
+                        withCredentials([string(credentialsId: 'jasypt-secret-key', variable: 'JASYPT_SECRET_KEY')]) {
+                            sh '''
+                                export JASYPT_SECRET_KEY="$JASYPT_SECRET_KEY"
+                                docker-compose -f docker-compose.prod.yml up -d --build
+                            '''
+                        }
+                    } catch (Exception e) {
+                        error "Production deployment failed: ${e.message}"
                     }
                 }
             }
@@ -85,7 +128,8 @@ pipeline {
                 script {
                     try {
                         sh 'sleep 30'
-                        sh 'docker logs smartoffice-pipeline_service_1'
+                        def containerName = env.BRANCH_NAME == 'main' ? 'smartoffice-prod_service_1' : 'smartoffice-test_service_1'
+                        sh "docker logs ${containerName}"
                     } catch (Exception e) {
                         echo "Warning: Failed to retrieve logs: ${e.message}"
                     }
