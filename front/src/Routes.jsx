@@ -7,6 +7,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Resume = lazy(() => import('./pages/Resume'));
 const Projects = lazy(() => import('./pages/Projects'));
 const Contact = lazy(() => import('./pages/Contact'));
+const Calendar = lazy(() => import ('./pages/Calendar'));
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
       <Route path="/resume" element={<Resume />} />
       <Route path="/projects" element={<Projects />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/calendar" element={<Calendar />} />
       
       {/* 404 route */}
       <Route path="/404" element={
