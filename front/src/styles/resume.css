@@ -1,14 +1,4 @@
 /* Common Styles */
-:root {
-  --primary: #0d6efd;
-  --primary-dark: #0b5ed7;
-  --secondary: #6c757d;
-  --dark: #212529;
-  --light: #f8f9fa;
-  --gradient: linear-gradient(to right, var(--primary), var(--primary-dark));
-  --section-margin: 4rem;
-}
-
 .education,
 .experience,
 .skills-container {
@@ -28,12 +18,17 @@
 }
 
 .card {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-    border: none;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  border: none;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.card:last-child {
+  margin-bottom: 0;
 }
 
 .card:hover {
@@ -87,26 +82,37 @@
 .timeline-info {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  gap: 2rem;
 }
   
 /* Education Styles */
 .period {
-  font-weight: 700;
-  padding: 1rem;
-  background-color: var(--light);
+  min-width: 200px;
+  background: var(--light);
   border-radius: 0.5rem;
-  min-width: 150px;
+  padding: 1rem 1.5rem;
   text-align: center;
+  font-weight: 600;
+}
+
+.job-info {
+  flex: 1;
 }
 
 .school-info,
 .job-info {
-  padding: 0 1.5rem;
+  flex: 1;
+  padding: 0;
+}  
+
+.school-info,
+.degree-info {
+  flex: 1;
 }
 
 .school,
-.position {
+.position,
+.company {
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
@@ -118,13 +124,14 @@
 }
 
 .description {
-  color: var(--dark);
+  margin-top: 1.5rem;
+  color: var(--gray);
   line-height: 1.7;
-  margin: 0;
 }
 
 .degree-info {
-  margin-top: 0.5rem;
+  margin-left: auto;
+  text-align: right;
 }
 
 .degree {
@@ -146,14 +153,19 @@
 }
 
 .download-btn {
+  padding: 0.75rem 1.25rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
+
+.download-btn i {
+  margin-right: 0.5rem;
+}
   
 /* Skills Styles */
 .skills-section {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
 .skills-section:last-child {
@@ -165,18 +177,6 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
-}
-
-.icon-box {
-  width: 3rem;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--gradient);
-  color: white;
-  border-radius: 0.5rem;
-  font-size: 1.5rem;
 }
 
 .gradient-text {
@@ -196,9 +196,6 @@
   background-color: var(--light);
   padding: 1rem;
   border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  min-height: 4rem;
   text-align: center;
   transition: all 0.3s ease;
 }
@@ -206,6 +203,7 @@
 .skill-item:hover {
   background-color: var(--primary);
   color: white;
+  transform: translateY(-2px);
 }
 
 /* TimeLine Common Styles */
@@ -231,9 +229,11 @@
 @media (max-width: 992px) {
   .timeline-info {
     flex-direction: column;
+    gap: 1rem;
   }
 
   .period {
+    width: 100%;
     margin-bottom: 1rem;
   }
 
@@ -243,6 +243,8 @@
   }
 
   .degree-info {
+    text-align: left;
+    margin-left: 0;
     padding: 0;
     margin-top: 1rem;
   }
@@ -260,7 +262,7 @@
   }
 
   .skills-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -271,5 +273,9 @@
 
   .section-title {
     font-size: 1.75rem;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
   }
 }

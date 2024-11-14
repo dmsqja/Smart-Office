@@ -23,7 +23,7 @@ const Education = () => {
               Delectus laudantium, voluptatem quis repellendus eaque sit animi illo 
               ipsam amet officiis corporis sed aliquam non voluptate corrupti excepturi 
               maxime porro fuga.`
-          }
+        }
     ];
 
     return (
