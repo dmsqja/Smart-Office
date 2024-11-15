@@ -2,6 +2,7 @@
 .hero {
   padding: 5rem 0;
   overflow: hidden;
+  background-color: white;
 }
 
 .hero-container {

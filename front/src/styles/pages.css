@@ -27,6 +27,28 @@
   height: 3rem;
 }
 
+/* page */
+.resume-page,
+.projects-page,
+.calendar-page,
+.chat-page,
+.ai-page,
+.hub-page,
+.home-page,
+.contact-page {
+  background-color: var(--light);
+}
+
+/* Container */
+.calendar-container,
+.chat-container,
+.ai-container,
+.hub-container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
 /* Page Headers */
 .page-header {
   padding: var(--section-spacing);
@@ -41,10 +63,6 @@
 }
 
 /* Projects Page Sepcific */
-.projects-page {
-  background-color: white;
-}
-
 .projects-cta {
   background: var(--gradient);
   color: white;
@@ -56,11 +74,9 @@
   margin-bottom: 2rem;
 }
 
-/* Resume Page Specific */
-.resume-page {
-  background-color: white;
-}
+/* Home Page Specific */
 
+/* Resume Page Specific */
 .resume-container {
   max-width: 900px;
   margin: 3rem auto;
@@ -69,7 +85,6 @@
 
 /* Contact Page Specific */
 .contact-page {
-  background: white;
   border-radius: var(--border-radius);
   padding: 3rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
@@ -78,20 +93,12 @@
 }
 
 /* Calendar Page Specific */
-.calendar-page {
-  background-color: var(--light);
-}
 
-.calendar-container {
-  max-width: 1200px;
-  margin: 3rem auto;
-  padding: 0 1rem;
-}
+/* Chat Page Specific */
 
-/* Home Page Specific */
-.home-page {
-  background-color: var(--light);
-}
+/* Ai Page Specific */
+
+/* Hub Page Specific */
 
 /* Animation */
 @keyframes fadeIn {
