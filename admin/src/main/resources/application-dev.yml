@@ -12,9 +12,9 @@ spring:
       suffix: .jsp
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: ENC(y4u+tyociJ1VA/RUxxsyEr3tf8ZEKfbUDuPZJnv9RJw3uiWi/YZAuRMl4k0ct+ZmhJmBwCjKXNlpZ9+FjzFlAb5rE1iba73rOo7BPp6PnA2DElgYbFbFBQ==)
-    username: ENC(koSJw3jZ7qC1qxXvJpmu4w==)
-    password: ENC(Z8QnRjbYd8zc+DI0oKHi9Q==)
+    url: ENC(qFiE9I4v2CXLqZzWNCl7UuJ94DBprPFYECuhR9FpnOn74MinXXgixIHMizfikAUIpC6g9cah12z4z2gjNGtGfLXFwhOc+34dDC681dQfgp4mkHkUfuZRxQ==)
+    username: ENC(a0E+w5V96368ZbbGuQA1Kg==)
+    password: ENC(pj2nIfjYWFQnQmWpcwEgx3+G834oNjX5bXl3cVDSzCg=)
 
 mybatis:
   type-aliases-package: com.office.app.dto
