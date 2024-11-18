@@ -2,17 +2,27 @@ import PropTypes from 'prop-types';
 import Header from './Header';
 import Footer from './Footer';
 import '../../styles/layout.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Layout = ({ children }) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
     useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [children]);
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'visible';
+        }
+
+        return () => {
+            document.body.style.overflow = 'visible';
+        };
+    }, [isMenuOpen]);
 
     return(
         <div className="layout">
-            <Header />
-            <main className="main-content">
+            <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
+            <main className={`main-content ${isMenuOpen ? 'menu-open' : ''}`}>
                 <div className="page-container">
                     {children}
                 </div>

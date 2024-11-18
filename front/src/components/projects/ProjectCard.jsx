@@ -24,7 +24,7 @@ const ProjectCard = ({ project }) => {
                 rel="noopener noreferrer"
                 className="project-link demo-link"
               >
-                <i className="bi bi-play-circle"></i>
+                <i className="far fa-play-circle"></i>
                 Live Demo
               </a>
             )}
@@ -35,7 +35,7 @@ const ProjectCard = ({ project }) => {
                 rel="noopener noreferrer"
                 className="project-link github-link"
               >
-                <i className="bi bi-github"></i>
+                <i className="fab fa-github"></i>
                 View Code
               </a>
             )}

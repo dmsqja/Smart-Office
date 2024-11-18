@@ -26,7 +26,7 @@ const Skills = () => {
           <div className="skills-section">
             <div className="section-header">
               <div className="icon-box">
-                <i className="bi bi-tools"></i>
+                <i className="fas fa-tools"></i>
               </div>
               <h3 className="gradient-text">Professional Skills</h3>
             </div>
@@ -43,7 +43,7 @@ const Skills = () => {
           <div className="skills-section">
             <div className="section-header">
               <div className="icon-box">
-                <i className="bi bi-code-slash"></i>
+                <i className="fas fa-code"></i>
               </div>
               <h3 className="gradient-text">Languages</h3>
             </div>

@@ -8,13 +8,18 @@ server:
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: ENC(y4u+tyociJ1VA/RUxxsyEr3tf8ZEKfbUDuPZJnv9RJw3uiWi/YZAuRMl4k0ct+ZmhJmBwCjKXNlpZ9+FjzFlAb5rE1iba73rOo7BPp6PnA2DElgYbFbFBQ==)
-    username: ENC(koSJw3jZ7qC1qxXvJpmu4w==)
-    password: ENC(Z8QnRjbYd8zc+DI0oKHi9Q==)
-    hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
-      connection-timeout: 30000
+    url: ENC(qFiE9I4v2CXLqZzWNCl7UuJ94DBprPFYECuhR9FpnOn74MinXXgixIHMizfikAUIpC6g9cah12z4z2gjNGtGfLXFwhOc+34dDC681dQfgp4mkHkUfuZRxQ==)
+    username: ENC(a0E+w5V96368ZbbGuQA1Kg==)
+    password: ENC(pj2nIfjYWFQnQmWpcwEgx3+G834oNjX5bXl3cVDSzCg=)
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
 
   web:
     resources:
@@ -34,15 +39,6 @@ spring:
   thymeleaf:
     cache: false
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: true
-    show-sql: true
-    open-in-view: false
 
   cloud:
     gcp:
@@ -57,6 +53,7 @@ logging:
     root: info
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql: trace
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.google.cloud.storage: DEBUG
     com.google.api.client: DEBUG
     com.office: DEBUG

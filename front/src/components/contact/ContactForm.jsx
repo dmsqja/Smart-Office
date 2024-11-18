@@ -94,7 +94,7 @@ const ContactForm = () => {
       <div className="contact-container">
         <div className="contact-header">
           <div className="icon-feature">
-            <i className="bi bi-envelope"></i>
+            <i className="far fa-envelope"></i>
           </div>
           <h2 className="contact-title">Get in touch</h2>
           <p className="contact-subtitle">Let's work together!</p>

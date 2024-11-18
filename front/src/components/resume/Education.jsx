@@ -23,7 +23,7 @@ const Education = () => {
               Delectus laudantium, voluptatem quis repellendus eaque sit animi illo 
               ipsam amet officiis corporis sed aliquam non voluptate corrupti excepturi 
               maxime porro fuga.`
-          }
+        }
     ];
 
     return (
@@ -32,7 +32,7 @@ const Education = () => {
 
             <div className="education-list">
                 {educationData.map((edu,index) => (
-                    <div key={index} className="education-item card">
+                    <div key={index} className="timeline-item card">
                         <div className="card-body">
                             <div className="timeline-info">
                                 <div className="period">{edu.period}</div>

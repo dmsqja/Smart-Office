@@ -9,6 +9,7 @@
     --danger: #dc3545;
     --light: #f8f9fa;
     --dark: #212529;
+    --gray: #6c757d;
     
     /* Gradients */
     --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
