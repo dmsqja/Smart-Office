@@ -1,3 +1,4 @@
+// 게시판 화면
 import HubForm from '../components/hub/HubForm';
 import '../styles/pages.css';
 

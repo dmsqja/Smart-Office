@@ -1,3 +1,4 @@
+// AI 챗봇 화면
 import AiForm from '../components/ai/AiForm';
 import '../styles/pages.css';
 

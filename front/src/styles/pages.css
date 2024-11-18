@@ -31,19 +31,25 @@
 .resume-page,
 .projects-page,
 .calendar-page,
-.chat-page,
+.msg-page,
 .ai-page,
 .hub-page,
 .home-page,
-.contact-page {
+.contact-page,
+.meeting-page,
+.emp-page,
+.doc-page {
   background-color: var(--light);
 }
 
 /* Container */
 .calendar-container,
-.chat-container,
+.msg-container,
 .ai-container,
-.hub-container {
+.hub-container,
+.meeting-container,
+.emp-container,
+.doc-container {
   max-width: 1200px;
   margin: 3rem auto;
   padding: 0 1rem;
