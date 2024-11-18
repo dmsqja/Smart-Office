@@ -22,7 +22,7 @@ const Hero = () => {
                             <Link to="/resume" className="btn btn-primary">
                                 Resume
                             </Link>
-                            <Link to="/projects" className="btn btn-primary">
+                            <Link to="/projects" className="btn btn-outline">
                                 Projects
                             </Link>
                         </div>
@@ -35,26 +35,6 @@ const Hero = () => {
                              alt="Profile"
                              className="profile-img"
                             />
-                            <div className="dots dots-1">
-                                <svg viewBox="0 0 191.6 1215.4">
-                                    <path d="M227.7,12788.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262 C383.7,12801.6,289.7,12808.6,227.7,12788.6z" />
-                                </svg>
-                            </div>
-                            <div className="dots dots-2">
-                                <svg viewBox="0 0 191.6 1215.4">
-                                    <path d="M227.7,12788.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262 C383.7,12801.6,289.7,12808.6,227.7,12788.6z" />
-                                </svg>
-                            </div>
-                            <div className="dots dots-3">
-                                <svg viewBox="0 0 191.6 1215.4">
-                                    <path d="M227.7,12788.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262 C383.7,12801.6,289.7,12808.6,227.7,12788.6z" />
-                                </svg>
-                            </div>
-                            <div className="dots dots-4">
-                                <svg viewBox="0 0 191.6 1215.4">
-                                    <path d="M227.7,12788.6c-105-35-200-141-222-248c-43-206,163-412,369-369c155,32,275,190,260,339c-11,105-90,213-190,262 C383.7,12801.6,289.7,12808.6,227.7,12788.6z" />
-                                </svg>
-                            </div>
                         </div>
                     </div>
                 </div>

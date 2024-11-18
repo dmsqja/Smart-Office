@@ -29,17 +29,17 @@ const Experience = () => {
       <div className="section-header">
         <h2 className="section-title text-primary">Experience</h2>
         <button className="btn btn-primary download-btn">
-          <i className="bi bi-download"></i>
+          <i className="fas fa-download"></i>
           Download Resume
         </button>
       </div>
 
       <div className="experience-list">
         {experienceData.map((exp, index) => (
-          <div key={index} className="experience-item card">
+          <div key={index} className="timeline-item card">
             <div className="card-body">
               <div className="timeline-info">
-                <div className="period text-primary">{exp.period}</div>
+                <div className="period">{exp.period}</div>
                 <div className="job-info">
                   <h3 className="position">{exp.position}</h3>
                   <div className="company">{exp.company}</div>

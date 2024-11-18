@@ -1,7 +1,7 @@
 // Projects.jsx
 import ProjectCard from '../components/projects/ProjectCard';
 import { Link } from 'react-router-dom';
-import '../styles/projects.css';
+import '../styles/pages.css';
 
 const Projects = () => {
   const projects = [
@@ -30,17 +30,19 @@ const Projects = () => {
   ];
 
   return (
-    <div className="projects-page">
-      <div className="projects-header">
-        <h1 className="projects-title">
-          <span className="gradient-text">Projects</span>
+    <div className="page projects-page">
+      <div className="page-header">
+        <h1 className="page-title">
+          <span className="text-gradient">Projects</span>
         </h1>
       </div>
 
-      <div className="projects-grid">
-        {projects.map((project, index) => (
-          <ProjectCard key={index} project={project} />
-        ))}
+      <div className="container">
+        <div className="projects-grid">
+          {projects.map((project, index) => (
+            <ProjectCard key={index} project={project} />
+          ))}
+        </div>
       </div>
 
       <div className="projects-cta">
