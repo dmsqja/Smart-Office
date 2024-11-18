@@ -8,29 +8,43 @@ server:
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: ENC(y4u+tyociJ1VA/RUxxsyEr3tf8ZEKfbUDuPZJnv9RJw3uiWi/YZAuRMl4k0ct+ZmhJmBwCjKXNlpZ9+FjzFlAb5rE1iba73rOo7BPp6PnA2DElgYbFbFBQ==)
-    username: ENC(koSJw3jZ7qC1qxXvJpmu4w==)
-    password: ENC(Z8QnRjbYd8zc+DI0oKHi9Q==)
-    hikari:
-      maximum-pool-size: 10
-      minimum-idle: 5
-      connection-timeout: 30000
+    url: ENC(qFiE9I4v2CXLqZzWNCl7UuJ94DBprPFYECuhR9FpnOn74MinXXgixIHMizfikAUIpC6g9cah12z4z2gjNGtGfLXFwhOc+34dDC681dQfgp4mkHkUfuZRxQ==)
+    username: ENC(a0E+w5V96368ZbbGuQA1Kg==)
+    password: ENC(pj2nIfjYWFQnQmWpcwEgx3+G834oNjX5bXl3cVDSzCg=)
 
   jpa:
     hibernate:
-      ddl-auto: update  # 필요에 따라 create, create-drop, validate, none으로 변경
+      ddl-auto: validate
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-    show-sql: true  # SQL 로그를 보고 싶은 경우
-    open-in-view: false  # 경고 메시지 제거를 위해
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+      add-mappings: true
+      chain:
+        strategy:
+          content:
+            enabled: true
+            paths: /**
+      cache:
+        period: 0
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  thymeleaf:
+    cache: false
+
 
   cloud:
     gcp:
       storage:
         credentials:
-          location: classpath:credentials.json
+          location: ${GOOGLE_APPLICATION_CREDENTIALS}
         project-id: ENC(RGD0LCqXa8dSZzNwqwhc53WR6ITm8YlTFPRzf+StzN8Hh+Ts3ZRXLQ==)
         bucket: smart-office
 
@@ -39,14 +53,17 @@ logging:
     root: info
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql: trace
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.google.cloud.storage: DEBUG
     com.google.api.client: DEBUG
     com.office: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.web.servlet.resource: TRACE
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
 
 app:
   dir:
-    imgdir: file:///C:/SmartOffice/imgs/  # 화면 출력 용
-    uploadimgdir: C:/SmartOffice/imgs/    # 파일 Write 용
+    imgdir: file:///C:/SmartOffice/imgs/
+    uploadimgdir: C:/SmartOffice/imgs/
     logdir: file:///C:/SmartOffice/logs/
     readLogDir: C:/SmartOffice/logs/
-

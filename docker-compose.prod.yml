@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  service:
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    environment:
+      JASYPT_SECRET_KEY: ${JASYPT_SECRET_KEY}
+      SPRING_PROFILES_ACTIVE: prod
+      LOG_LEVEL: INFO
+    deploy:
+      replicas: 3  # 프로덕션 환경은 여러 인스턴스로 확장
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+volumes:
+  pgdata:

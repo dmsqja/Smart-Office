@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  service:
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+    environment:
+      JASYPT_SECRET_KEY: ${JASYPT_SECRET_KEY}
+      SPRING_PROFILES_ACTIVE: test
+      LOG_LEVEL: DEBUG
+    volumes:
+      - ./service:/app
+    deploy:
+      replicas: 1
