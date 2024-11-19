@@ -4,8 +4,7 @@ services:
     build:
       context: ./service
       dockerfile: Dockerfile
-    ports:
-      - '8000:8000'
+
     environment:
       JASYPT_SECRET_KEY: ${JASYPT_SECRET_KEY}
       SPRING_PROFILES_ACTIVE: test

@@ -4,11 +4,9 @@ services:
     build:
       context: ./service
       dockerfile: Dockerfile
-    ports:
-      - '80:8000'
     environment:
       JASYPT_SECRET_KEY: ${JASYPT_SECRET_KEY}
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: dev
       LOG_LEVEL: INFO
     deploy:
       replicas: 3  # 프로덕션 환경은 여러 인스턴스로 확장
