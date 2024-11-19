@@ -1,8 +1,10 @@
 // 화상 회의 화면
-import MeetingForm from '../components/meeting/MeetingForm';
+import WebRTCComponent from '../components/webrtc/WebRTCComponents.tsx';
 import '../styles/pages.css';
 
 const Meeting = () => {
+    const roomId = "default-room";
+
     return (
         <div className="page meeting-page">
             <div className="page-header">
@@ -11,7 +13,7 @@ const Meeting = () => {
                 </h1>
             </div>
             <div className="meeting-container">
-                <MeetingForm />
+                <WebRTCComponent roomId={roomId} />
             </div>
         </div>
     );
