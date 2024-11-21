@@ -20,7 +20,6 @@ const Layout = ({ children }) => {
         };
     }, [isMenuOpen]);
 
-
     return(
         <div className="layout">
             <Header setIsMenuOpen={setIsMenuOpen} />
