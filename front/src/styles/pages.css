@@ -106,41 +106,6 @@
 
 /* Hub Page Specific */
 
-/* Meeting Page Specific */
-.meeting-page {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--dark);
-}
-
-.meeting-page .page-header {
-  padding: var(--spacing-3);
-  margin-bottom: 0;
-}
-
-.meeting-page .page-title {
-  font-size: 2rem;
-  margin-bottom: 0;
-}
-
-.meeting-container {
-  flex: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: var(--spacing-3) 0;
-  height: calc(100vh - 180px);
-  overflow: hidden;
-}
-
-.meeting-container .webrtc-container {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  max-width: none;
-  width: 100%;
-}
-
 /* Animation */
 @keyframes fadeIn {
   from {
@@ -208,18 +173,6 @@
   :root {
     --page-padding: 3rem;
     --section-spacing: 2rem;
-  }
-
-  .meeting-page .page-header {
-    padding: var(--spacing-2);
-  }
-
-  .meeting-page .page-title {
-    font-size: 1.5rem;
-  }
-
-  .meeting-container {
-    padding: var(--spacing-2) 0;
   }
 
   .page-title {
