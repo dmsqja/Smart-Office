@@ -4,7 +4,7 @@ import '../../styles/layout.css';
 
 const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
     const menuItems = [
-        { path: "/", label: "Home", icon: "fas fa-home" },
+        { path: "/home", label: "Home", icon: "fas fa-home" },
         { path: "/resume", label: "Resume", icon: "fas fa-file-alt" },
         { path: "/projects", label: "Projects", icon: "fas fa-folder-open" },
         { path: "/contact", label: "Contact", icon: "fas fa-phone" },
