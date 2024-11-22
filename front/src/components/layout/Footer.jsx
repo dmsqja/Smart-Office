@@ -7,7 +7,7 @@ const Footer = () => {
             <div className="footer-container">
                 <div className="footer-content">
                     <div className="copyright">
-                        <p>Copyright @ Your Website 2024</p>
+                        Copyright @ Your Website 2024
                     </div>
 
                     <div className="footer-links">

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const Layout = ({ children }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
+
     useEffect(() => {
         if (isMenuOpen) {
             document.body.style.overflow = 'hidden';

@@ -5,12 +5,12 @@ services:
       context: ./service
       dockerfile: Dockerfile
     ports:
-      - '80:80'
+      - '80:8000'
     environment:
       JASYPT_SECRET_KEY: ${JASYPT_SECRET_KEY}
       SPRING_PROFILES_ACTIVE: test
       LOG_LEVEL: DEBUG
     volumes:
       - ./service:/app
-    deploy:
-      replicas: 1
+#    deploy:
+#      replicas: 1

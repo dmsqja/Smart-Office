@@ -1,9 +1,21 @@
 server:
-  port: 80
+  # SSL 설정 추가
+  ssl:
+    enabled: true
+    key-store: classpath:server.p12
+    key-store-password: ENC(CLTCgFTz0XA+nEThhVb8JfKwC2HECWoGW1fFf9sQsXQ=)
+    key-store-type: PKCS12
+    key-alias: tomcat
+  # 기존 설정 유지
+  port: 443  # HTTPS 기본 포트로 변경
   servlet:
     encoding:
       charset: UTF-8
       force: true
+
+# HTTP -> HTTPS 리다이렉션을 위한 추가 포트
+http:
+  port: 80
 
 spring:
   datasource:
@@ -38,7 +50,6 @@ spring:
 
   thymeleaf:
     cache: false
-
 
   cloud:
     gcp:
