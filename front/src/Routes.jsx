@@ -2,10 +2,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { lazy } from 'react';
 import Layout from './components/layout/Layout';
-import PrivateRoute from './components/PrivateRoute';
 
 // Lazy load pages
-const Login = lazy(() => import('./pages/LoginPage'));
+const Login = lazy(() => import('./components/login/LoginForm'));
 const Home = lazy(() => import('./pages/Home'));
 const Resume = lazy(() => import('./pages/Resume'));
 const Projects = lazy(() => import('./pages/Projects'));
