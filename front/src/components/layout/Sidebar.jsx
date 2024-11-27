@@ -44,8 +44,8 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                 </nav>
             </aside>
             <div
-            className={`sidebar-overlay ${isMenuOpen ? 'show' : ''}`}
-            onClick={() => setIsMenuOpen(false)}
+                className={`sidebar-overlay ${isMenuOpen ? 'show' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
             />
         </>
     );

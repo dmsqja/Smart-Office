@@ -21,7 +21,7 @@ const Main = () => {
                     <div className="welcome-info">
                         <div className="profile-container">
                             <div className="profile-image-wrapper">
-                                <img 
+                                <img
                                     src={user.profileImage}
                                     alt="Profile"
                                     className="profile-image"

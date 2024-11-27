@@ -1,8 +1,10 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
+import Sidebar from './Sidebar';
+import BottomNav from './BottomNav';
 import Footer from './Footer';
-import '../../styles/layout.css';
 import { useEffect, useState } from 'react';
+import '../../styles/layout.css';
 
 const Layout = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,7 +15,6 @@ const Layout = () => {
         } else {
             document.body.style.overflow = 'visible';
         }
-
         return () => {
             document.body.style.overflow = 'visible';
         };
@@ -21,16 +22,18 @@ const Layout = () => {
 
     return(
         <div className="layout">
-            <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
-            <main className={`main-content ${isMenuOpen ? 'menu-open' : ''}`}>
+            <Header setIsMenuOpen={setIsMenuOpen} />
+            <Sidebar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+            <main className="main-content">
                 <div className="page-container">
                     <Outlet />
                 </div>
             </main>
+            <BottomNav />
             <Footer />
             {/* 모바일에서 사이드바가 열릴 때 오버레이 추가 */}
             {isMenuOpen && (
-                <div 
+                <div
                     className={`sidebar-overlay ${isMenuOpen ? 'show' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
                 />
