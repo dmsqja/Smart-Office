@@ -1,8 +1,10 @@
 // Routes.jsx
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { lazy } from 'react';
+import Layout from './components/layout/Layout';
 
 // Lazy load pages
+const Login = lazy(() => import('./components/login/LoginForm'));
 const Home = lazy(() => import('./pages/Home'));
 const Resume = lazy(() => import('./pages/Resume'));
 const Projects = lazy(() => import('./pages/Projects'));
@@ -18,19 +20,27 @@ const Document = lazy(() => import ('./pages/Document'));
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/resume" element={<Resume />} />
-      <Route path="/projects" element={<Projects />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/calendar" element={<Calendar />} />
-      <Route path="/messenger" element={<Messenger />} />
-      <Route path="/ai" element={<Ai />} />
-      <Route path="/hub" element={<Hub />} />
-      <Route path="/meeting" element={<Meeting />} />
-      <Route path="/employee" element={<Employee />} />
-      <Route path="/document" element={<Document />} />
+      {/* Public routes */}
+      <Route path="/" element={<Login />} />
+
+      {/* Protected routes with Layout */}
+      {/* <Route element={<PrivateRoute />}>
+      </Route> */}
+      <Route element={<Layout />}>
+        <Route path="/home" element={<Home />} />
+        <Route path="/resume" element={<Resume />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/messenger" element={<Messenger />} />
+        <Route path="/ai" element={<Ai />} />
+        <Route path="/hub" element={<Hub />} />
+        <Route path="/meeting" element={<Meeting />} />
+        <Route path="/employee" element={<Employee />} />
+        <Route path="/document" element={<Document />} />
+      </Route>
       
-      {/* 404 route */}
+      {/* Error routes */}
       <Route path="/404" element={
         <div className="error-page">
           <h1>404 - Page Not Found</h1>
@@ -38,7 +48,6 @@ const AppRoutes = () => {
         </div>
       } />
       
-      {/* Redirect all unmatched routes to 404 */}
       <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );

@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
+import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import '../../styles/layout.css';
 import { useEffect, useState } from 'react';
 
-const Layout = ({ children }) => {
+const Layout = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
@@ -24,16 +24,19 @@ const Layout = ({ children }) => {
             <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
             <main className={`main-content ${isMenuOpen ? 'menu-open' : ''}`}>
                 <div className="page-container">
-                    {children}
+                    <Outlet />
                 </div>
             </main>
             <Footer />
+            {/* 모바일에서 사이드바가 열릴 때 오버레이 추가 */}
+            {isMenuOpen && (
+                <div 
+                    className={`sidebar-overlay ${isMenuOpen ? 'show' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                />
+            )}
         </div>
     );
-};
-
-Layout.propTypes = {
-    children: PropTypes.node.isRequired,
 };
 
 export default Layout;
