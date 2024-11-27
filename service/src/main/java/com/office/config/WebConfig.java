@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
@@ -22,15 +23,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Controller
     public static class ReactController {
-        @GetMapping(value = {"/", "/{x:[\\w\\-]+}", "/{x:^(?!api$).*$}/**/{y:[\\w\\-]+}"})
-        public String getIndex() {
-            return "/index.html";
-        }
-
-        // API 요청은 무시
         @GetMapping("/api/**")
         public ResponseEntity<Void> handleApi() {
             return ResponseEntity.notFound().build();
+        }
+
+        @GetMapping(value = {
+                "/",
+                "/{x:[\\w\\-]+}",
+                "/{x:^(?!api|ws|swagger-ui|v3).*$}/**/{y:[\\w\\-]+}"
+        })
+        public String getIndex() {
+            return "/index.html";
         }
     }
 

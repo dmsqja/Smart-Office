@@ -1,4 +1,7 @@
 // 화상 회의 화면
+// @ts-ignore
+import React from 'react';
+// @ts-ignore
 import WebRTCComponent from '../components/webrtc/WebRTCComponents.tsx';
 import '../styles/pages.css';
 
@@ -11,7 +14,7 @@ const Meeting = () => {
                 </h1>
             </div>
             <div className="meeting-container">
-                <WebRTCComponent />
+                <WebRTCComponent roomId="test-room" />
             </div>
         </div>
     );
