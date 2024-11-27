@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
@@ -30,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
         @GetMapping(value = {
                 "/",
                 "/{x:[\\w\\-]+}",
-                "/{x:^(?!api|ws).*$}/**/{y:[\\w\\-]+}"  // ws를 제외하도록 수정
+                "/{x:^(?!api|ws|swagger-ui|v3).*$}/**/{y:[\\w\\-]+}"
         })
         public String getIndex() {
             return "/index.html";

@@ -3,3 +3,4 @@
 logs/*
 imgs/*
 /service/src/main/resources/static/static/*
+/front/.env
