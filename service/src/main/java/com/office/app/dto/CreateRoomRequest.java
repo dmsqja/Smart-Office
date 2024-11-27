@@ -12,7 +12,7 @@ public class CreateRoomRequest {
     @Size(min = 3, message = "Room name must be at least 3 characters")
     private String roomName;
 
-    private String description;  // 추가
+    private String description;
 
     @Min(value = 2, message = "Minimum participants is 2")
     @Max(value = 6, message = "Maximum participants is 6")

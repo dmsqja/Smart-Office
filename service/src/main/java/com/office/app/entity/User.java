@@ -19,19 +19,19 @@ public class User {
     private String employeeId;  // 사번을 PK로 사용
 
     @Column(nullable = false)
-    private String password;    
+    private String password;
 
     @Column(nullable = false)
-    private String name;        
+    private String name;
 
     @Column(nullable = false)
-    private String department;  
+    private String department;
 
     @Column(nullable = false)
-    private String position;    
+    private String position;
 
     @Column(nullable = false, unique = true)
-    private String email;       
+    private String email;
 
     @Column(name = "password_change_required")
     private boolean passwordChangeRequired;

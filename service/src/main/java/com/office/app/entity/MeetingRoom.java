@@ -26,7 +26,7 @@ public class MeetingRoom {
     @NotNull
     private String roomName;
 
-    private String description;  // 추가
+    private String description;
 
     @NotNull
     private String hostId;
@@ -42,5 +42,5 @@ public class MeetingRoom {
 
     @Enumerated(EnumType.STRING)
     private RoomStatus status = RoomStatus.ACTIVE;
-
+    
 }
