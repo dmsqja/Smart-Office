@@ -1,6 +1,6 @@
 // Routes.jsx
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { lazy } from 'react';
+import {Routes, Route, Navigate} from 'react-router-dom';
+import {lazy} from 'react';
 import Layout from './components/layout/Layout';
 
 // Lazy load pages
@@ -16,41 +16,44 @@ const Hub = lazy(() => import ('./pages/Hub'));
 const Meeting = lazy(() => import ('./pages/Meeting'));
 const Employee = lazy(() => import ('./pages/Employee'));
 const Document = lazy(() => import ('./pages/Document'));
+const RoomList = lazy(() => import('./components/meeting/RoomList'));
 
 const AppRoutes = () => {
-  return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<Login />} />
+    return (
+        <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Login/>}/>
 
-      {/* Protected routes with Layout */}
-      {/* <Route element={<PrivateRoute />}>
+            {/* Protected routes with Layout */}
+            {/* <Route element={<PrivateRoute />}>
       </Route> */}
-      <Route element={<Layout />}>
-        <Route path="/home" element={<Home />} />
-        <Route path="/resume" element={<Resume />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/messenger" element={<Messenger />} />
-        <Route path="/ai" element={<Ai />} />
-        <Route path="/hub" element={<Hub />} />
-        <Route path="/meeting" element={<Meeting />} />
-        <Route path="/employee" element={<Employee />} />
-        <Route path="/document" element={<Document />} />
-      </Route>
-      
-      {/* Error routes */}
-      <Route path="/404" element={
-        <div className="error-page">
-          <h1>404 - Page Not Found</h1>
-          <p>The page you are looking for doesn't exist.</p>
-        </div>
-      } />
-      
-      <Route path="*" element={<Navigate to="/404" replace />} />
-    </Routes>
-  );
+            <Route element={<Layout/>}>
+                <Route path="/home" element={<Home/>}/>
+                <Route path="/resume" element={<Resume/>}/>
+                <Route path="/projects" element={<Projects/>}/>
+                <Route path="/contact" element={<Contact/>}/>
+                <Route path="/calendar" element={<Calendar/>}/>
+                <Route path="/messenger" element={<Messenger/>}/>
+                <Route path="/ai" element={<Ai/>}/>
+                <Route path="/hub" element={<Hub/>}/>
+                <Route path="/meeting" element={<Meeting/>}/>
+                <Route path="/employee" element={<Employee/>}/>
+                <Route path="/document" element={<Document/>}/>
+                <Route path="/meeting" element={<RoomList/>}/>
+                <Route path="/meeting/:roomId" element={<Meeting/>}/>
+            </Route>
+
+            {/* Error routes */}
+            <Route path="/404" element={
+                <div className="error-page">
+                    <h1>404 - Page Not Found</h1>
+                    <p>The page you are looking for doesn't exist.</p>
+                </div>
+            }/>
+
+            <Route path="*" element={<Navigate to="/404" replace/>}/>
+        </Routes>
+    );
 };
 
 export default AppRoutes;

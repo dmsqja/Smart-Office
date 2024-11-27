@@ -1,4 +1,4 @@
-package com.office.app.dto;
+package com.office.app.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
