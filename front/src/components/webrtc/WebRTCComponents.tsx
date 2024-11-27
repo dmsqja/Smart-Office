@@ -1,5 +1,7 @@
 // WebRTCComponent.tsx
+// @ts-ignore
 import React, { useEffect, useRef, useState } from 'react';
+// @ts-ignore
 import { checkWebRTCSupport } from '../../utils/webrtc.ts';
 import '../../styles/webrtc.css';
 
@@ -24,9 +26,9 @@ const WebRTCComponent: React.FC<WebRTCComponentProps> = ({ roomId }) => {
   const configuration: RTCConfiguration = {
     iceServers: [
       {
-        urls: 'turn:210.119.34.236:3478',
-        username: 'turnuser',
-        credential: 'Turn2024!@#'
+        urls: process.env.REACT_APP_TURN_SERVER_URL || '',
+        username: process.env.REACT_APP_TURN_SERVER_USERNAME || '',
+        credential: process.env.REACT_APP_TURN_SERVER_CREDENTIAL || ''
       }
     ]
   };
@@ -44,7 +46,7 @@ const WebRTCComponent: React.FC<WebRTCComponentProps> = ({ roomId }) => {
         console.log('Initializing WebRTC...');
         
         // WebSocket 연결
-        websocket.current = new WebSocket('ws://210.119.34.236:80/signal');
+        websocket.current = new WebSocket('/ws/signaling');
         
         websocket.current.onopen = () => {
           console.log('WebSocket connected');
