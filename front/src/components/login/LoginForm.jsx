@@ -80,6 +80,11 @@ const Login = () => {
       setErrors(newErrors);
     }
   };
+
+  const handleForgotPassword = () => {
+    navigate('/password-change');
+  };
+
   return (
       <div className="login-container">
         <div className="login-wrapper">
@@ -209,7 +214,7 @@ const Login = () => {
                 </button>
 
                 <div className="forgot-password">
-                  <button type="button">비밀번호를 잊으셨나요?</button>
+                  <button type="button" onClick={handleForgotPassword}>비밀번호를 잊으셨나요?</button>
                 </div>
               </form>
             </div>
