@@ -1,6 +1,7 @@
 from google.cloud import storage
 from typing import List, Optional
 from app.core.config import settings
+from app.core.logger import logger
 import os
 
 class GCSHandler:
@@ -43,7 +44,7 @@ class GCSHandler:
             blob.upload_from_filename(filename)
             return True
         except Exception as e:
-            print(f"업로드 실패: {str(e)}")
+            logger.error(f"업로드 실패: {str(e)}")
             return False
 
     def download_file(self, filename: str) -> bool:
@@ -64,7 +65,7 @@ class GCSHandler:
             blob.download_to_filename(local_destination_path)
             return True
         except Exception as e:
-            print(f"다운로드 실패: {str(e)}")
+            logger.error(f"다운로드 실패: {str(e)}")
             return False
 
     def delete_file(self, filename: str, is_upload_path: bool = False) -> bool:
@@ -85,7 +86,7 @@ class GCSHandler:
             blob.delete()
             return True
         except Exception as e:
-            print(f"삭제 실패: {str(e)}")
+            logger.error(f"삭제 실패: {str(e)}")
             return False
 
     def list_files(self, use_upload_path: bool = False) -> List[str]:
@@ -107,7 +108,7 @@ class GCSHandler:
                 if blob.name.startswith(base_path) and not blob.name.endswith('/')
             ]
         except Exception as e:
-            print(f"목록 조회 실패: {str(e)}")
+            logger.error(f"목록 조회 실패: {str(e)}")
             return []
 
     def get_file_url(self, blob_name: str) -> Optional[str]:
@@ -124,7 +125,7 @@ class GCSHandler:
             blob = self.bucket.blob(blob_name)
             return blob.public_url
         except Exception as e:
-            print(f"URL 가져오기 실패: {str(e)}")
+            logger.error(f"URL 가져오기 실패: {str(e)}")
             return None
 
     def check_file_exists(self, filename: str, is_upload_path: bool = False) -> bool:
@@ -143,5 +144,5 @@ class GCSHandler:
             blob = self.bucket.blob(base_path + filename)
             return blob.exists()
         except Exception as e:
-            print(f"존재 여부 확인 실패: {str(e)}")
+            logger.error(f"존재 여부 확인 실패: {str(e)}")
             return False

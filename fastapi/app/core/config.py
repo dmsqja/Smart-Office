@@ -19,6 +19,10 @@ class Settings(BaseSettings):
         GCS_DOWNLOAD_PATH (str): GCS 다운로드 기본 경로 (기본값: "img/")
         GCS_UPLOAD_PATH (str): GCS 업로드 기본 경로 (기본값: "processing/")
         LOCAL_DOWNLOAD_PATH (str): 로컬 다운로드 경로 (기본값: "tmp/")
+        LOG_LEVEL (str): 로그 레벨 (기본값: "INFO")
+        LOG_FILE_PATH (str): 로그 파일 경로 (기본값: "logs/app.log")
+        LOG_MAX_SIZE (int): 로그 파일 최대 크기 (기본값: 10MB)
+        LOG_BACKUP_COUNT (int): 로그 파일 백업 개수 (기본값: 30)
     """
     APP_VERSION: str = "1.0.0"
     OLLAMA_URL: str
@@ -32,6 +36,10 @@ class Settings(BaseSettings):
     GCS_DOWNLOAD_PATH: str = "img/"
     GCS_UPLOAD_PATH: str = "processing/"
     LOCAL_DOWNLOAD_PATH: str = "tmp/"
+    LOG_LEVEL: str = "INFO"
+    LOG_FILE_PATH: str = "logs/app.log"
+    LOG_MAX_SIZE: int = 10 * 1024 * 1024  # 10MB
+    LOG_BACKUP_COUNT: int = 30
 
     model_config = {
         "env_file": ".env",

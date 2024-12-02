@@ -1,5 +1,6 @@
 import pytest
 from app.utils.image.gcs_handler import GCSHandler
+from app.core.logger import logger
 import os
 
 @pytest.fixture
@@ -41,13 +42,13 @@ def test_download_file(gcs, test_file_info):
 
 def test_list_files(gcs):
     image_files = gcs.list_files(use_upload_path=False)
-    print("\n=== Images 폴더 내 파일 목록 ===")
-    print(image_files)
+    logger.info("\n=== Images 폴더 내 파일 목록 ===")
+    logger.info(image_files)
     assert isinstance(image_files, list)
     
     processing_files = gcs.list_files(use_upload_path=True)
-    print("\n=== Processing 폴더 내 파일 목록 ===")
-    print(processing_files)
+    logger.info("\n=== Processing 폴더 내 파일 목록 ===")
+    logger.info(processing_files)
     assert isinstance(processing_files, list)
 
 def test_delete_file(gcs, test_file_info):
@@ -69,8 +70,8 @@ def test_get_file_url(gcs, test_file_info):
     
     full_path = gcs.upload_path + test_file_info['filename']
     url = gcs.get_file_url(full_path)
-    print("\n=== 생성된 파일 URL ===")
-    print(url)
+    logger.info("\n=== 생성된 파일 URL ===")
+    logger.info(url)
     
     assert url is not None
     assert url.startswith('https://')
