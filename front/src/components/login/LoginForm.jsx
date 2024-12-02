@@ -92,9 +92,6 @@ const Login = () => {
                   <h1>Smart Office</h1>
                   <p>사내 업무 관리 시스템</p>
                 </div>
-                <button className="read-more-btn">
-                  자세히 보기
-                </button>
               </div>
               {/* Decorative circles */}
               <div className="decorative-circles">
@@ -208,10 +205,6 @@ const Login = () => {
                 >
                   {isLoading ? '로그인 중...' : '로그인'}
                 </button>
-
-                <div className="forgot-password">
-                  <button type="button">비밀번호를 잊으셨나요?</button>
-                </div>
               </form>
             </div>
           </div>
