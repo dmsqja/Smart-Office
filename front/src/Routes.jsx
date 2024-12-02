@@ -18,7 +18,7 @@ const Hub = lazy(() => import ('./pages/Hub'));
 const Meeting = lazy(() => import ('./pages/Meeting'));
 const Employee = lazy(() => import ('./pages/Employee'));
 const Document = lazy(() => import ('./pages/Document'));
-const RoomList = lazy(() => import('./components/meeting/RoomList'));
+const MeetingRoom = lazy(() => import('./pages/MeetingRoom'));
 
 const AppRoutes = () => {
     return (
@@ -28,22 +28,23 @@ const AppRoutes = () => {
                 <Route path="/" element={<Login />} />
                 <Route path="/password-change" element={<PasswordChange />} />
 
-                {/* Protected routes with Layout */}
-                <Route element={<Layout/>}>
-                    <Route path="/home" element={<Home/>}/>
-                    <Route path="/resume" element={<Resume/>}/>
-                    <Route path="/projects" element={<Projects/>}/>
-                    <Route path="/contact" element={<Contact/>}/>
-                    <Route path="/calendar" element={<Calendar/>}/>
-                    <Route path="/messenger" element={<Messenger/>}/>
-                    <Route path="/ai" element={<Ai/>}/>
-                    <Route path="/hub" element={<Hub/>}/>
-                    <Route path="/meeting" element={<Meeting/>}/>
-                    <Route path="/employee" element={<Employee/>}/>
-                    <Route path="/document" element={<Document/>}/>
-                    <Route path="/meeting" element={<RoomList/>}/>
-                    <Route path="/meeting/:roomId" element={<Meeting/>}/>
-                </Route>
+            {/* Protected routes with Layout */}
+            {/* <Route element={<PrivateRoute />}>
+      </Route> */}
+            <Route element={<Layout/>}>
+                <Route path="/home" element={<Home/>}/>
+                <Route path="/resume" element={<Resume/>}/>
+                <Route path="/projects" element={<Projects/>}/>
+                <Route path="/contact" element={<Contact/>}/>
+                <Route path="/calendar" element={<Calendar/>}/>
+                <Route path="/messenger" element={<Messenger/>}/>
+                <Route path="/ai" element={<Ai/>}/>
+                <Route path="/hub" element={<Hub/>}/>
+                <Route path="/meeting" element={<Meeting/>}/>
+                <Route path="/employee" element={<Employee/>}/>
+                <Route path="/document" element={<Document/>}/>
+                <Route path="/meetingRoom" element={<MeetingRoom/>}/>
+            </Route>
 
                 {/* Error routes */}
                 <Route path="/404" element={

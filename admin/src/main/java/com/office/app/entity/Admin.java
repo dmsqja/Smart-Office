@@ -18,17 +18,17 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @OneToOne
     @JoinColumn(name = "employee_id")
     private User user;  // 기존 User 엔티티 참조
-
+    
     @Enumerated(EnumType.STRING)
     private AdminRole role;  // SUPER_ADMIN, ADMIN
-
+    
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
+    
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
