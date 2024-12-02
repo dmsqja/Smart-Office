@@ -2,7 +2,7 @@
 import {Routes, Route, Navigate} from 'react-router-dom';
 import {lazy} from 'react';
 import Layout from './components/layout/Layout';
-import PrivateRoute from './components/auth/PrivateRoute';
+import { CalendarProvider } from './context/CalendarContext';
 
 // Lazy load pages
 const Login = lazy(() => import('./components/login/LoginForm'));
@@ -22,10 +22,11 @@ const MeetingRoom = lazy(() => import('./pages/MeetingRoom'));
 
 const AppRoutes = () => {
     return (
-        <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Login />} />
-            <Route path="/password-change" element={<PasswordChange />} />
+        <CalendarProvider>
+            <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<Login />} />
+                <Route path="/password-change" element={<PasswordChange />} />
 
             {/* Protected routes with Layout */}
             {/* <Route element={<PrivateRoute />}>
@@ -45,16 +46,17 @@ const AppRoutes = () => {
                 <Route path="/meetingRoom" element={<MeetingRoom/>}/>
             </Route>
 
-            {/* Error routes */}
-            <Route path="/404" element={
-                <div className="error-page">
-                    <h1>404 - Page Not Found</h1>
-                    <p>The page you are looking for doesn't exist.</p>
-                </div>
-            }/>
+                {/* Error routes */}
+                <Route path="/404" element={
+                    <div className="error-page">
+                        <h1>404 - Page Not Found</h1>
+                        <p>The page you are looking for doesn't exist.</p>
+                    </div>
+                }/>
 
-            <Route path="*" element={<Navigate to="/404" replace/>}/>
-        </Routes>
+                <Route path="*" element={<Navigate to="/404" replace/>}/>
+            </Routes>
+        </CalendarProvider>
     );
 };
 
