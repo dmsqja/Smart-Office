@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,37 +31,41 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화 (개발 환경)
                 .authorizeHttpRequests(auth -> {
+                    // 정적 리소스와 공개 경로 설정
                     auth.requestMatchers(
                                     "/",
                                     "/static/**",
                                     "/error",
                                     "/index.html",
                                     "/login",
-                                    "/assets/**",
                                     "/manifest.json",
                                     "/favicon.ico"
                             ).permitAll()
+                            // WebSocket과 API 요청은 인증 필요
                             .requestMatchers("/ws/**").authenticated()
                             .requestMatchers("/api/**").authenticated();
 
+                    // 개발 환경에서 Swagger UI 접근 허용
                     if ("dev".equals(activeProfile)) {
                         auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll();
                     }
 
-                    auth.anyRequest().authenticated();
+                    auth.anyRequest().permitAll();
                 })
                 .userDetailsService(userDetailsService)
+                // 세션 관리 설정
                 .sessionManagement(session -> {
                     session
                             .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                             .invalidSessionUrl("/")
-                            .maximumSessions(1)
-                            .maxSessionsPreventsLogin(true)
+                            .maximumSessions(1)  // 동시 세션 제한
+                            .maxSessionsPreventsLogin(true)  // 중복 로그인 방지
                             .expiredUrl("/");
-                    session.sessionFixation().newSession();
+                    session.sessionFixation().newSession();  // 세션 고정 공격 방지
                 })
+                // 로그인 설정
                 .formLogin(form -> {
                     form
                             .loginPage("/")
@@ -71,6 +76,7 @@ public class SecurityConfig {
                             .failureHandler(authenticationFailureHandler)
                             .permitAll();
                 })
+                // 로그아웃 설정
                 .logout(logout -> {
                     logout
                             .logoutUrl("/logout")
@@ -79,6 +85,7 @@ public class SecurityConfig {
                             .invalidateHttpSession(true)
                             .logoutSuccessHandler(logoutSuccessHandler);
                 })
+                // 예외 처리 설정
                 .exceptionHandling(handling -> {
                     handling
                             .authenticationEntryPoint(authenticationEntryPoint)
