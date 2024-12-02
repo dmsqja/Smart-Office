@@ -102,7 +102,7 @@
 
         const employeeId = '<sec:authentication property="principal.user.employeeId"/>';
 
-        fetch(`/api/users/${employeeId}/change-password`, {
+        fetch(`/api/users/`+employeeId+`/change-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

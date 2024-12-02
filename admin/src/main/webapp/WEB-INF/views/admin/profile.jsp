@@ -95,7 +95,7 @@
         const data = Object.fromEntries(formData.entries());
         const employeeId = '<sec:authentication property="principal.user.employeeId"/>';
 
-        fetch(`/api/users/${employeeId}`, {
+        fetch(`/api/users/`+employeeId, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -21,35 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class ViewController {
+public class AdminController {
+    private final AdminService adminService;
     private final DashboardService dashboardService;
     private final UserService userService;
-    private final AdminService adminService;
-
-
-    @GetMapping("/")
-    public String root() {
-        return "redirect:/admin/login";
-    }
-
-    @RequestMapping("/login")
-    public String loginPage() {
-        log.info("admin login page");
-        return "login";
-    }
-
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        // 대시보드 통계 데이터 추가
-        model.addAttribute("stats", dashboardService.getDashboardStats());
-        model.addAttribute("departmentStats", dashboardService.getDepartmentStats());
-        model.addAttribute("adminStats", dashboardService.getAdminRoleStats());
-        model.addAttribute("recentUsers", dashboardService.getRecentUsers(10));
-
-        // 컨텐츠 페이지 설정
-        model.addAttribute("contentPage", "admin/dashboard.jsp");
-        return "index";
-    }
 
     @GetMapping("/list")
     public String adminList(
@@ -58,33 +33,10 @@ public class ViewController {
             @PageableDefault(size = 10) Pageable pageable,
             Model model
     ) {
-        // AdminService의 searchAdmins 메서드 호출
         model.addAttribute("adminList", adminService.searchAdmins(keyword, role, pageable));
         model.addAttribute("keyword", keyword);
         model.addAttribute("role", role);
         model.addAttribute("contentPage", "admin/list.jsp");
-        return "index";
-    }
-
-
-
-    @GetMapping("/users")
-    public String userList(UserSearchDto searchDto,
-                           @PageableDefault(size = 10) Pageable pageable,
-                           Model model) {
-        // 부서 목록 조회
-        model.addAttribute("departments", userService.getAllDepartments());
-
-        // 사용자 목록 조회 (페이징, 검색 조건 적용)
-        Page<UserListResponse> users = userService.searchUsers(
-                searchDto.getKeyword(),
-                searchDto.getDepartment(),
-                pageable
-        );
-        model.addAttribute("users", users);
-
-        // 컨텐츠 페이지 설정
-        model.addAttribute("contentPage", "admin/users.jsp");
         return "index";
     }
 
@@ -97,6 +49,34 @@ public class ViewController {
     @GetMapping("/password")
     public String password(Model model) {
         model.addAttribute("contentPage", "admin/password.jsp");
+        return "index";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("stats", dashboardService.getDashboardStats());
+        model.addAttribute("departmentStats", dashboardService.getDepartmentStats());
+        model.addAttribute("adminStats", dashboardService.getAdminRoleStats());
+        model.addAttribute("recentUsers", dashboardService.getRecentUsers(10));
+
+        model.addAttribute("contentPage", "admin/dashboard.jsp");
+        return "index";
+    }
+
+    @GetMapping("/users")
+    public String userList(UserSearchDto searchDto,
+                           @PageableDefault(size = 10) Pageable pageable,
+                           Model model) {
+        model.addAttribute("departments", userService.getAllDepartments());
+
+        Page<UserListResponse> users = userService.searchUsers(
+                searchDto.getKeyword(),
+                searchDto.getDepartment(),
+                pageable
+        );
+        model.addAttribute("users", users);
+
+        model.addAttribute("contentPage", "admin/users.jsp");
         return "index";
     }
 }

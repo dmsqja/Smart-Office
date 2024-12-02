@@ -162,7 +162,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         userModal = new bootstrap.Modal(document.getElementById('userModal'));
     });
-
     function openUserModal(employeeId) {
         const form = document.getElementById('userForm');
         const passwordGroup = document.getElementById('passwordGroup');
@@ -173,8 +172,8 @@
             passwordGroup.style.display = 'none';
             document.getElementById('employeeId').readOnly = true;
 
-            // 사용자 정보 조회
-            fetch(`/api/users/${employeeId}`)
+            // 사용자 정보 조회 URL 수정
+            fetch('/api/users/' + employeeId)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('employeeId').value = data.employeeId;
@@ -191,7 +190,6 @@
 
         userModal.show();
     }
-
     function saveUser() {
         const form = document.getElementById('userForm');
         if (!form.checkValidity()) {
@@ -203,7 +201,7 @@
         const data = Object.fromEntries(formData.entries());
         const employeeId = document.getElementById('employeeId').value;
 
-        const url = isUpdate ? `/api/users/${employeeId}` : '/api/users';
+        const url = isUpdate ? '/api/users/' + employeeId : '/api/users';
         const method = isUpdate ? 'PUT' : 'POST';
 
         fetch(url, {
@@ -228,7 +226,7 @@
 
     function resetPassword(employeeId) {
         if (confirm('비밀번호를 초기화하시겠습니까?')) {
-            fetch(`/api/users/${employeeId}/reset-password`, {
+            fetch('/api/users/' + employeeId + '/reset-password', {
                 method: 'POST'
             })
                 .then(response => {
@@ -246,7 +244,8 @@
 
     function deleteUser(employeeId) {
         if (confirm('정말 삭제하시겠습니까?')) {
-            fetch(`/api/users/${employeeId}`, {
+
+            fetch('/api/users/' + employeeId, {
                 method: 'DELETE'
             })
                 .then(response => {
@@ -257,6 +256,7 @@
                     }
                 })
                 .catch(error => {
+                    console.error('에러 발생:', error);
                     alert('삭제에 실패했습니다.');
                 });
         }

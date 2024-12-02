@@ -265,7 +265,7 @@
     function saveAdminRole(adminId) {
         const role = document.getElementById('adminRole').value;
 
-        fetch(`/api/admin/${adminId}`, {
+        fetch(`/api/admin/`+adminId, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -290,7 +290,7 @@
     // 관리자 삭제
     function deleteAdmin(adminId) {
         if (confirm('정말 이 관리자를 삭제하시겠습니까?')) {
-            fetch(`/api/admin/${adminId}`, {
+            fetch(`/api/admin/`+adminId, {
                 method: 'DELETE'
             })
                 .then(response => {
@@ -319,7 +319,7 @@
     }
 
     function openAdminDetailModal(id) {
-        fetch(`<c:url value="/api/admin/${id}"/>`)
+        fetch(`/api/admin/`+id)
             .then(response => response.json())
             .then(data => {
                 document.getElementById('adminId').value = data.id;
@@ -332,7 +332,7 @@
     function saveAdmin() {
         const form = document.getElementById('adminForm');
         const id = document.getElementById('adminId').value;
-        const url = id ? `/api/admin/${id}` : '/api/admin';
+        const url = id ? `/api/admin/` + id : '/api/admin';
         const method = id ? 'PUT' : 'POST';
 
         fetch(url, {
@@ -357,7 +357,7 @@
 
     function deleteAdmin(id) {
         if (confirm('정말 삭제하시겠습니까?')) {
-            fetch(`<c:url value="/api/admin/${id}"/>`, {
+            fetch(`/api/admin/`+id, {
                 method: 'DELETE'
             })
                 .then(response => {
