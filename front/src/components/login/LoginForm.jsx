@@ -85,6 +85,10 @@ const Login = () => {
     navigate('/password-change');
   };
 
+  const handleReadMore = () => {
+    window.open('https://www.example.com', '_blank');
+  };
+
   return (
       <div className="login-container">
         <div className="login-wrapper">
@@ -96,7 +100,7 @@ const Login = () => {
                   <h1>Smart Office</h1>
                   <p>사내 업무 관리 시스템</p>
                 </div>
-                <button className="read-more-btn">
+                <button className="read-more-btn" onClick={handleReadMore}>
                   자세히 보기
                 </button>
               </div>
