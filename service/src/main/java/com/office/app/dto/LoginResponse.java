@@ -17,7 +17,7 @@ public class LoginResponse {
     private String position;
     private String email;
     private boolean passwordChangeRequired;
-
+    
     public static LoginResponse from(User user) {
         return LoginResponse.builder()
                 .employeeId(user.getEmployeeId())
