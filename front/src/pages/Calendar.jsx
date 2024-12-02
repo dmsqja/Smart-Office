@@ -1,4 +1,4 @@
-// 일정 관리 화면
+// pages/Calendar.jsx
 import CalendarForm from '../components/calendar/CalendarForm';
 import '../styles/pages.css';
 

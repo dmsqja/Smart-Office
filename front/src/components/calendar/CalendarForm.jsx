@@ -18,7 +18,7 @@ const initialEvents = [
   }
 ];
 
-const CalendarForm = () => {
+const CalendarForm = ({ height = 'calc(100vh - 2rem)', minimode = false }) => {
   const [events, setEvents] = useState(initialEvents);
   const DnDCalendar = withDragAndDrop(Calendar);
 
@@ -57,7 +57,7 @@ const CalendarForm = () => {
   }, []);
 
   return (
-    <div className="h-screen p-4">
+    <div className={minimode ? "p-2" : "h-screen p-4"} style={{ height: height }}>
       <DnDCalendar
         localizer={localizer}
         events={events}
@@ -67,9 +67,10 @@ const CalendarForm = () => {
         onSelectEvent={handleSelectEvent}
         resizable
         selectable
-        style={{ height: 'calc(100vh - 2rem)' }}
+        style={{ height : '100%', width : '100%'}}
         defaultView="month"
-        views={['month', 'week', 'day']}
+        views={minimode ? ['month'] : ['month', 'week', 'day']}
+        toolbar={!minimode}
       />
     </div>
   );
