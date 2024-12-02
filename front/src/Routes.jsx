@@ -2,7 +2,7 @@
 import {Routes, Route, Navigate} from 'react-router-dom';
 import {lazy} from 'react';
 import Layout from './components/layout/Layout';
-import PrivateRoute from './components/auth/PrivateRoute';
+import { CalendarProvider } from './context/CalendarContext';
 
 // Lazy load pages
 const Login = lazy(() => import('./components/login/LoginForm'));
@@ -22,40 +22,40 @@ const RoomList = lazy(() => import('./components/meeting/RoomList'));
 
 const AppRoutes = () => {
     return (
-        <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Login />} />
-            <Route path="/password-change" element={<PasswordChange />} />
+        <CalendarProvider>
+            <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<Login />} />
+                <Route path="/password-change" element={<PasswordChange />} />
 
-            {/* Protected routes with Layout */}
-            {/* <Route element={<PrivateRoute />}>
-      </Route> */}
-            <Route element={<Layout/>}>
-                <Route path="/home" element={<Home/>}/>
-                <Route path="/resume" element={<Resume/>}/>
-                <Route path="/projects" element={<Projects/>}/>
-                <Route path="/contact" element={<Contact/>}/>
-                <Route path="/calendar" element={<Calendar/>}/>
-                <Route path="/messenger" element={<Messenger/>}/>
-                <Route path="/ai" element={<Ai/>}/>
-                <Route path="/hub" element={<Hub/>}/>
-                <Route path="/meeting" element={<Meeting/>}/>
-                <Route path="/employee" element={<Employee/>}/>
-                <Route path="/document" element={<Document/>}/>
-                <Route path="/meeting" element={<RoomList/>}/>
-                <Route path="/meeting/:roomId" element={<Meeting/>}/>
-            </Route>
+                {/* Protected routes with Layout */}
+                <Route element={<Layout/>}>
+                    <Route path="/home" element={<Home/>}/>
+                    <Route path="/resume" element={<Resume/>}/>
+                    <Route path="/projects" element={<Projects/>}/>
+                    <Route path="/contact" element={<Contact/>}/>
+                    <Route path="/calendar" element={<Calendar/>}/>
+                    <Route path="/messenger" element={<Messenger/>}/>
+                    <Route path="/ai" element={<Ai/>}/>
+                    <Route path="/hub" element={<Hub/>}/>
+                    <Route path="/meeting" element={<Meeting/>}/>
+                    <Route path="/employee" element={<Employee/>}/>
+                    <Route path="/document" element={<Document/>}/>
+                    <Route path="/meeting" element={<RoomList/>}/>
+                    <Route path="/meeting/:roomId" element={<Meeting/>}/>
+                </Route>
 
-            {/* Error routes */}
-            <Route path="/404" element={
-                <div className="error-page">
-                    <h1>404 - Page Not Found</h1>
-                    <p>The page you are looking for doesn't exist.</p>
-                </div>
-            }/>
+                {/* Error routes */}
+                <Route path="/404" element={
+                    <div className="error-page">
+                        <h1>404 - Page Not Found</h1>
+                        <p>The page you are looking for doesn't exist.</p>
+                    </div>
+                }/>
 
-            <Route path="*" element={<Navigate to="/404" replace/>}/>
-        </Routes>
+                <Route path="*" element={<Navigate to="/404" replace/>}/>
+            </Routes>
+        </CalendarProvider>
     );
 };
 
