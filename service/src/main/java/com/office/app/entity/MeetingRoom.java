@@ -42,5 +42,5 @@ public class MeetingRoom {
 
     @Enumerated(EnumType.STRING)
     private RoomStatus status = RoomStatus.ACTIVE;
-    
+
 }
