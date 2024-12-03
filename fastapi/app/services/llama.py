@@ -1,5 +1,5 @@
 from app.core.config import settings
-from app.core.logger import logger
+from app.core.logging.logger import logger
 from app.models.chat import ChatRequest, Role
 from fastapi import HTTPException
 import httpx

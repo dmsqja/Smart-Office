@@ -2,7 +2,7 @@
 from typing import Literal, Tuple, Dict, Any
 import httpx
 from app.core.config import settings
-from app.core.logger import logger
+from app.core.logging.logger import logger
 
 async def check_llama_service() -> Tuple[Literal["connected", "error", "not_configured"], str, Dict[str, Any]]:
     """

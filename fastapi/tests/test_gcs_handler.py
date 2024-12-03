@@ -1,6 +1,6 @@
 import pytest
 from app.utils.image.gcs_handler import GCSHandler
-from app.core.logger import logger
+from app.core.logging.logger import logger
 import os
 
 @pytest.fixture

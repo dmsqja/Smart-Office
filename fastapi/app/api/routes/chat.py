@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.models.chat import ChatRequest, ChatResponse
 from app.services.llama import LlamaClient
-from app.core.logger import logger
+from app.core.logging.logger import logger
 from app.utils.service_checks import check_llama_service
 
 router = APIRouter()
