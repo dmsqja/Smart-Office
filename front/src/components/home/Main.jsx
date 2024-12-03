@@ -12,8 +12,34 @@ const Main = () => {
         email: "",
         profileImage: defaultProfileImage
     });
+    // const mockUser = {
+    //     name: "김지원",
+    //     position: "선임연구원",
+    //     department: "AI연구소",
+    //     employeeId: "EMP2024001",
+    //     email: "jiwon.kim@company.com",
+    //     profileImage: defaultProfileImage
+    // };
+    // const [user, setUser] = useState(mockUser);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    // useEffect(() => {
+    //     const fetchUserData = async () => {
+    //         try {
+    //             // 실제 API 호출 대신 목업 데이터 사용
+    //             setTimeout(() => {
+    //                 setUser(mockUser);
+    //                 setLoading(false);
+    //             }, 500);
+    //         } catch (error) {
+    //             setError('사용자 정보를 불러오는데 실패했습니다.');
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchUserData();
+    // }, []);
 
     useEffect(() => {
         const getUserFromSession = () => {
