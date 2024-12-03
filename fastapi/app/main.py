@@ -1,7 +1,9 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import chat, health
-from app.core.logger import logger
+from app.core.logging import logger
+from app.core.config import settings
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
@@ -47,7 +49,7 @@ app = FastAPI(
 )
 
 """
-CORS 설정을 통해 다음을 허용:
+CORS 설정을 위해 다음을 허용:
     - 모든 도메인에서의 접근 (allow_origins=["*"])
     - 쿠키 사용 (allow_credentials=True)
     - 모든 HTTP 메서드 (allow_methods=["*"])
@@ -64,3 +66,16 @@ app.add_middleware(
 # API 라우터 설정
 app.include_router(chat.router, prefix="/api/v1/llama", tags=["llama"])
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
+
+if __name__ == "__main__":
+    from app.core.logging.logger import setup_uvicorn_logging
+    setup_uvicorn_logging()
+    
+    uvicorn.run(
+        "app.main:app",
+        host=settings.SERVER_HOST,
+        port=settings.SERVER_PORT,
+        reload=settings.RELOAD,
+        workers=settings.WORKERS,
+        log_config=None
+    )
