@@ -16,11 +16,16 @@ const Main = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchUserData = async () => {
+        const getUserFromSession = () => {
             try {
-                const response = await axios.get('/api/user/me');
-                const userData = response.data;
+                const userInfoStr = sessionStorage.getItem('userInfo');
+                if (!userInfoStr) {
+                    // 세션에 사용자 정보가 없으면 로그인 페이지로
+                    window.location.href = '/';
+                    return;
+                }
 
+                const userData = JSON.parse(userInfoStr);
                 setUser({
                     name: userData.name,
                     position: userData.position,
@@ -32,21 +37,18 @@ const Main = () => {
 
                 // 비밀번호 변경이 필요한 경우
                 if (userData.passwordChangeRequired) {
-                    // 비밀번호 변경 페이지로 리다이렉트
                     window.location.href = '/password-change';
                 }
             } catch (error) {
-                console.error('Failed to fetch user data:', error);
+                console.error('Failed to get user data from session:', error);
                 setError('사용자 정보를 불러오는데 실패했습니다.');
-                if (error.response?.status === 401) {
-                    window.location.href = '/';  // 인증되지 않은 경우 로그인 페이지로
-                }
+                window.location.href = '/';
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchUserData();
+        getUserFromSession();
     }, []);
 
     if (loading) {

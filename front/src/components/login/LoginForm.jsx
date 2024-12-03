@@ -66,6 +66,19 @@ const Login = () => {
         });
 
         if (response.status === 200) {
+          // 서버에서 받은 사용자 정보 저장
+          const userInfo = {
+            employeeId: response.data.employeeId,
+            name: response.data.name,
+            department: response.data.department,
+            position: response.data.position,
+            email: response.data.email,
+            passwordChangeRequired: response.data.passwordChangeRequired
+          };
+
+          // sessionStorage에 저장
+          sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+
           navigate('/home');
         }
       } catch (error) {

@@ -7,15 +7,30 @@ const API_BASE_URL = '/api';
 const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
     headers: {
-        'Content-Type': 'application/json',
-        'X-User-Id': localStorage.getItem('userId') || 'temp-user-id'
+        'Content-Type': 'application/json'
     }
 });
 
-// 요청 인터셉터 추가 - 디버깅용
+// 요청 인터셉터
 axiosInstance.interceptors.request.use(
     config => {
-        console.log('Request:', config);
+        const sessionUserInfo = sessionStorage.getItem('userInfo');
+        let userId;
+
+        if (sessionUserInfo) {
+            try {
+                const parsedUserInfo = JSON.parse(sessionUserInfo);
+                userId = parsedUserInfo.employeeId;
+                console.log('Found userId in sessionStorage:', userId);
+            } catch (e) {
+                console.error('Failed to parse sessionStorage userInfo:', e);
+            }
+        }
+
+        // 헤더에 userId 설정
+        config.headers['X-User-Id'] = userId || 'anonymous';
+        console.log('Setting X-User-Id header:', config.headers['X-User-Id']);
+
         return config;
     },
     error => {
@@ -24,7 +39,7 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// 응답 인터셉터 추가 - 디버깅 및 에러 처리
+// 응답 인터셉터
 axiosInstance.interceptors.response.use(
     response => {
         console.log('Response:', response);
@@ -38,6 +53,7 @@ axiosInstance.interceptors.response.use(
         throw new Error(message);
     }
 );
+
 
 export const api = {
     // 회의실 목록 조회
@@ -71,11 +87,29 @@ export const api = {
     // 회의실 참여
     async joinRoom(roomId, joinData) {
         try {
-            console.log('Joining room:', { roomId, joinData });  // 디버깅용 로그
-            return await axiosInstance.post(`/rooms/${roomId}/join`, {
+            console.log('Joining room:', { roomId, joinData });
+            const sessionUserInfo = sessionStorage.getItem('userInfo');
+            let employeeId = null;
+
+            if (sessionUserInfo) {
+                const parsedUserInfo = JSON.parse(sessionUserInfo);
+                employeeId = parsedUserInfo.employeeId;
+                console.log('Using session storage employeeId:', employeeId);
+            }
+
+            if (!employeeId) {
+                console.error('No employeeId found in sessionStorage');
+                throw new Error('로그인이 필요한 서비스입니다.');
+            }
+
+            const response = await axiosInstance.post(`/rooms/${roomId}/join`, {
                 roomId: roomId,
+                employeeId: employeeId,
                 password: joinData?.password
             });
+
+            console.log('Join room response:', response);
+            return response;
         } catch (error) {
             console.error('Failed to join room:', error);
             throw error;
