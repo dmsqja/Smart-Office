@@ -1,7 +1,7 @@
 from google.cloud import storage
 from typing import List, Optional
 from app.core.config import settings
-from app.core.logger import logger
+from app.core.logging.logger import logger
 import os
 
 class GCSHandler:
