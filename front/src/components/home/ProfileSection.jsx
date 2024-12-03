@@ -12,8 +12,9 @@ const ProfileSection = ({ user }) => {
                     <h1 style={{ fontSize: '1.5rem', marginBottom: 'var(--spacing-2)' }}>
                         <span className="gradient-text">{user.name}</span>님
                     </h1>
-                    <p className="position-text">{user.team}</p>
+                    <p className="position-text">{user.department}</p>
                     <p className="position-text">{user.position}</p>
+                    <p className="position-text">{user.employeeId}</p>
                 </div>
                 <button className="notification-button" style={{ marginTop: 'var(--spacing-3)' }}>
                     <i className="fas fa-bell"></i>
