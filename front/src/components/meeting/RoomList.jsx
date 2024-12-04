@@ -208,7 +208,7 @@ const RoomList = ({ mode = 'join', onBack }) => {
                     </FormControl>
                     <TextField
                         fullWidth
-                        label="비밀번호 (선택사항)"
+                        label="비밀번호"
                         type="password"
                         value={newRoom.password}
                         onChange={(e) => setNewRoom({ ...newRoom, password: e.target.value })}
@@ -221,7 +221,7 @@ const RoomList = ({ mode = 'join', onBack }) => {
                         }
                     />
                     <Button
-                        type="submit"  // 변경
+                        type="submit"
                         fullWidth
                         variant="contained"
                         disabled={loading || newRoom.roomName.length < 3 || (newRoom.password.length > 0 && newRoom.password.length < 4)}

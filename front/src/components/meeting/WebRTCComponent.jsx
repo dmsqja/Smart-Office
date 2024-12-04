@@ -43,6 +43,7 @@ const WebRTCComponent = ({ roomId }) => {
   const peerConnection = useRef(null);
   const websocket = useRef(null);
   const navigate = useNavigate();
+  const [chatMessages, setChatMessages] = useState([]);  // 추가
 
   const configuration = {
     iceServers: [
@@ -139,7 +140,8 @@ const WebRTCComponent = ({ roomId }) => {
         websocket.current.onmessage = async (event) => {
           try {
             const message = JSON.parse(event.data);
-            console.log('Received message:', message.type);
+            console.log('Original WebSocket message:', event.data);  // 원본 메시지 로깅
+            console.log('Parsed message:', message);  // 파싱된 메시지 로깅
 
             switch (message.type) {
               case 'offer':
@@ -152,11 +154,23 @@ const WebRTCComponent = ({ roomId }) => {
                 await handleIceCandidate(message.data);
                 break;
               case 'chat':
-                // 채팅이 닫혀있을 때만 읽지 않은 메시지 카운트 증가
+                console.log('Chat message received:', message);
                 if (!isChatOpen) {
                   setUnreadMessages(prev => prev + 1);
                 }
+                if (message.data) {
+                  // 새 메시지를 chatMessages 상태에 추가
+                  setChatMessages(prev => [...prev, {
+                    id: message.data.messageId,
+                    senderId: message.data.senderId,
+                    senderName: message.data.senderName,
+                    content: message.data.content,
+                    createdAt: message.data.createdAt,
+                    type: message.data.type
+                  }]);
+                }
                 break;
+
               default:
                 console.log('Unknown message type:', message.type);
             }
@@ -164,7 +178,6 @@ const WebRTCComponent = ({ roomId }) => {
             console.error('Error handling WebSocket message:', error);
           }
         };
-
 
 
         // Error handling
@@ -200,7 +213,7 @@ const WebRTCComponent = ({ roomId }) => {
       console.log('Closing WebSocket');
       websocket.current.close();
     }
-    // 방 나가기 API 호출
+    setUnreadMessages(0);
     api.leaveRoom(roomId).catch(console.error);
   };
 
@@ -448,8 +461,8 @@ const WebRTCComponent = ({ roomId }) => {
             websocket={websocket}
             isOpen={isChatOpen}
             onClose={() => setIsChatOpen(false)}
+            messages={chatMessages}
         />
-
         <Box
             sx={{
               display: 'flex',

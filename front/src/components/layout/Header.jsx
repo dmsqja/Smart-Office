@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import '../../styles/layout.css';
 
 const Header = ({ setIsMenuOpen }) => {
@@ -7,24 +8,15 @@ const Header = ({ setIsMenuOpen }) => {
 
     const handleLogout = async () => {
         try {
-            // 로그아웃 로직
-            // const response = await fetch('/logout', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type' : 'application/json'
-            //     }
-            // });
+            const response = await axios.post('/logout', {}, {
+                withCredentials: true // 쿠키 포함
+            });
 
-            // if (!response.ok) {
-            //     throw new Error('로그아웃 처리 중 오류가 발생했습니다.');
-            // }
-            
-            // 로컬 스토리지에서 인증 관련 데이터 제거
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-
-            // 로그아웃 후 로그인 페이지로 리다이렉트
-            navigate('/');
+            if (response.status === 200) {
+                // 세션스토리지에서 사용자 정보 제거
+                sessionStorage.removeItem('userInfo');
+                navigate('/');
+            }
         } catch (error) {
             console.error('Logout failed:', error);
             alert('로그아웃 중 오류가 발생했습니다.');
