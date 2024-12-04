@@ -44,7 +44,6 @@
 
 /* Container */
 .calendar-container,
-.msg-container,
 .ai-container,
 .hub-container,
 .meeting-container,
@@ -55,6 +54,10 @@
   padding: 0 1rem;
 }
 
+.msg-container {
+  max-width: auto;
+  padding: 0 1rem;
+}
 /* Page Headers */
 .page-header {
   padding: var(--section-spacing);
