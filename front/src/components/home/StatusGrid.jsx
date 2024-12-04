@@ -1,27 +1,24 @@
+// StatusGrid.jsx
 import React from 'react';
 import StatusCard from './StatusCard';
 import '../../styles/home.css';
 
 const StatusGrid = ({ stats }) => {
+    const { attendanceStats, leaveStats, overtimeStats } = stats;
+    
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+        <div className="status-grid-container">
             <StatusCard
-                icon="fa-tasks"
-                title="할 일"
-                count={stats.tasks}
-                colorClass="text-primary"
+                title={attendanceStats.title}
+                stats={attendanceStats.stats}
             />
             <StatusCard
-                icon="fa-envelope"
-                title="새 메시지"
-                count={stats.messages}
-                colorClass="text-success"
+                title={leaveStats.title}
+                stats={leaveStats.stats}
             />
             <StatusCard
-                icon="fa-video"
-                title="오늘 회의"
-                count={stats.meetings}
-                colorClass="text-secondary"
+                title={overtimeStats.title}
+                stats={overtimeStats.stats}
             />
         </div>
     );

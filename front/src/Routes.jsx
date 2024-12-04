@@ -29,8 +29,6 @@ const AppRoutes = () => {
                 <Route path="/password-change" element={<PasswordChange />} />
 
             {/* Protected routes with Layout */}
-            {/* <Route element={<PrivateRoute />}>
-      </Route> */}
             <Route element={<Layout/>}>
                 <Route path="/home" element={<Home/>}/>
                 <Route path="/resume" element={<Resume/>}/>

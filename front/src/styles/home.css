@@ -1,200 +1,35 @@
-/* Hero Styles */
-.hero {
-  padding: 5rem 0;
-  overflow: hidden;
-  background-color: white;
-}
-
-.hero-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.hero-content {
-  display: flex;
-  align-items: center;
-  gap: 4rem;
-}
-
-.hero-text {
-  flex: 1;
-}
-
-.badge {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background: var(--gradient);
-  color: white;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-}
-
-.subtitle {
-  font-size: 1.5rem;
-  color: var(--dark);
-  opacity: 0.7;
-  margin-bottom: 1rem;
-}
-
-.title {
-  font-size: 4rem;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 2rem;
-}
-
-.gradient-text {
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-}
-
-.btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.btn-primary {
-  background: var(--gradient);
-  color: white;
-}
-
-.btn-outline {
-  border: 2px solid var(--dark);
-  color: var(--dark);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-outline:hover {
-  background: var(--dark);
-  color: white;
-}
-
-/* Profile Styles */
-.hero-profile {
-  flex: 1;
-}
-
-.profile {
-  position: relative;
-  height: 75vw;
-  width: 75vw;
-  border-radius: 5vw;
-  margin-top: 5vw;
-  max-height: 40rem;
-  max-width: 40rem;
-  background: var(--gradient);
-}
-
-.profile-img {
-  height: 80vw;
-  max-height: 45rem;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* About Section Styles */
-.about {
-  padding: 5rem 0;
-  background-color: var(--light);
-}
-
-.about-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.about-content {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.about-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 3rem;
-}
-
-.about-name {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-}
-
-.about-description {
-  font-size: 1.125rem;
-  color: var(--dark);
-  opacity: 0.8;
-  margin-bottom: 2rem;
-  line-height: 1.7;
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.social-link {
-  font-size: 1.5rem;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.social-link:hover {
-  transform: translateY(-2px);
-}
-
-/* 대시보드 컨텐츠 */
+/* 대시보드 레이아웃 */
 .dashboard-content {
-  padding: var(--spacing-4) var(--spaccing-3);
+  padding: var(--spacing-4);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-/* 환영 섹션 */
-.welcome-section {
-  margin-bottom: var(--spacing-4);
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: var(--spacing-4);
 }
 
-.welcome-header {
+.dashboard-column {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--spacing-4);
 }
 
+/* 프로필 섹션 */
 .welcome-info {
-  flex: 1;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-4);
 }
 
 .profile-container {
   display: flex;
   align-items: center;
-  gap: var(--spacing-4);
 }
 
 .profile-image-wrapper {
-  width: 80px;
-  height: 80px;
   border-radius: 50%;
   overflow: hidden;
   background: var(--gradient);
@@ -209,27 +44,15 @@
   border: 2px solid white;
 }
 
-.user-info h1{
-  font-size: 2rem;
-  margin-bottom: var(--spcing-2);
+.user-info {
+  text-align: center;
+  width: 100%;
 }
 
 .position-text {
   color: var(--gray);
-  font-size: 1rem;
-  margin: 0;
-}
-
-.user-greeting {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--dark);
-  margin-bottom: 0.5rem;
-}
-
-.user-position {
-  color: var(--gray);
-  font-size: 1rem;
+  margin: 0.5rem 0;
+  font-size: 0.875rem;
 }
 
 .notification-button {
@@ -253,268 +76,152 @@
   color: var(--gray);
 }
 
-/* 상태 카드 */
-.status-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-4);
-  margin-bottom: var(--spacing-5);
-}
 
+/* 상태 그리드 */
 .status-card {
-  background-color: white;
+  background: white;
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-4);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.status-content {
-  display: flex;
-  align-items: center;
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-3);
 }
 
-.status-content i {
-  font-size: 1.5rem;
+.status-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4);
 }
 
-.status-info {
-  flex: 1;
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: var(--spacing-2);
 }
 
-.status-info h3 {
-  font-size: 1rem;
+.stat-label {
   color: var(--gray);
-  margin-bottom: var(--spacing-2);
+  font-size: 0.875rem;
 }
 
-.status-info p {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0;
+.stat-value {
+  font-weight: 600;
+  color: var(--dark);
 }
 
-.status-title {
-  font-size: 1rem;
-  color: var(--gray);
-  margin-bottom: 0.5rem;
-}
-
-.status-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-/* 추가한 내용 */
-.mini-calendar-card {
-  background-color: white;
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-4);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 100%;
-}
-
+/* 활동 카드 */
 .activity-card {
-  background-color: white;
+  background: white;
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-4);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.activity-item {
+  padding: var(--spacing-3);
+  border-radius: var(--border-radius);
+  background: var(--light);
+  transition: all 0.2s ease;
+}
+
+.activity-item:hover {
+  background: #f0f0f5;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* 미니 캘린더 */
+.mini-calendar-card {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .card-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--dark);
   margin-bottom: var(--spacing-4);
-}
-
-.activity-item {
-  display: flex;
-  justify-content: space-between;
-  padding: var(--spacing-2);
-  border-radius: var(--border-radius);
-  transition: background-color 0.3s ease;
-}
-
-.activity-item:hover {
-  background-color: var(--light);
-}
-
-.activity-text {
   color: var(--dark);
 }
 
-.activity-time {
+/* 로딩 & 에러 상태 */
+.loading, .error {
+  text-align: center;
+  padding: var(--spacing-5);
   color: var(--gray);
-  font-size: 0.875rem;
 }
 
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-4);
-  margin-top: var(--spacing-4);
+.error {
+  color: var(--danger);
 }
 
-/* 색상 */
-.blue {
-  color: #2563eb;
-}
-
-.green {
-  color: #059669;
-}
-
-.red {
-  color: #dc2626;
-}
-
-/* Responsive Styles */
+/* 반응형 스타일 */
 @media (max-width: 992px) {
-  .profile {
-    height: 40vw;
-    width: 40vw;
+  .dashboard-grid {
+    grid-template-columns: 1fr;
   }
 
-  .profile-img {
-    height: 45vw;
+  .status-grid-container {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .hero-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .title {
-    font-size: 3rem;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .profile {
-    max-width: 500px;
-    margin: 0 auto;
+  .dashboard-content > div {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .status-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-3);
+  .dashboard-content {
+    padding: var(--spacing-3);
   }
 
-  .user-info h1 {
-    font-size: 1.5rem;
+  .status-grid-container {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .profile-container {
-    gap: var(--spacing-3);
+    flex-direction: column;
+    gap: var(--spacing-4);
   }
 
-  .profile-image-wrapper {
-    width: 60px;
-    height: 60px;
-  }
-
-  .dashboard-content {
-    padding: 1rem;
-  }
-
-  .status-cards {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .user-greeting {
-    font-size: 1.5rem;
-  }
-
-  .profile {
-    height: 50vw;
-    width: 50vw;
-  }
-
-  .profile-img {
-    height: 55vw;
-  }
-
-  .title {
-    font-size: 2.5rem;
-  }
-
-  .subtitle {
-    font-size: 1.25rem;
-  }
-
-  .about-title {
-    font-size: 2.5rem;
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
+  .activity-item {
+    flex-direction: column;
+    gap: var(--spacing-2);
   }
 }
 
 @media (max-width: 576px) {
-  .welcome-header {
-    flex-direction: column;
-    align-items: flex-start;
+  .dashboard-content {
+    padding: var(--spacing-2);
+  }
+
+  .status-grid-container {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-column {
     gap: var(--spacing-3);
   }
 
-  .notification-button {
-    align-self: flex-end;
-  }
-
-  .dashboard-content {
-    padding: var(--spacing-3) var(--spacing-2);
-  }
-
-  .profile-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-2);
-  }
-
-  .profile-image-wrapper {
-    width: 50px;
-    height: 50px;
-  }
-
-  .notifications {
-    align-self: flex-end;
-  }
-
-  .profile {
-    height: 60vw;
-    width: 60vw;
-  }
-
-  .profile-img {
-    height: 65vw;
-  }
-
-  .hero {
-    padding: 3rem 0;
-  }
-
-  .badge {
-    font-size: 0.75rem;
-  }
-
-  .title {
-    font-size: 2rem;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
-    text-align: center;
+  .status-card, .activity-card, .mini-calendar-card {
+    padding: var(--spacing-3);
   }
 }
