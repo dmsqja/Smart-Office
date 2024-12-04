@@ -185,38 +185,71 @@ const Main = () => {
     }
 
     return (
+        // <div className="dashboard-content container">
+        //     <div style={{ display: 'grid', gridTemplateColumns: '350px 1fr', gap: 'var(--spacing-4)' }}>
+        //         {/* Left Column */}
+        //         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
+        //             <div className="status-card">
+        //                 <ProfileSection user={user} />
+        //             </div>
+        //             <div className="mini-calendar-card">
+        //                 <h2 className="card-title">일정</h2>
+        //                 <div style={{ height: '400px' }}>
+        //                     <CalendarForm height="100%" minimode={true} />
+        //                 </div>
+        //             </div>
+        //         </div>
+
+        //         {/* Right Column */}
+
+        //         {/* 테스트 정보 */}
+        //         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
+        //             <StatusGrid stats={stats} />
+        //             <ActivityCard activities={activities} />
+        //         </div>
+        //         {/* 테스트 정보 */}
+                
+        //         {/* 실제 기능 */}
+        //         {/* <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
+        //             <StatusGrid stats={user} />
+        //             <ActivityCard activities={activities} />
+        //         </div> */}
+        //         {/* 실제 기능 */}
+        //     </div>
+        // </div>
+
+
         <div className="dashboard-content container">
-        <div style={{ display: 'grid', gridTemplateColumns: '350px 1fr', gap: 'var(--spacing-4)' }}>
-            {/* Left Column */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
-                <div className="status-card">
-                    <ProfileSection user={user} />
-                </div>
-                <div className="mini-calendar-card">
-                    <h2 className="card-title">일정</h2>
-                    <div style={{ height: '400px' }}>
-                        <CalendarForm height="100%" minimode={true} />
+            <div className="dashboard-grid">
+                {/* Left Column */}
+                <div className="dashboard-column">
+                    <div className="status-card">
+                        <ProfileSection user={user} />
+                    </div>
+                    <div className="mini-calendar-card">
+                        <h2 className="card-title">일정</h2>
+                        <div style={{ height: '400px' }}>
+                            <CalendarForm height="100%" minimode={true} />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Right Column */}
+                {/* Right Column */}
+                <div className="dashboard-column">
+                    <StatusGrid stats={stats} />
+                    <ActivityCard activities={activities} />
+                </div>
+                
+               {/* 실제 기능 */}
+    //         {/* <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
+    //             <StatusGrid stats={user} />
+    //             <ActivityCard activities={activities} />
+    //         </div> */}
+                {/* 실제 기능 */}
 
-            {/* 테스트 정보 */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
-                <StatusGrid stats={stats} />
-                <ActivityCard activities={activities} />
             </div>
-            {/* 테스트 정보 */}
-            
-            {/* 실제 기능 */}
-            {/* <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4)' }}>
-                <StatusGrid stats={user} />
-                <ActivityCard activities={activities} />
-            </div> */}
-            {/* 실제 기능 */}
         </div>
-      </div>
+
     );
 };
 

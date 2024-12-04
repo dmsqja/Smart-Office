@@ -5,6 +5,18 @@
   margin: 0 auto;
 }
 
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: var(--spacing-4);
+}
+
+.dashboard-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
 /* 프로필 섹션 */
 .welcome-info {
   background: white;
@@ -43,6 +55,28 @@
   font-size: 0.875rem;
 }
 
+.notification-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--light);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.notification-button:hover {
+  background-color: #ebebeb;
+}
+
+.notification-button i {
+  color: var(--gray);
+}
+
+
 /* 상태 그리드 */
 .status-card {
   background: white;
@@ -55,6 +89,12 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-3);
+}
+
+.status-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4);
 }
 
 .stat-item {
@@ -134,8 +174,16 @@
 }
 
 /* 반응형 스타일 */
-@media (max-width: 1024px) {
-  .stats-grid {
+@media (max-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-content > div {
     grid-template-columns: 1fr;
   }
 }
@@ -143,6 +191,10 @@
 @media (max-width: 768px) {
   .dashboard-content {
     padding: var(--spacing-3);
+  }
+
+  .status-grid-container {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .profile-container {
@@ -156,13 +208,17 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 576px) {
   .dashboard-content {
     padding: var(--spacing-2);
   }
 
-  .stats-grid {
+  .status-grid-container {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-column {
+    gap: var(--spacing-3);
   }
 
   .status-card, .activity-card, .mini-calendar-card {
