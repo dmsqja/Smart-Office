@@ -52,7 +52,7 @@ public class SecurityConfig {
                         auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll();
                     }
 
-                    auth.anyRequest().permitAll();
+                    auth.anyRequest().authenticated();
                 })
                 .userDetailsService(userDetailsService)
                 // 세션 관리 설정

@@ -158,5 +158,28 @@ export const api = {
             console.error('Failed to verify room access:', error);
             throw error;
         }
+    },
+    // 채팅 메시지 조회
+    async getChatMessages(roomId, page = 0, size = 50) {
+        try {
+            return await axiosInstance.get(`/meetings/chat/rooms/${roomId}/messages`, {
+                params: { page, size }
+            });
+        } catch (error) {
+            console.error('Failed to fetch chat messages:', error);
+            throw error;
+        }
+    },
+
+    // 채팅 메시지 삭제
+    async deleteChatMessage(messageId) {
+        try {
+            return await axiosInstance.delete(`/meetings/chat/messages/${messageId}`);
+        } catch (error) {
+            console.error('Failed to delete chat message:', error);
+            throw error;
+        }
     }
+
+
 };

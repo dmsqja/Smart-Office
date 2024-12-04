@@ -10,6 +10,7 @@ import com.office.exception.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class MeetingRoomService {
     private final MeetingRoomRepository roomRepository;
     private final RoomParticipantRepository participantRepository;
-
+    private final MeetingChatService meetingChatService;
     @Transactional
     public MeetingRoomDto createRoom(CreateRoomRequest request, String hostId) {
         MeetingRoom room = MeetingRoom.builder()
@@ -135,24 +136,68 @@ public class MeetingRoomService {
     @Transactional
     public void closeRoom(String roomId, String userId) {
         MeetingRoom room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RoomNotFoundException("Room not found with id: " + roomId));
+                .orElseThrow(() -> new RoomNotFoundException("Room not found"));
 
-        // 방장 권한 확인
         if (!room.getHostId().equals(userId)) {
             throw new UnauthorizedAccessException("Only host can close the room");
         }
 
-        // 이미 종료된 방인지 확인
         if (room.getStatus() == RoomStatus.CLOSED) {
             throw new RoomClosedException("Room is already closed");
         }
 
-        // 방 상태를 CLOSED로 변경
         room.setStatus(RoomStatus.CLOSED);
         roomRepository.save(room);
 
-        // 모든 참가자 강제 퇴장 처리
+        // 모든 참가자 강제 퇴장 처리 및 시스템 메시지 생성
         List<RoomParticipant> participants = participantRepository.findByIdRoomId(roomId);
+        participants.forEach(participant -> {
+            // 채팅 시스템 메시지 생성
+            MeetingChatMessage systemMessage = MeetingChatMessage.builder()
+                    .roomId(roomId)
+                    .senderId("SYSTEM")
+                    .senderName("SYSTEM")
+                    .content("회의가 종료되었습니다.")
+                    .type(MessageType.SYSTEM)
+                    .build();
+            meetingChatService.saveMessage(systemMessage);
+        });
         participantRepository.deleteAll(participants);
+    }
+    /**
+     * 회의방 존재 여부 확인
+     */
+    @Transactional(readOnly = true)
+    public boolean existsRoom(String roomId) {
+        return roomRepository.existsById(roomId);
+    }
+
+    /**
+     * 회의방 채팅 접근 권한 확인
+     */
+    @Transactional(readOnly = true)
+    public void validateChatAccess(String roomId, String participantId) {
+        MeetingRoom room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomNotFoundException("Room not found"));
+
+        // 방이 활성 상태인지 확인
+        if (room.getStatus() != RoomStatus.ACTIVE) {
+            throw new IllegalStateException("Room is not active");
+        }
+
+        // 참가자가 해당 방에 속해있는지 확인
+        RoomParticipantId participantKey = new RoomParticipantId(participantId, roomId);
+        if (!participantRepository.existsById(participantKey)) {
+            throw new UnauthorizedAccessException("User is not a participant of this room");
+        }
+    }
+
+    /**
+     * 회의방 참가자 정보 조회
+     */
+    @Transactional(readOnly = true)
+    public RoomParticipant getParticipant(String roomId, String participantId) {
+        return participantRepository.findById(new RoomParticipantId(participantId, roomId))
+                .orElseThrow(() -> new NotFoundException("Participant not found"));
     }
 }

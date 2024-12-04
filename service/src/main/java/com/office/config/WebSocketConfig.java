@@ -1,6 +1,7 @@
 package com.office.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.office.app.service.MeetingChatService;
 import com.office.app.service.MeetingRoomService;
 import com.office.handler.WebRTCSignalingHandler;
 import com.office.interceptor.WebSocketHandshakeInterceptor;
@@ -17,6 +18,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfig implements WebSocketConfigurer {
     private final ObjectMapper objectMapper;
     private final MeetingRoomService meetingRoomService;
+    private final MeetingChatService meetingChatService;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
@@ -27,6 +29,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Bean
     public WebRTCSignalingHandler webRTCSignalingHandler() {
-        return new WebRTCSignalingHandler(objectMapper, meetingRoomService);
+        return new WebRTCSignalingHandler(
+                objectMapper,
+                meetingRoomService,
+                meetingChatService
+        );
     }
 }

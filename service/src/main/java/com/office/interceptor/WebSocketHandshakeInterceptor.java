@@ -1,5 +1,7 @@
 package com.office.interceptor;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -29,19 +31,39 @@ public class WebSocketHandshakeInterceptor extends HttpSessionHandshakeIntercept
 
                 if (auth != null && auth.isAuthenticated()) {
                     String userId = auth.getName(); // 인증된 사용자의 ID를 가져옴
+
+                    // 세션에서 사용자 정보 가져오기
+                    String userInfo = servletRequest.getServletRequest().getHeader("userInfo");
+                    if (userInfo != null) {
+                        try {
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            JsonNode userNode = objectMapper.readTree(userInfo);
+                            String userName = userNode.get("name").asText();
+
+                            attributes.put("X-User-Id", userId);
+                            attributes.put("X-User-Name", userName);
+                            log.debug("WebSocket handshake - User ID: {}, Name: {}", userId, userName);
+                            return true;
+                        } catch (Exception e) {
+                            log.error("Error parsing user info from session", e);
+                        }
+                    }
+
+                    // 기본 처리
                     attributes.put("X-User-Id", userId);
                     log.debug("WebSocket handshake - User ID added to attributes: {}", userId);
+                    return true;
                 } else {
                     log.warn("WebSocket handshake - No authenticated user found");
-                    return false; // 인증되지 않은 사용자는 연결 거부
+                    return false;
                 }
             } else {
                 log.warn("WebSocket handshake - No session found");
-                return false; // 세션이 없는 경우 연결 거부
+                return false;
             }
         }
 
-        return super.beforeHandshake(request, response, wsHandler, attributes);
+        return false;
     }
 
     @Override
