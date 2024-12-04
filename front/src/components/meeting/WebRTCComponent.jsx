@@ -366,9 +366,17 @@ const WebRTCComponent = ({ roomId }) => {
   };
 
   const handleChatMessage = (message) => {
-    if (!isChatOpen) {
-      setUnreadMessages(prev => prev + 1);
+    if (!isChatOpen && message.data) {
+      // 메시지가 시스템 메시지가 아니고, 내가 보낸 메시지가 아닐 때만 카운트
+      const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+      const isSystemMessage = message.data.type === 'JOIN' || message.data.type === 'LEAVE';
+      const isMyMessage = message.data.senderId === userInfo?.employeeId;
+
+      if (!isSystemMessage && !isMyMessage) {
+        setUnreadMessages(prev => prev + 1);
+      }
     }
+
     if (message.data) {
       setChatMessages(prev => [...prev, message.data]);
     }
