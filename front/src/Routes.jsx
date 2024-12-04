@@ -19,6 +19,7 @@ const Meeting = lazy(() => import ('./pages/Meeting'));
 const Employee = lazy(() => import ('./pages/Employee'));
 const Document = lazy(() => import ('./pages/Document'));
 const MeetingRoom = lazy(() => import('./pages/MeetingRoom'));
+const KakaoMap = lazy(() => import('./pages/KakaoMap'));
 
 const AppRoutes = () => {
     return (
@@ -42,6 +43,7 @@ const AppRoutes = () => {
                 <Route path="/employee" element={<Employee/>}/>
                 <Route path="/document" element={<Document/>}/>
                 <Route path="/meetingRoom" element={<MeetingRoom/>}/>
+                <Route path="/map" element={<KakaoMap/>}/>
             </Route>
 
                 {/* Error routes */}
