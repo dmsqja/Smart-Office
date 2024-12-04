@@ -46,7 +46,6 @@ const ChatComponent = ({ roomId, websocket, isOpen, onClose, messages }) => {
         }
     }, [messages]);
 
-    console.log('Current messages in render:', messages);
     const handleSendMessage = async () => {
         if (!newMessage.trim() || !websocket?.current) return;
 
