@@ -14,7 +14,8 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
         { path: "/hub", label: "Hub", icon: "fas fa-cubes" },
         { path: "/meeting", label: "Meeting", icon: "fas fa-video" },
         { path: "/employee", label: "Emp", icon: "fas fa-users" },
-        { path: "/document", label: "Doc", icon: "fas fa-file" }
+        { path: "/document", label: "Doc", icon: "fas fa-file" },
+        { path: "/map", label: "Map", icon: "fas fa-map-marked-alt" }
     ];
 
     return (
