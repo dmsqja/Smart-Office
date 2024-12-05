@@ -1,47 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
-import generateMockData from '../../utils/generateMockData';
-import searchData from '../../data/searchData.json';
+import useFetch from '../../hooks/useFetch';
 import '../../styles/employee.css';
 
 const EmployeeForm = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [mockData, setMockData] = useState([]);
     const [displayedResults, setDisplayedResults] = useState([]);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const itemsPerPage = 6; // 한 번에 보여줄 아이템 수
-
-    useEffect(() => { 
-        // generateMockData 대신 JSON 데이터 사용
-        // const data = generateMockData(100);
-        // console.log('생성된 데이터:', data);
-        // setMockData(data);
-        console.log('searchdata:', searchData);
-        if (searchData && searchData.items) {
-            console.log('검색 데이터:', searchData.items);
-            setMockData(searchData.items);
-        } else {
-            console.error('Invalid searchData:', searchData);
-        }
-    }, []);
-
-    // 스크롤 이벤트 처리
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollHeight = document.documentElement.scrollHeight;
-            const scrollTop = document.documentElement.scrollTop;
-            const clientHeight = document.documentElement.clientHeight;
-
-            // 하단에서 100px 전에 도달했을 때 로드
-            if (scrollTop + clientHeight >= scrollHeight - 1) {
-                loadMore();
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [searchResults, page]);
+    
+    // JSON 서버에서 데이터 가져오기
+    const userData = useFetch('http://localhost:3001/user');
 
     const loadMore = useCallback (() => {
         const startIndex = (page - 1) * itemsPerPage;
@@ -51,24 +21,57 @@ const EmployeeForm = () => {
         if (newResults.length > 0 && startIndex < searchResults.length) {
             setIsLoading(true);
             setTimeout(() => {
-                setDisplayedResults(prev => [...prev, ...newResults]);
+                // 중복 체크를 위해 set 사용
+                const uniqueResults = Array.from(new Set([...displayedResults, ...newResults].map(item => item.id)))
+                    .map(id => [...displayedResults, ...newResults].find(item => item.id === id));
+
+                setDisplayedResults(uniqueResults);
                 setPage(prev => prev + 1);
                 setIsLoading(false);
             }, 1000);
         }
-    }, [page, searchResults, itemsPerPage]);
+    }, [page, searchResults, itemsPerPage, displayedResults]);
+
+    useEffect(() => {
+        if (userData && Array.isArray(userData)) {
+            console.log('사용자 데이터:', userData);
+            setSearchResults(userData);
+            setDisplayedResults(userData.slice(0, itemsPerPage));
+        }
+    }, [userData, itemsPerPage]);
+
+    // 스크롤 이벤트 처리
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollHeight = document.documentElement.scrollHeight;
+            const scrollTop = document.documentElement.scrollTop;
+            const clientHeight = document.documentElement.clientHeight;
+
+            // 하단에서 100px 전에 도달했을 때 로드
+            // 디바운싱 처리
+            if (!isLoading && scrollTop + clientHeight >= scrollHeight - 1) {
+                loadMore();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [searchResults, page, loadMore, isLoading]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('검색어:', searchTerm);
-        console.log('현재 mockData:', mockData);
 
-        if (!Array.isArray(mockData)) {
-            console.error('mockData is not an array: ', mockData);
+        // 검색 시 페이지와 displayedResults 초기화
+        setPage(1);
+        setDisplayedResults([]);
+
+        if (!Array.isArray(userData)) {
+            console.error('userData is not an array: ', userData);
             return;
         }
 
-        let results = mockData.filter(item => {
+        let results = userData.filter(item => {
             if (!item || typeof item.name !== 'string' || typeof item.department !== 'string' || typeof item.position !== 'string') {
                 console.log('Invalid item:', item);
                 return false;
@@ -85,7 +88,6 @@ const EmployeeForm = () => {
         setTimeout(() => {
             setSearchResults(results);
             setDisplayedResults(results.slice(0, itemsPerPage));
-            setPage(2);            
         }, 500);
     };
 
