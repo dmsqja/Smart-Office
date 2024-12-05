@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/server-grow/node_modules
 /.pnp
 .pnp.js
 
