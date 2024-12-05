@@ -1,19 +1,29 @@
 {
-    "comment": "This JSON file contains search data used in the application. It is located at src/data/searchData.json.",
-    "items": [
+  "comment": "Employee data for the application",
+  "items": [
       {
-        "id": 1,
-        "title": "서울역 근처 맛집",
-        "category": "articles",
-        "content": "서울역 주변 맛집 리스트입니다...",
-        "date": "2024-01-15"
+          "id": "EMP2024001",
+          "name": "김지원",
+          "position": "선임연구원",
+          "department": "AI연구소",
+          "email": "jiwon.kim@company.com",
+          "joinDate": "2020-03-15"
       },
       {
-        "id": 2, 
-        "title": "여행 상품 A",
-        "category": "products", 
-        "content": "제주도 3박 4일 패키지...",
-        "date": "2024-02-01"
+          "id": "EMP2024002",
+          "name": "이민수",
+          "position": "책임연구원",
+          "department": "개발팀",
+          "email": "minsu.lee@company.com",
+          "joinDate": "2021-05-20"
+      },
+      {
+          "id": "EMP2024003",
+          "name": "박서연",
+          "position": "대리",
+          "department": "HR팀",
+          "email": "seoyeon.park@company.com",
+          "joinDate": "2022-09-01"
       }
-    ]
+  ]
 }

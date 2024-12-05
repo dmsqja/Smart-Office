@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import generateMockData from '../../utils/generateMockData';
+import searchData from '../../data/searchData.json';
 import '../../styles/employee.css';
 
 const EmployeeForm = () => {
@@ -11,10 +12,18 @@ const EmployeeForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const itemsPerPage = 6; // 한 번에 보여줄 아이템 수
 
-    useEffect(() => {
-        const data = generateMockData(100);
-        console.log('생성된 데이터:', data);
-        setMockData(data);
+    useEffect(() => { 
+        // generateMockData 대신 JSON 데이터 사용
+        // const data = generateMockData(100);
+        // console.log('생성된 데이터:', data);
+        // setMockData(data);
+        console.log('searchdata:', searchData);
+        if (searchData && searchData.items) {
+            console.log('검색 데이터:', searchData.items);
+            setMockData(searchData.items);
+        } else {
+            console.error('Invalid searchData:', searchData);
+        }
     }, []);
 
     // 스크롤 이벤트 처리
@@ -52,11 +61,24 @@ const EmployeeForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('검색어:', searchTerm);
+        console.log('현재 mockData:', mockData);
 
-        let results = mockData.filter(item =>
-            (item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.content.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
+        if (!Array.isArray(mockData)) {
+            console.error('mockData is not an array: ', mockData);
+            return;
+        }
+
+        let results = mockData.filter(item => {
+            if (!item || typeof item.name !== 'string' || typeof item.department !== 'string' || typeof item.position !== 'string') {
+                console.log('Invalid item:', item);
+                return false;
+            }
+            return (
+                item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.position.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        });
 
         console.log('검색 결과:', results);
 
@@ -89,10 +111,14 @@ const EmployeeForm = () => {
                     <>
                         {displayedResults.map(item => (
                             <div key={item.id} className="emp-result-item">
-                                <h3>{item.title}</h3>
-                                <p className="emp-result-category">{item.category}</p>
-                                <p className="emp-result-content">{item.content}</p>
-                                <p className="emp-result-date">{item.date}</p>
+                                <h3>{item.name}</h3>
+                                <p className="emp-result-category">{item.department}</p>
+                                <p className="emp-result-content">
+                                    <strong>직급:</strong> {item.position}<br />
+                                    <strong>사번:</strong> {item.id}<br />
+                                    <strong>이메일:</strong> {item.email}
+                                </p>
+                                <p className="emp-result-date">입사일: {item.joinDate}</p>
                             </div>
                         ))}
                         {isLoading && displayedResults.length < searchResults.length && (
@@ -107,7 +133,6 @@ const EmployeeForm = () => {
                 )}
             </div>
         </div>
-        
     );
 };
 
