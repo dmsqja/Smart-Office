@@ -38,7 +38,8 @@
 .contact-page,
 .meeting-page,
 .emp-page,
-.doc-page {
+.doc-page,
+.map-page {
   background-color: var(--light);
 }
 
@@ -48,7 +49,8 @@
 .hub-container,
 .meeting-container,
 .emp-container,
-.doc-container {
+.doc-container,
+.map-container {
   max-width: 1200px;
   margin: 3rem auto;
   padding: 0 1rem;
