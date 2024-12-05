@@ -1,4 +1,4 @@
-// 메신저 화면
+// Messenger page
 import MessengerForm from '../components/messenger/MessengerForm';
 import '../styles/pages.css';
 
