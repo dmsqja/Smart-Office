@@ -1,7 +1,7 @@
 package com.office.controller;
 
-import com.office.app.dto.ChatResponse;
-import com.office.app.dto.ChatRequest;
+import com.office.app.dto.LlamaChatResponse;
+import com.office.app.dto.LlamaChatRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,20 +23,20 @@ public class LlamaController {
     }
 
     @PostMapping("/chat")
-    public Mono<ChatResponse> chat(@RequestBody ChatRequest request) {
+    public Mono<LlamaChatResponse> chat(@RequestBody LlamaChatRequest request) {
         return webClient.post()
                 .uri("/api/llama/chat")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(ChatResponse.class)
+                .bodyToMono(LlamaChatResponse.class)
                 .doOnError(e -> log.error("Chat request failed: ", e))
-                .onErrorReturn(new ChatResponse("오류가 발생했습니다.", "error"));
+                .onErrorReturn(new LlamaChatResponse("오류가 발생했습니다.", "error"));
     }
 
     @GetMapping("/test")
-    public Mono<ChatResponse> testChat() {
-        ChatRequest request = new ChatRequest("안녕하세요, 자기소개 해주세요.");
+    public Mono<LlamaChatResponse> testChat() {
+        LlamaChatRequest request = new LlamaChatRequest("안녕하세요, 자기소개 해주세요.");
         return chat(request);
     }
 }

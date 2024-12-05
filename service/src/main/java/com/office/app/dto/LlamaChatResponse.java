@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatRequest {
-    private String prompt;
+public class LlamaChatResponse {
+    private String response;
+    private String status;
 }

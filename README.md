@@ -1,4 +1,5 @@
-[![Docker Image CI](https://github.com/Tae4an/Smart-Office/actions/workflows/ci.yml/badge.svg)](https://github.com/Tae4an/Smart-Office/actions/workflows/ci.yml)
+[![Build Status](http://211.188.62.189:8080/buildStatus/icon?job=SmartOffice&style=flat-square&subject=CI/CD)](http://211.188.62.189:8080/job/SmartOffice)
+
 # 🚀 Smart Office Solution
 
 혁신적인 업무 환경의 미래를 위한 올인원 스마트 오피스 솔루션

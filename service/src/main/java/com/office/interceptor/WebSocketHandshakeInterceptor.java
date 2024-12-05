@@ -1,5 +1,6 @@
 package com.office.interceptor;
 
+import com.office.app.security.CustomUserDetails;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -14,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class WebSocketHandshakeInterceptor extends HttpSessionHandshakeInterceptor {
-
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
@@ -24,26 +24,26 @@ public class WebSocketHandshakeInterceptor extends HttpSessionHandshakeIntercept
             HttpSession session = servletRequest.getServletRequest().getSession(false);
 
             if (session != null) {
-                // Spring Security 컨텍스트에서 인증 정보 가져오기
                 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-                if (auth != null && auth.isAuthenticated()) {
-                    String userId = auth.getName(); // 인증된 사용자의 ID를 가져옴
-                    attributes.put("X-User-Id", userId);
-                    log.debug("WebSocket handshake - User ID added to attributes: {}", userId);
-                } else {
-                    log.warn("WebSocket handshake - No authenticated user found");
-                    return false; // 인증되지 않은 사용자는 연결 거부
+                if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof CustomUserDetails) {
+                    CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+                    attributes.put("X-User-Id", userDetails.getUsername());
+                    attributes.put("X-User-Name", userDetails.getName());
+                    return true;
                 }
-            } else {
-                log.warn("WebSocket handshake - No session found");
-                return false; // 세션이 없는 경우 연결 거부
+
+                log.warn("WebSocket handshake - No authenticated user found");
+                return false;
             }
+
+            log.warn("WebSocket handshake - No session found");
+            return false;
         }
 
-        return super.beforeHandshake(request, response, wsHandler, attributes);
+        return false;
     }
-
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                WebSocketHandler wsHandler, Exception ex) {
