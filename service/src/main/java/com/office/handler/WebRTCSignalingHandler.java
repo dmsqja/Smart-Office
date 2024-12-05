@@ -146,6 +146,7 @@ public class WebRTCSignalingHandler extends TextWebSocketHandler {
 
             sendParticipantsList(roomId, session);
 
+            // 입장 메시지 생성 및 저장
             MeetingChatMessage joinMessage = MeetingChatMessage.builder()
                     .roomId(roomId)
                     .senderId("SYSTEM")
@@ -154,10 +155,31 @@ public class WebRTCSignalingHandler extends TextWebSocketHandler {
                     .type(MessageType.JOIN)
                     .build();
 
-            meetingChatService.saveMessage(joinMessage);
+            MeetingChatMessage savedMessage = meetingChatService.saveMessage(joinMessage);
+
+            // 입장 메시지를 채팅 메시지 형태로 변환하여 브로드캐스트
+            SignalMessage chatMessage = new SignalMessage();
+            chatMessage.setType("chat");
+            chatMessage.setRoomId(roomId);
+            Map<String, Object> chatData = new HashMap<>();
+            chatData.put("messageId", savedMessage.getId());
+            chatData.put("senderId", savedMessage.getSenderId());
+            chatData.put("senderName", savedMessage.getSenderName());
+            chatData.put("content", savedMessage.getContent());
+            chatData.put("type", savedMessage.getType().toString());
+            chatData.put("createdAt", savedMessage.getCreatedAt().toString());
+            chatMessage.setData(chatData);
+
+            String jsonMessage = objectMapper.writeValueAsString(chatMessage);
+            broadcastToRoom(session, new TextMessage(jsonMessage), roomId);
+
+            // 새로 입장한 사용자에게 이전 메시지 이력 전송
             sendRecentMessages(roomId, session);
 
         } catch (RoomNotFoundException e) {
+            handleError(session, e);
+        } catch (JsonProcessingException e) {
+            log.error("Error processing join message", e);
             handleError(session, e);
         }
     }
