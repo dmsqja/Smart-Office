@@ -44,6 +44,8 @@
 }
 
 /* Container */
+.resume-container,
+.projects-container,
 .calendar-container,
 .ai-container,
 .hub-container,
@@ -88,11 +90,6 @@
 /* Home Page Specific */
 
 /* Resume Page Specific */
-.resume-container {
-  max-width: 900px;
-  margin: 3rem auto;
-  padding: 0 1rem;
-}
 
 /* Contact Page Specific */
 .contact-page {

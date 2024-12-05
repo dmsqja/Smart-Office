@@ -1,0 +1,19 @@
+{
+    "comment": "This JSON file contains search data used in the application. It is located at src/data/searchData.json.",
+    "items": [
+      {
+        "id": 1,
+        "title": "서울역 근처 맛집",
+        "category": "articles",
+        "content": "서울역 주변 맛집 리스트입니다...",
+        "date": "2024-01-15"
+      },
+      {
+        "id": 2, 
+        "title": "여행 상품 A",
+        "category": "products", 
+        "content": "제주도 3박 4일 패키지...",
+        "date": "2024-02-01"
+      }
+    ]
+}
