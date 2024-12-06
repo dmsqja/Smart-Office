@@ -58,11 +58,14 @@ const WebRTCComponent = ({ roomId }) => {
 
     const configuration = {
         iceServers: [{
-            urls: process.env.REACT_APP_TURN_SERVER_URL,
+            url: process.env.REACT_APP_TURN_SERVER_URL,
             username: process.env.REACT_APP_TURN_USERNAME,
             credential: process.env.REACT_APP_TURN_PASSWORD
         }]
     };
+    console.log('TURN Server URL:', process.env.REACT_APP_TURN_SERVER_URL);
+    console.log('TURN Username:', process.env.REACT_APP_TURN_USERNAME);
+
     const initializeStream = async () => {
         try {
             console.log('Requesting media stream...');
@@ -304,7 +307,7 @@ const WebRTCComponent = ({ roomId }) => {
                         }
                         break;
                     case 'ice-candidate':
-                        console.log('Received ICE candidate');
+                        console.log('Received ICE candidate',message.data);
                         if (peerConnection.current.remoteDescription) {
                             await handleIceCandidate(message.data);
                         } else {
