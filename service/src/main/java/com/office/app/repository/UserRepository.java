@@ -1,8 +1,12 @@
 package com.office.app.repository;
 
-import com.office.app.dto.User;
+import com.office.app.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
+import java.util.Optional;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, String> {
+    Optional<User> findByEmployeeId(String employeeId);
 }

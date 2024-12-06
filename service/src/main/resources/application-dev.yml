@@ -1,21 +1,9 @@
 server:
-  # SSL 설정 추가
-  ssl:
-    enabled: true
-    key-store: classpath:server.p12
-    key-store-password: ENC(CLTCgFTz0XA+nEThhVb8JfKwC2HECWoGW1fFf9sQsXQ=)
-    key-store-type: PKCS12
-    key-alias: tomcat
-  # 기존 설정 유지
-  port: 443  # HTTPS 기본 포트로 변경
+  port: 80
   servlet:
     encoding:
       charset: UTF-8
       force: true
-
-# HTTP -> HTTPS 리다이렉션을 위한 추가 포트
-http:
-  port: 80
 
 spring:
   datasource:
@@ -26,7 +14,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -72,9 +60,19 @@ logging:
     org.springframework.web.servlet.resource: TRACE
     org.springframework.web.servlet.DispatcherServlet: DEBUG
 
-app:
-  dir:
-    imgdir: file:///C:/SmartOffice/imgs/
-    uploadimgdir: C:/SmartOffice/imgs/
-    logdir: file:///C:/SmartOffice/logs/
-    readLogDir: C:/SmartOffice/logs/
+  springdoc:
+    swagger-ui:
+      path: /swagger-ui.html
+      enabled: true
+      disable-swagger-default-url: true
+      # HTTPS 설정
+      url: /v3/api-docs
+      config-url: /v3/api-docs/swagger-config
+      urls:
+        - url: /v3/api-docs
+          name: Smart Office API
+
+    api-docs:
+      path: /v3/api-docs
+    default-consumes-media-type: application/json
+    default-produces-media-type: application/json

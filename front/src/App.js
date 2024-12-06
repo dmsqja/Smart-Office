@@ -1,21 +1,33 @@
 import { Suspense } from 'react';
-import Layout from './components/layout/Layout';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import AppRoutes from './Routes';
 import './styles/global.css';
 import './styles/pages.css';
 
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#1976d2',
+        },
+        secondary: {
+            main: '#dc004e',
+        },
+    },
+});
+
 function App() {
-  return (
-      <Suspense fallback={
-        <div className="loading">
-          <div className="loading-spinner"></div>
-        </div>
-      }>
-        <Layout>
-          <AppRoutes />
-        </Layout>
-      </Suspense>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Suspense fallback={
+                <div className="loading">
+                    <div className="loading-spinner"></div>
+                </div>
+            }>
+                <AppRoutes />
+            </Suspense>
+        </ThemeProvider>
+    );
 }
 
 export default App;

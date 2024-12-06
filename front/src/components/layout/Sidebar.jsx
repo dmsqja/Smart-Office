@@ -4,7 +4,7 @@ import '../../styles/layout.css';
 
 const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
     const menuItems = [
-        { path: "/", label: "Home", icon: "fas fa-home" },
+        { path: "/home", label: "Home", icon: "fas fa-home" },
         { path: "/resume", label: "Resume", icon: "fas fa-file-alt" },
         { path: "/projects", label: "Projects", icon: "fas fa-folder-open" },
         { path: "/contact", label: "Contact", icon: "fas fa-phone" },
@@ -14,14 +14,15 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
         { path: "/hub", label: "Hub", icon: "fas fa-cubes" },
         { path: "/meeting", label: "Meeting", icon: "fas fa-video" },
         { path: "/employee", label: "Emp", icon: "fas fa-users" },
-        { path: "/document", label: "Doc", icon: "fas fa-file" }
+        { path: "/document", label: "Doc", icon: "fas fa-file" },
+        { path: "/map", label: "Map", icon: "fas fa-map-marked-alt" }
     ];
 
     return (
         <>
             <aside className={`sidebar ${isMenuOpen ? 'show' : ''}`}>
                 <div className="sidebar-header">
-                    <NavLink to="/" className="brand">
+                    <NavLink to="/home" className="brand">
                         <span className="brand-text">Start Bootstrap</span>
                     </NavLink>
                 </div>
@@ -44,8 +45,8 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                 </nav>
             </aside>
             <div
-            className={`sidebar-overlay ${isMenuOpen ? 'show' : ''}`}
-            onClick={() => setIsMenuOpen(false)}
+                className={`sidebar-overlay ${isMenuOpen ? 'show' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
             />
         </>
     );
