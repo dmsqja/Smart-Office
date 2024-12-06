@@ -376,7 +376,6 @@ public class WebRTCSignalingHandler extends TextWebSocketHandler {
         }
     }
 
-    // 내부 클래스: 방 세션 관리
     private static class RoomSession {
         private final Map<String, WebSocketSession> participants = new ConcurrentHashMap<>();
         private final Map<String, String> participantNames = new ConcurrentHashMap<>();

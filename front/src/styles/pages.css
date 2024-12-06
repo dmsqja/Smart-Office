@@ -38,23 +38,30 @@
 .contact-page,
 .meeting-page,
 .emp-page,
-.doc-page {
+.doc-page,
+.map-page {
   background-color: var(--light);
 }
 
 /* Container */
+.resume-container,
+.projects-container,
 .calendar-container,
-.msg-container,
 .ai-container,
 .hub-container,
 .meeting-container,
 .emp-container,
-.doc-container {
+.doc-container,
+.map-container {
   max-width: 1200px;
   margin: 3rem auto;
   padding: 0 1rem;
 }
 
+.msg-container {
+  max-width: auto;
+  padding: 0 1rem;
+}
 /* Page Headers */
 .page-header {
   padding: var(--section-spacing);
@@ -83,11 +90,6 @@
 /* Home Page Specific */
 
 /* Resume Page Specific */
-.resume-container {
-  max-width: 900px;
-  margin: 3rem auto;
-  padding: 0 1rem;
-}
 
 /* Contact Page Specific */
 .contact-page {

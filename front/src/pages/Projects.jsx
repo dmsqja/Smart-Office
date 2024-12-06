@@ -37,7 +37,7 @@ const Projects = () => {
         </h1>
       </div>
 
-      <div className="container">
+      <div className="projects-container">
         <div className="projects-grid">
           {projects.map((project, index) => (
             <ProjectCard key={index} project={project} />

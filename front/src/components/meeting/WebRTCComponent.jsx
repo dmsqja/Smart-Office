@@ -48,6 +48,7 @@ const WebRTCComponent = ({ roomId }) => {
     const [participants, setParticipants] = useState([]);
     const [showParticipants, setShowParticipants] = useState(false);
     const [pendingCandidates, setPendingCandidates] = useState([]);
+    const [remoteStreams, setRemoteStreams] = useState(new Map());
 
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
@@ -56,12 +57,15 @@ const WebRTCComponent = ({ roomId }) => {
     const navigate = useNavigate();
 
     const configuration = {
-        iceServers: [
-            {
-                urls: 'stun:stun.l.google.com:19302'
-            }
-        ]
+        iceServers: [{
+            url: process.env.REACT_APP_TURN_SERVER_URL,
+            username: process.env.REACT_APP_TURN_USERNAME,
+            credential: process.env.REACT_APP_TURN_PASSWORD
+        }]
     };
+    console.log('TURN Server URL:', process.env.REACT_APP_TURN_SERVER_URL);
+    console.log('TURN Username:', process.env.REACT_APP_TURN_USERNAME);
+
     const initializeStream = async () => {
         try {
             console.log('Requesting media stream...');
@@ -118,23 +122,24 @@ const WebRTCComponent = ({ roomId }) => {
 
         peerConnection.current.ontrack = (event) => {
             console.log('Received remote track:', event.track.kind);
-            const [remoteStream] = event.streams;
+            const [stream] = event.streams;
+            const senderId = event.target.senderId;
 
-            if (remoteStream) {
-                console.log('Setting remote stream');
-                setRemoteStream(remoteStream);
+            console.log('ontrack event - senderId:', senderId);
+            console.log('Current participants in ontrack:', participants);
 
-                if (remoteVideoRef.current) {
-                    console.log('Updating remote video element');
-                    remoteVideoRef.current.srcObject = remoteStream;
-
-                    remoteVideoRef.current.onloadedmetadata = () => {
-                        console.log('Remote video metadata loaded');
-                        remoteVideoRef.current.play()
-                            .then(() => console.log('Remote video playing'))
-                            .catch(err => console.error('Error playing remote video:', err));
-                    };
-                }
+            if (stream) {
+                console.log('Setting remote stream for user:', senderId);
+                setRemoteStreams(prev => {
+                    const newStreams = new Map(prev);
+                    const participant = participants.find(p => p.userId === senderId);
+                    const existingStream = newStreams.get(senderId);
+                    newStreams.set(senderId, {
+                        stream,
+                        userName: participant?.name || existingStream?.userName || 'Unknown User'
+                    });
+                    return newStreams;
+                });
             }
         };
 
@@ -159,7 +164,6 @@ const WebRTCComponent = ({ roomId }) => {
             }
         };
     };
-
     const sendSignalingMessage = async (message) => {
         const maxRetries = 3;
         let retryCount = 0;
@@ -185,10 +189,15 @@ const WebRTCComponent = ({ roomId }) => {
 
         return tryToSend();
     };
+
     const handleOffer = async (offer, senderId) => {
         try {
             if (peerConnection.current) {
-                console.log('Setting remote description (offer)');
+                // senderId 저장
+                peerConnection.current.senderId = senderId;
+                console.log('Setting remote description (offer) from:', senderId);
+                console.log('Current participants:', participants);
+
                 await peerConnection.current.setRemoteDescription(new RTCSessionDescription(offer));
 
                 if (!localStream) {
@@ -198,7 +207,7 @@ const WebRTCComponent = ({ roomId }) => {
                     });
                 }
 
-                console.log('Creating answer');
+                console.log('Creating answer for:', senderId);
                 const answer = await peerConnection.current.createAnswer();
 
                 console.log('Setting local description (answer)');
@@ -213,7 +222,7 @@ const WebRTCComponent = ({ roomId }) => {
 
                 // 저장된 ICE candidate 처리
                 if (pendingCandidates.length > 0) {
-                    console.log('Processing pending ICE candidates');
+                    console.log('Processing pending ICE candidates for:', senderId);
                     for (const candidate of pendingCandidates) {
                         await peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate));
                     }
@@ -221,7 +230,7 @@ const WebRTCComponent = ({ roomId }) => {
                 }
             }
         } catch (error) {
-            console.error('Error handling offer:', error);
+            console.error('Error handling offer from:', senderId, error);
         }
     };
 
@@ -259,7 +268,6 @@ const WebRTCComponent = ({ roomId }) => {
             console.error('Error handling ICE candidate:', error);
         }
     };
-
     const connectWebSocket = () => {
         if (websocket.current?.readyState === WebSocket.OPEN) {
             console.log('WebSocket already connected');
@@ -285,7 +293,7 @@ const WebRTCComponent = ({ roomId }) => {
         websocket.current.onmessage = async (event) => {
             try {
                 const message = JSON.parse(event.data);
-                console.log('Raw WebSocket message:', message);  // 전체 메시지 로깅
+                console.log('Raw WebSocket message:', message);
 
                 switch (message.type) {
                     case 'offer':
@@ -299,7 +307,7 @@ const WebRTCComponent = ({ roomId }) => {
                         }
                         break;
                     case 'ice-candidate':
-                        console.log('Received ICE candidate');
+                        console.log('Received ICE candidate',message.data);
                         if (peerConnection.current.remoteDescription) {
                             await handleIceCandidate(message.data);
                         } else {
@@ -317,6 +325,31 @@ const WebRTCComponent = ({ roomId }) => {
                     case 'participants-list':
                         console.log('Participants list:', message.data);
                         handleParticipantsList(message.data);
+
+                        // 참가자 수 체크를 더 명확하게 로깅
+                        const participantCount = message.data.participants ? message.data.participants.length : 0;
+                        console.log('Current participant count:', participantCount);
+                        console.log('Current call status:', isCallStarted);
+
+                        if (message.data.participants &&
+                            message.data.participants.length > 1 &&
+                            !isCallStarted &&
+                            peerConnection.current
+                        ) {
+                            console.log('Call conditions met, starting call...');
+                            try {
+                                await startCall();
+                            } catch (err) {
+                                console.error('Failed to start call:', err);
+                            }
+                        } else {
+                            console.log('Call conditions not met:', {
+                                hasParticipants: !!message.data.participants,
+                                participantCount: message.data.participants?.length,
+                                isCallStarted,
+                                hasPeerConnection: !!peerConnection.current
+                            });
+                        }
                         break;
                     case 'chat-history':
                         console.log('Chat history:', message.data);
@@ -354,8 +387,36 @@ const WebRTCComponent = ({ roomId }) => {
                 }
                 return [...prev, { userId, name: name || '사용자' }];
             });
+
+            // 참가자가 입장할 때 remoteStreams 업데이트
+            setRemoteStreams(prev => {
+                const newStreams = new Map(prev);
+                const existingStream = newStreams.get(userId);
+                if (existingStream) {
+                    newStreams.set(userId, {
+                        stream: existingStream.stream || existingStream,
+                        userName: name || '사용자'
+                    });
+                }
+                return newStreams;
+            });
         } else if (action === 'left') {
+            // 참가자 목록에서 제거
             setParticipants(prev => prev.filter(p => p.userId !== userId));
+
+            // remoteStreams에서 해당 참가자의 스트림 제거
+            setRemoteStreams(prev => {
+                const newStreams = new Map(prev);
+                if (newStreams.has(userId)) {
+                    // 스트림의 모든 트랙 중지
+                    const stream = newStreams.get(userId);
+                    if (stream.stream) {
+                        stream.stream.getTracks().forEach(track => track.stop());
+                    }
+                    newStreams.delete(userId);
+                }
+                return newStreams;
+            });
         }
     };
 
@@ -381,32 +442,39 @@ const WebRTCComponent = ({ roomId }) => {
             setChatMessages(prev => [...prev, message.data]);
         }
     };
-
     const startCall = async () => {
         try {
+            console.log('Starting call - initial checks');
             if (peerConnection.current && !isCallStarted) {
                 if (peerConnection.current.signalingState !== 'stable') {
                     console.log('Existing connection in progress, cancelling');
                     return;
                 }
 
-                console.log('Creating offer');
+                console.log('Creating offer with state:', peerConnection.current.signalingState);
                 const offer = await peerConnection.current.createOffer({
                     offerToReceiveAudio: true,
                     offerToReceiveVideo: true,
                     iceRestart: true
                 });
 
-                console.log('Setting local description');
+                console.log('Offer created, setting local description');
                 await peerConnection.current.setLocalDescription(offer);
 
+                console.log('Local description set, sending offer via signaling');
                 await sendSignalingMessage({
                     type: 'offer',
                     data: offer,
                     roomId
                 });
 
+                console.log('Offer sent, setting call as started');
                 setIsCallStarted(true);
+            } else {
+                console.log('Call start conditions not met:', {
+                    peerConnection: !!peerConnection.current,
+                    isCallStarted
+                });
             }
         } catch (error) {
             console.error('Error starting call:', error);
@@ -450,7 +518,6 @@ const WebRTCComponent = ({ roomId }) => {
             console.error('Error retrying connection:', error);
         }
     };
-
     const setupNewPeerConnection = async () => {
         if (peerConnection.current) {
             peerConnection.current.close();
@@ -479,20 +546,24 @@ const WebRTCComponent = ({ roomId }) => {
                     throw new Error('Your browser does not support required WebRTC features');
                 }
 
-                connectWebSocket();
-
-                // DOM이 준비되도록 약간의 지연
-                await new Promise(resolve => setTimeout(resolve, 100));
-
+                // 1. 먼저 미디어 스트림 초기화
                 const stream = await initializeStream();
-                const pc = await setupNewPeerConnection();
+                console.log('Stream initialized');
 
+                // 2. PeerConnection 설정
+                const pc = await setupNewPeerConnection();
+                console.log('Peer connection setup completed');
+
+                // 3. 스트림을 PeerConnection에 추가
                 if (stream && pc) {
                     stream.getTracks().forEach(track => {
                         console.log('Adding track to peer connection:', track.kind);
                         pc.addTrack(track, stream);
                     });
                 }
+
+                // 4. 마지막으로 WebSocket 연결
+                connectWebSocket();
 
             } catch (error) {
                 console.error('Error initializing WebRTC:', error);
@@ -609,9 +680,9 @@ const WebRTCComponent = ({ roomId }) => {
                     </Tooltip>
                 </Box>
             </Box>
-
             <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
+                {/* 로컬 비디오 */}
+                <Grid item xs={12} md={participants.length <= 1 ? 12 : 6} lg={participants.length <= 2 ? 6 : 4}>
                     <Paper sx={{ position: 'relative', aspectRatio: '16/9' }}>
                         <video
                             ref={localVideoRef}
@@ -635,39 +706,50 @@ const WebRTCComponent = ({ roomId }) => {
                                 borderRadius: 1,
                             }}
                         >
-                            You
+                            {JSON.parse(sessionStorage.getItem('userInfo'))?.name || 'You'} (나)
                         </Typography>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} md={6}>
-                    <Paper sx={{ position: 'relative', aspectRatio: '16/9' }}>
-                        <video
-                            ref={remoteVideoRef}
-                            autoPlay
-                            playsInline
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                            }}
-                        />
-                        <Typography
-                            sx={{
-                                position: 'absolute',
-                                bottom: 8,
-                                left: 8,
-                                color: 'white',
-                                backgroundColor: 'rgba(0,0,0,0.5)',
-                                padding: '2px 8px',
-                                borderRadius: 1,
-                            }}
-                        >
-                            Remote User
-                        </Typography>
-                    </Paper>
-                </Grid>
-            </Grid>
 
+                {/* 원격 참가자 비디오들 */}
+                {Array.from(remoteStreams).map(([userId, {stream, userName}]) => (
+                    <Grid
+                        item
+                        xs={12}
+                        md={participants.length <= 2 ? 6 : 4}
+                        lg={participants.length <= 2 ? 6 : 4}
+                        key={userId}
+                    >
+                        <Paper sx={{ position: 'relative', aspectRatio: '16/9' }}>
+                            <video
+                                autoPlay
+                                playsInline
+                                ref={el => {
+                                    if (el) el.srcObject = stream;
+                                }}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                }}
+                            />
+                            <Typography
+                                sx={{
+                                    position: 'absolute',
+                                    bottom: 8,
+                                    left: 8,
+                                    color: 'white',
+                                    backgroundColor: 'rgba(0,0,0,0.5)',
+                                    padding: '2px 8px',
+                                    borderRadius: 1,
+                                }}
+                            >
+                                {userName}
+                            </Typography>
+                        </Paper>
+                    </Grid>
+                ))}
+            </Grid>
             <Box
                 sx={{
                     display: 'flex',
@@ -690,7 +772,7 @@ const WebRTCComponent = ({ roomId }) => {
                     {isVideoOff ? <VideocamOffIcon /> : <VideocamIcon />}
                 </IconButton>
                 <IconButton
-                    onClick={isCallStarted ? endCall : startCall}
+                    onClick={endCall}
                     color="error"
                 >
                     <CallEndIcon />
@@ -746,7 +828,6 @@ const WebRTCComponent = ({ roomId }) => {
                     </List>
                 </DialogContent>
             </Dialog>
-
             <ChatComponent
                 roomId={roomId}
                 websocket={websocket}

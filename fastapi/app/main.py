@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import chat, health
+from app.api.routes import chat, health, ocr  # ocr 추가
 from app.core.logging import logger
 from app.core.config import settings
 from contextlib import asynccontextmanager
@@ -34,12 +34,14 @@ app = FastAPI(
     description="""
     여러 AI 서비스를 통합한 API 서버:
         - Llama 챗봇 서비스
+        - OCR (문서 텍스트 추출) 서비스
         - 시스템 상태 모니터링
         - 서비스 헬스체크
     
     엔드포인트:
         - /api/v1/llama/chat: Llama 모델과 대화
         - /api/v1/llama/status: Llama 서비스 상태 확인
+        - /api/v1/ocr/process: 이미지 문서의 텍스트 추출
         - /api/v1/health: 시스템 전반적인 상태 확인
     """,
     version="1.0.0",
@@ -66,6 +68,7 @@ app.add_middleware(
 # API 라우터 설정
 app.include_router(chat.router, prefix="/api/v1/llama", tags=["llama"])
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
+app.include_router(ocr.router, prefix="/api/v1/ocr", tags=["ocr"])
 
 if __name__ == "__main__":
     from app.core.logging.logger import setup_uvicorn_logging
