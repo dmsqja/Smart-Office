@@ -1,404 +1,354 @@
 {
     "user": [
         {
-            "id": "EMP2024001",
+            "id": "EMP001",
             "name": "김지원",
             "position": "선임연구원",
             "department": "AI연구소",
-            "email": "jiwon.kim@company.com",
-            "joinDate": "2020-03-15"
+            "email": "jiwon.kim@company.com"
         },
         {
-            "id": "EMP2024002",
+            "id": "EMP002",
             "name": "이민수",
             "position": "책임연구원",
             "department": "개발팀",
-            "email": "minsu.lee@company.com",
-            "joinDate": "2021-05-20"
+            "email": "minsu.lee@company.com"
         },
         {
-            "id": "EMP2024003",
+            "id": "EMP003",
             "name": "박서연",
             "position": "대리",
             "department": "HR팀",
-            "email": "seoyeon.park@company.com",
-            "joinDate": "2022-09-01"
+            "email": "seoyeon.park@company.com"
         },
         {
-            "id": "EMP2024004",
+            "id": "EMP004",
             "name": "정현우",
             "position": "수석연구원",
             "department": "AI연구소",
-            "email": "hyunwoo.jung@company.com",
-            "joinDate": "2019-04-10"
+            "email": "hyunwoo.jung@company.com"
         },
         {
-            "id": "EMP2024005",
+            "id": "EMP005",
             "name": "송미라",
             "position": "과장",
             "department": "마케팅팀",
-            "email": "mira.song@company.com",
-            "joinDate": "2020-08-15"
+            "email": "mira.song@company.com"
         },
         {
-            "id": "EMP2024006",
+            "id": "EMP006",
             "name": "강동훈",
             "position": "책임연구원",
             "department": "개발팀",
-            "email": "donghun.kang@company.com",
-            "joinDate": "2021-02-01"
+            "email": "donghun.kang@company.com"
         },
         {
-            "id": "EMP2024007",
+            "id": "EMP007",
             "name": "이수진",
             "position": "선임연구원",
             "department": "AI연구소",
-            "email": "sujin.lee@company.com",
-            "joinDate": "2022-01-20"
+            "email": "sujin.lee@company.com"
         },
         {
-            "id": "EMP2024008",
+            "id": "EMP008",
             "name": "한지민",
             "position": "대리",
             "department": "재무팀",
-            "email": "jimin.han@company.com",
-            "joinDate": "2023-03-15"
+            "email": "jimin.han@company.com"
         },
         {
-            "id": "EMP2024009",
+            "id": "EMP009",
             "name": "최준호",
             "position": "수석연구원",
             "department": "개발팀",
-            "email": "junho.choi@company.com",
-            "joinDate": "2019-07-01"
+            "email": "junho.choi@company.com"
         },
         {
-            "id": "EMP2024010",
+            "id": "EMP010",
             "name": "박영희",
             "position": "과장",
             "department": "HR팀",
-            "email": "younghee.park@company.com",
-            "joinDate": "2020-11-30"
+            "email": "younghee.park@company.com"
         },
         {
-            "id": "EMP2024011",
+            "id": "EMP011",
             "name": "김태우",
             "position": "선임연구원",
             "department": "AI연구소",
-            "email": "taewoo.kim@company.com",
-            "joinDate": "2021-09-15"
+            "email": "taewoo.kim@company.com"
         },
         {
-            "id": "EMP2024012",
+            "id": "EMP012",
             "name": "이하은",
             "position": "대리",
             "department": "마케팅팀",
-            "email": "haeun.lee@company.com",
-            "joinDate": "2022-04-01"
+            "email": "haeun.lee@company.com"
         },
         {
-            "id": "EMP2024013",
+            "id": "EMP013",
             "name": "정민성",
             "position": "책임연구원",
             "department": "개발팀",
-            "email": "minsung.jung@company.com",
-            "joinDate": "2020-06-15"
+            "email": "minsung.jung@company.com"
         },
         {
-            "id": "EMP2024014",
+            "id": "EMP014",
             "name": "윤서아",
             "position": "과장",
             "department": "재무팀",
-            "email": "seoa.yoon@company.com",
-            "joinDate": "2021-03-22"
+            "email": "seoa.yoon@company.com"
         },
         {
-            "id": "EMP2024015",
+            "id": "EMP015",
             "name": "임재현",
             "position": "선임연구원",
             "department": "AI연구소",
-            "email": "jaehyun.lim@company.com",
-            "joinDate": "2022-07-11"
+            "email": "jaehyun.lim@company.com"
         },
         {
-            "id": "EMP2024016",
+            "id": "EMP016",
             "name": "신다은",
             "position": "대리",
             "department": "HR팀",
-            "email": "daeun.shin@company.com",
-            "joinDate": "2023-01-16"
+            "email": "daeun.shin@company.com"
         },
         {
-            "id": "EMP2024017",
+            "id": "EMP017",
             "name": "권현우",
             "position": "수석연구원",
             "department": "개발팀",
-            "email": "hyunwoo.kwon@company.com",
-            "joinDate": "2019-11-05"
+            "email": "hyunwoo.kwon@company.com"
         },
         {
-            "id": "EMP2024018",
+            "id": "EMP018",
             "name": "장미영",
             "position": "과장",
             "department": "마케팅팀",
-            "email": "miyoung.jang@company.com",
-            "joinDate": "2020-12-07"
+            "email": "miyoung.jang@company.com"
         },
         {
-            "id": "EMP2024019",
+            "id": "EMP019",
             "name": "오승훈",
             "position": "책임연구원",
             "department": "AI연구소",
-            "email": "seunghun.oh@company.com",
-            "joinDate": "2021-08-23"
+            "email": "seunghun.oh@company.com"
         },
         {
-            "id": "EMP2024020",
+            "id": "EMP020",
             "name": "배수민",
             "position": "대리",
             "department": "재무팀",
-            "email": "sumin.bae@company.com",
-            "joinDate": "2022-05-30"
+            "email": "sumin.bae@company.com"
         },
         {
-            "id": "EMP2024021",
+            "id": "EMP021",
             "name": "조은우",
             "position": "선임연구원",
             "department": "개발팀",
-            "email": "eunwoo.jo@company.com",
-            "joinDate": "2020-09-14"
+            "email": "eunwoo.jo@company.com"
         },
         {
-            "id": "EMP2024022",
+            "id": "EMP022",
             "name": "황지현",
             "position": "과장",
             "department": "HR팀",
-            "email": "jihyun.hwang@company.com",
-            "joinDate": "2021-04-19"
+            "email": "jihyun.hwang@company.com"
         },
         {
-            "id": "EMP2024023",
+            "id": "EMP023",
             "name": "노승준",
             "position": "책임연구원",
             "department": "AI연구소",
-            "email": "seungjun.noh@company.com",
-            "joinDate": "2022-02-28"
+            "email": "seungjun.noh@company.com"
         },
         {
-            "id": "EMP2024024",
+            "id": "EMP024",
             "name": "유민지",
             "position": "대리",
             "department": "마케팅팀",
-            "email": "minji.yoo@company.com",
-            "joinDate": "2023-02-13"
+            "email": "minji.yoo@company.com"
         },
         {
-            "id": "EMP2024025",
+            "id": "EMP025",
             "name": "안현서",
             "position": "수석연구원",
             "department": "개발팀",
-            "email": "hyunseo.ahn@company.com",
-            "joinDate": "2019-12-09"
+            "email": "hyunseo.ahn@company.com"
         },
         {
-            "id": "EMP2024026",
+            "id": "EMP026",
             "name": "홍서영",
             "position": "과장",
             "department": "재무팀",
-            "email": "seoyoung.hong@company.com",
-            "joinDate": "2020-10-26"
+            "email": "seoyoung.hong@company.com"
         },
         {
-            "id": "EMP2024027",
+            "id": "EMP027",
             "name": "백승호",
             "position": "선임연구원",
             "department": "AI연구소",
-            "email": "seungho.baek@company.com",
-            "joinDate": "2021-07-05"
+            "email": "seungho.baek@company.com"
         },
         {
-            "id": "EMP2024028",
+            "id": "EMP028",
             "name": "서은지",
             "position": "대리",
             "department": "HR팀",
-            "email": "eunji.seo@company.com",
-            "joinDate": "2022-03-21"
+            "email": "eunji.seo@company.com"
         },
         {
-            "id": "EMP2024029",
+            "id": "EMP029",
             "name": "남동현",
             "position": "책임연구원",
             "department": "개발팀",
-            "email": "donghyun.nam@company.com",
-            "joinDate": "2020-05-18"
+            "email": "donghyun.nam@company.com"
         },
         {
-            "id": "EMP2024030",
+            "id": "EMP030",
             "name": "문예진",
             "position": "과장",
             "department": "마케팅팀",
-            "email": "yejin.moon@company.com",
-            "joinDate": "2021-01-25"
+            "email": "yejin.moon@company.com"
         },
         {
-            "id": "EMP2024031",
+            "id": "EMP031",
             "name": "국민호",
             "position": "선임연구원",
             "department": "AI연구소",
-            "email": "minho.kook@company.com",
-            "joinDate": "2022-06-27"
+            "email": "minho.kook@company.com"
         },
         {
-            "id": "EMP2024032",
+            "id": "EMP032",
             "name": "성지원",
             "position": "대리",
             "department": "재무팀",
-            "email": "jiwon.sung@company.com",
-            "joinDate": "2023-04-03"
+            "email": "jiwon.sung@company.com"
         },
         {
-            "id": "EMP2024033",
+            "id": "EMP033",
             "name": "구본영",
             "position": "수석연구원",
             "department": "개발팀",
-            "email": "bonyoung.koo@company.com",
-            "joinDate": "2019-08-12"
+            "email": "bonyoung.koo@company.com"
         },
         {
-            "id": "EMP2024034",
+            "id": "EMP034",
             "name": "민서연",
             "position": "과장",
             "department": "HR팀",
-            "email": "seoyeon.min@company.com",
-            "joinDate": "2020-07-20"
+            "email": "seoyeon.min@company.com"
         },
         {
-            "id": "EMP2024035",
+            "id": "EMP035",
             "name": "석현민",
             "position": "책임연구원",
             "department": "AI연구소",
-            "email": "hyunmin.seok@company.com",
-            "joinDate": "2021-06-14"
+            "email": "hyunmin.seok@company.com"
         },
         {
-            "id": "EMP2024036",
+            "id": "EMP036",
             "name": "염하윤",
             "position": "대리",
             "department": "마케팅팀",
-            "email": "hayun.yeom@company.com",
-            "joinDate": "2022-08-22"
+            "email": "hayun.yeom@company.com"
         },
         {
-            "id": "EMP2024037",
+            "id": "EMP037",
             "name": "설지훈",
             "position": "선임연구원",
             "department": "개발팀",
-            "email": "jihoon.seol@company.com",
-            "joinDate": "2020-04-06"
+            "email": "jihoon.seol@company.com"
         },
         {
-            "id": "EMP2024038",
+            "id": "EMP038",
             "name": "진수아",
             "position": "과장",
             "department": "재무팀",
-            "email": "sua.jin@company.com",
-            "joinDate": "2021-10-11"
+            "email": "sua.jin@company.com"
         },
         {
-            "id": "EMP2024039",
+            "id": "EMP039",
             "name": "기태윤",
             "position": "책임연구원",
             "department": "AI연구소",
-            "email": "taeyoon.ki@company.com",
-            "joinDate": "2022-01-17"
+            "email": "taeyoon.ki@company.com"
         },
         {
-            "id": "EMP2024040",
+            "id": "EMP040",
             "name": "마윤서",
             "position": "대리",
             "department": "HR팀",
-            "email": "yoonseo.ma@company.com",
-            "joinDate": "2023-05-08"
+            "email": "yoonseo.ma@company.com"
         },
         {
-            "id": "EMP2024041",
+            "id": "EMP041",
             "name": "피동하",
             "position": "수석연구원",
             "department": "개발팀",
-            "email": "dongha.pi@company.com",
-            "joinDate": "2019-09-23"
+            "email": "dongha.pi@company.com"
         },
         {
-            "id": "EMP2024042",
+            "id": "EMP042",
             "name": "전지아",
             "position": "과장",
             "department": "마케팅팀",
-            "email": "jia.jeon@company.com",
-            "joinDate": "2020-01-13"
+            "email": "jia.jeon@company.com"
         },
         {
-            "id": "EMP2024043",
+            "id": "EMP043",
             "name": "복승민",
             "position": "선임연구원",
             "department": "AI연구소",
-            "email": "seungmin.bok@company.com",
-            "joinDate": "2021-11-29"
+            "email": "seungmin.bok@company.com"
         },
         {
-            "id": "EMP2024044",
+            "id": "EMP044",
             "name": "심도원",
             "position": "대리",
             "department": "재무팀",
-            "email": "dowon.shim@company.com",
-            "joinDate": "2022-09-05"
+            "email": "dowon.shim@company.com"
         },
         {
-            "id": "EMP2024045",
+            "id": "EMP045",
             "name": "공주원",
             "position": "책임연구원",
             "department": "개발팀",
-            "email": "juwon.gong@company.com",
-            "joinDate": "2020-02-24"
+            "email": "juwon.gong@company.com"
         },
         {
-            "id": "EMP2024046",
+            "id": "EMP046",
             "name": "방은수",
             "position": "과장",
             "department": "HR팀",
-            "email": "eunsoo.bang@company.com",
-            "joinDate": "2021-12-20"
+            "email": "eunsoo.bang@company.com"
         },
         {
-            "id": "EMP2024047",
+            "id": "EMP047",
             "name": "여승우",
             "position": "선임연구원",
             "department": "AI연구소",
-            "email": "seungwoo.yeo@company.com",
-            "joinDate": "2022-10-31"
+            "email": "seungwoo.yeo@company.com"
         },
         {
-            "id": "EMP2024048",
+            "id": "EMP048",
             "name": "탁서진",
             "position": "대리",
             "department": "마케팅팀",
-            "email": "seojin.tak@company.com",
-            "joinDate": "2023-06-19"
+            "email": "seojin.tak@company.com"
         },
         {
-            "id": "EMP2024049",
+            "id": "EMP049",
             "name": "범현수",
             "position": "수석연구원",
             "department": "개발팀",
-            "email": "hyunsoo.bum@company.com",
-            "joinDate": "2019-10-07"
+            "email": "hyunsoo.bum@company.com"
         },
         {
-            "id": "EMP2024050",
+            "id": "EMP050",
             "name": "추미란",
             "position": "과장",
             "department": "재무팀",
-            "email": "miran.choo@company.com",
-            "joinDate": "2020-03-30"
+            "email": "miran.choo@company.com"
         }
     ]
 }
