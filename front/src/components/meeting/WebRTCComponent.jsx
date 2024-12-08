@@ -31,7 +31,7 @@ import {
 } from '@mui/icons-material';
 import { checkWebRTCSupport } from '../../utils/webrtc';
 import ChatComponent from './ChatComponent.jsx';
-import { api } from "../../utils/api";
+import { meetingApi } from "../../utils/meetingApi";
 import { useNavigate } from "react-router-dom";
 
 const WebRTCComponent = ({ roomId }) => {
@@ -607,7 +607,7 @@ const WebRTCComponent = ({ roomId }) => {
             setUnreadMessages(0);
             setPendingCandidates([]);
             if (leaveRoom) {
-                api.leaveRoom(roomId).catch(error => {
+                meetingApi.leaveRoom(roomId).catch(error => {
                     console.error('Error leaving room:', error);
                 });
             }
