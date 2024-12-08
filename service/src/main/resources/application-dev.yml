@@ -84,3 +84,7 @@ springdoc:
     path: /v3/api-docs              # OpenAPI 문서 경로
   default-consumes-media-type: application/json  # 기본 요청 미디어 타입
   default-produces-media-type: application/json  # 기본 응답 미디어 타입
+
+file:
+  max-size: 10485760  # 10MB
+  allowed-types: image/jpeg,image/png,application/pdf
