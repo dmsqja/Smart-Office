@@ -1,3 +1,4 @@
+// 실제 코드용 Main.jsx 파일
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProfileSection from './ProfileSection';
