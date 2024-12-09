@@ -1,4 +1,4 @@
-// 테스트용 Main.jsx 파일
+// 실제 코드용 Main.jsx 파일
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProfileSection from './ProfileSection';
@@ -10,28 +10,14 @@ import '../../styles/home.css';
 
 const Main = () => {
 
-    {/* 실제 코드 */}
-    // const [user, setUser] = useState({
-    //     name: "",
-    //     position: "",
-    //     department: "",
-    //     employeeId: "",
-    //     email: "",
-    //     profileImage: defaultProfileImage
-    // });
-    {/* 실제 코드 */}
-
-
-    {/* 테스트 정보 */}
-    const mockUser = {
-        name: "김지원",
-        position: "선임연구원",
-        department: "AI연구소",
-        employeeId: "EMP2024001",
-        email: "jiwon.kim@company.com",
+    const [user, setUser] = useState({
+        name: "",
+        position: "",
+        department: "",
+        employeeId: "",
+        email: "",
         profileImage: defaultProfileImage
-    };
-    {/* 테스트 정보 */}
+    });
 
     // // 목업 통계 데이터
     const mockStats = {
@@ -106,68 +92,46 @@ const Main = () => {
         }
     ];
     
-    const [user, setUser] = useState(mockUser);    // 이거 테스트 정보니까 주석처리
+    // const [user, setUser] = useState(mockUser);
     const [stats, setStats] = useState(mockStats); // 나중에 이 mockStats 실제 데이터로 가져오기
     const [activities, setActivities] = useState(mockActivities);
-
+    {/* 테스트 정보 */}
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    {/* 테스트 정보 */}
+
+    {/* 실제 기능 */}
     useEffect(() => {
-        const fetchUserData = async () => {
+        const getUserFromSession = () => {
             try {
-                // 실제 API 호출 대신 목업 데이터 사용
-                setTimeout(() => {
-                    setUser(mockUser);
-                    setStats(mockStats);
-                    setActivities(mockActivities);
-                    setLoading(false);
-                }, 500);
+                const userInfoStr = sessionStorage.getItem('userInfo');
+
+                const userData = JSON.parse(userInfoStr);
+                setUser({
+                    name: userData.name,
+                    position: userData.position,
+                    department: userData.department,
+                    employeeId: userData.employeeId,
+                    email: userData.email,
+                    profileImage: defaultProfileImage // 프로필 이미지는 현재 기본 이미지 사용
+                });
+
+                // 비밀번호 변경이 필요한 경우
+                if (userData.passwordChangeRequired) {
+                    window.location.href = '/password-change';
+                }
             } catch (error) {
+                console.error('Failed to get user data from session:', error);
                 setError('사용자 정보를 불러오는데 실패했습니다.');
+                window.location.href = '/';
+            } finally {
                 setLoading(false);
             }
         };
 
-        fetchUserData();
+        getUserFromSession();
     }, []);
-    {/* 테스트 정보 */}
-
-
-
-    {/* 실제 기능 */}
-    // useEffect(() => {
-    //     const getUserFromSession = () => {
-    //         try {
-    //             const userInfoStr = sessionStorage.getItem('userInfo');
-
-    //             const userData = JSON.parse(userInfoStr);
-    //             setUser({
-    //                 name: userData.name,
-    //                 position: userData.position,
-    //                 department: userData.department,
-    //                 employeeId: userData.employeeId,
-    //                 email: userData.email,
-    //                 profileImage: defaultProfileImage // 프로필 이미지는 현재 기본 이미지 사용
-    //             });
-
-    //             // 비밀번호 변경이 필요한 경우
-    //             if (userData.passwordChangeRequired) {
-    //                 window.location.href = '/password-change';
-    //             }
-    //         } catch (error) {
-    //             console.error('Failed to get user data from session:', error);
-    //             setError('사용자 정보를 불러오는데 실패했습니다.');
-    //             window.location.href = '/';
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     getUserFromSession();
-    // }, []);
     {/* 실제 기능 */}
 
     if (loading) {
