@@ -23,7 +23,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             <aside className={`sidebar ${isMenuOpen ? 'show' : ''}`}>
                 <div className="sidebar-header">
                     <NavLink to="/home" className="brand">
-                        <span className="brand-text">Start Bootstrap</span>
+                        <span className="brand-text">Dashboard</span>
                     </NavLink>
                 </div>
                 <nav className="nav-menu">
