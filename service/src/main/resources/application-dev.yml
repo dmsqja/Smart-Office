@@ -50,8 +50,8 @@ spring:
       storage:
         credentials:
           location: ${GOOGLE_APPLICATION_CREDENTIALS}  # GCP 인증 정보 위치
-        project-id: ENC(RGD0LCqXa8dSZzNwqwhc53WR6ITm8YlTFPRzf+StzN8Hh+Ts3ZRXLQ==)
-        bucket: smart-office  # GCS 버킷 이름
+        project-id: ENC(E8keV70I9+OaNeMrARacJPx0uMzPvcOgm/6hgWcOlWk=)
+        bucket: smart_office  # GCS 버킷 이름
 
   # Redis 설정
   data:
