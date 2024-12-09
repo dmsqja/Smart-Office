@@ -1,90 +1,90 @@
+# 서버 관련 기본 설정
 server:
-  # SSL 설정 추가
-  ssl:
-    enabled: true
-    key-store: classpath:server.p12
-    key-store-password: ENC(CLTCgFTz0XA+nEThhVb8JfKwC2HECWoGW1fFf9sQsXQ=)
-    key-store-type: PKCS12
-    key-alias: tomcat
-  # 기존 설정 유지
-  port: 443  # HTTPS 기본 포트로 변경
+  port: 80  # 서버가 실행될 포트 번호
   servlet:
     encoding:
-      charset: UTF-8
-      force: true
+      charset: UTF-8  # 문자 인코딩을 UTF-8로 설정
+      force: true    # 모든 요청/응답에 강제로 인코딩 적용
 
-# HTTP -> HTTPS 리다이렉션을 위한 추가 포트
-http:
-  port: 80
 
+# Spring 프레임워크 관련 설정
 spring:
+  # 데이터베이스 연결 설정
   datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: ENC(qFiE9I4v2CXLqZzWNCl7UuJ94DBprPFYECuhR9FpnOn74MinXXgixIHMizfikAUIpC6g9cah12z4z2gjNGtGfLXFwhOc+34dDC681dQfgp4mkHkUfuZRxQ==)
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy  # SQL 로깅을 위한 JDBC 드라이버
+    url: ENC(o6oqvMIjx+qqudp/OxFhqUTWGcGlI0qkVaEMkaMgzPmSBMbbN9xnbJiRk1ey4EMROA9nwmW9MndJzu3Y2VfIg2ofBo4nlzPgOS0yZ29tlnbeX3mcvIh7PQ==)
     username: ENC(a0E+w5V96368ZbbGuQA1Kg==)
     password: ENC(pj2nIfjYWFQnQmWpcwEgx3+G834oNjX5bXl3cVDSzCg=)
 
+  # JPA(Java Persistence API) 설정
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update  # 데이터베이스 스키마 자동 업데이트
+    show-sql: true      # SQL 쿼리 로깅 활성화
     properties:
       hibernate:
-        format_sql: true
-    database-platform: org.hibernate.dialect.MySQLDialect
+        format_sql: true  # SQL 쿼리 포맷팅
+    database-platform: org.hibernate.dialect.MySQLDialect  # MySQL 데이터베이스 방언 설정
 
+  # 정적 리소스 설정
   web:
     resources:
-      static-locations: classpath:/static/
-      add-mappings: true
+      static-locations: classpath:/static/  # 정적 파일 위치
+      add-mappings: true                    # 정적 리소스 매핑 활성화
       chain:
         strategy:
           content:
-            enabled: true
-            paths: /**
+            enabled: true                    # 리소스 체인 전략 활성화
+            paths: /**                       # 모든 경로에 적용
       cache:
-        period: 0
+        period: 0                           # 캐시 비활성화
+
+  # MVC 패턴 매칭 전략 설정
   mvc:
     pathmatch:
-      matching-strategy: ant_path_matcher
+      matching-strategy: ant_path_matcher   # URL 경로 매칭 전략 설정
 
-  thymeleaf:
-    cache: false
-
+  # Google Cloud Storage 설정
   cloud:
     gcp:
       storage:
         credentials:
-          location: ${GOOGLE_APPLICATION_CREDENTIALS}
-        project-id: ENC(RGD0LCqXa8dSZzNwqwhc53WR6ITm8YlTFPRzf+StzN8Hh+Ts3ZRXLQ==)
-        bucket: smart-office
+          location: ${GOOGLE_APPLICATION_CREDENTIALS}  # GCP 인증 정보 위치
+        project-id: ENC(E8keV70I9+OaNeMrARacJPx0uMzPvcOgm/6hgWcOlWk=)
+        bucket: smart_office  # GCS 버킷 이름
 
+  # Redis 설정
+  data:
+    redis:
+      host: ${SERVER_URL}        # Redis 서버 호스트
+      port: 6379                 # Redis 포트
+      password: ${REDIS_PASSWORD}  # Redis 비밀번호
+
+# 로깅 기본 설정 (상세 설정은 logback.xml에서 관리)
 logging:
+  config: classpath:logback.xml   # logback 설정 파일 위치
   level:
-    root: info
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql: trace
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    com.google.cloud.storage: DEBUG
-    com.google.api.client: DEBUG
-    com.office: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.web.servlet.resource: TRACE
-    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    root: info  # 기본 로그 레벨 (logback.xml의 root level과 동일하게 설정)
+  charset:
+    console: UTF-8
 
-  springdoc:
-    swagger-ui:
-      path: /swagger-ui.html
-      enabled: true
-      disable-swagger-default-url: true
-      # HTTPS 설정
-      url: /v3/api-docs
-      config-url: /v3/api-docs/swagger-config
-      urls:
-        - url: /v3/api-docs
-          name: Smart Office API
+# Swagger/OpenAPI 문서화 설정
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html           # Swagger UI 경로
+    enabled: true                    # Swagger UI 활성화
+    disable-swagger-default-url: true
+    url: /v3/api-docs               # OpenAPI 문서 URL
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: Smart Office API       # API 문서 이름
 
-    api-docs:
-      path: /v3/api-docs
-    default-consumes-media-type: application/json
-    default-produces-media-type: application/json
+  api-docs:
+    path: /v3/api-docs              # OpenAPI 문서 경로
+  default-consumes-media-type: application/json  # 기본 요청 미디어 타입
+  default-produces-media-type: application/json  # 기본 응답 미디어 타입
+
+file:
+  max-size: 10485760  # 10MB
+  allowed-types: image/jpeg,image/png,application/pdf
