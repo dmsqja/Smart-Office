@@ -14,7 +14,7 @@ const MessengerForm = () => {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/chats');
+        const response = await axios.get('http://localhost:3002/chats');
         setChats(response.data);
       } catch (error) {
         console.error('채팅 목록을 불러오는데 실패했습니다:', error);
@@ -31,7 +31,7 @@ const MessengerForm = () => {
       
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3001/messages?chatId=${selectedChat.id}`);
+        const response = await axios.get(`http://localhost:3002/messages?chatId=${selectedChat.id}`);
         const chatData = response.data[0]; // 첫 번째 결과만 사용
         if (chatData) {
           setMessages(chatData.messages);
@@ -68,7 +68,7 @@ const MessengerForm = () => {
 
     try {
       // 실제 API 호출 (실제 구현 시에는 웹소켓이나 적절한 API 엔드포인트 사용)
-      await axios.post(`http://localhost:3001/messages/${selectedChat.id}`, {
+      await axios.post(`http://localhost:3002/messages/${selectedChat.id}`, {
         messages: [...messages, messageData]
       });
     } catch (error) {
