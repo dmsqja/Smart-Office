@@ -10,6 +10,7 @@ import lombok.Data;
 @Builder
 public class GCSResponse {
     private String fileName;  // 파일 이름
+    private String originalFileName;  // 원본 파일명
     private String downloadUrl;  // 파일 다운로드 URL
     private Long fileSize;  // 파일 크기 (바이트 단위)
     private String contentType;  // 파일 MIME 타입

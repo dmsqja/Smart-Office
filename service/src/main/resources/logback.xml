@@ -1,82 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Logback 메인 설정 파일 -->
 <configuration>
-    <!--    <property resource="logback.properties" />-->
-    <!--    <property name="LOGS_DIR" value="${logdir}" />-->
-    <property name="LOGS_DIR" value="C:\SmartOffice\logs" />
+    <!-- 스프링 환경변수를 logback 설정에서 사용할 수 있도록 로드 -->
+    <springProperty scope="context" name="SERVER_URL" source="SERVER_URL"/>
+    <springProperty scope="context" name="REDIS_PASSWORD" source="REDIS_PASSWORD"/>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <!--<Pattern>[%d{MM-dd HH:mm:ss}][%thread] %-5level %logger{36} - %msg%n</Pattern>-->
-            <Pattern>[%d{MM-dd HH:mm:ss}] %-5level %logger{36} - %msg%n</Pattern>
+    <!-- 전역적으로 사용할 로그 패턴 정의 -->
+    <!-- LOG_PATTERN: 일반적인 로그 출력을 위한 패턴
+         - %d{yyyy-MM-dd HH:mm:ss.SSS}: 날짜/시간
+         - [%thread]: 현재 스레드 이름
+         - %-5level: 로그 레벨 (5자리로 맞춤)
+         - %logger{36}: 로거 이름 (최대 36자)
+         - %msg: 실제 로그 메시지
+         - %n: 줄바꿈 -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <!-- ELK 스택 분석을 위한 JSON 형식의 로그 패턴 -->
+    <property name="LOG_PATTERN_JSON" value='{"timestamp":"%d{ISO8601}","level":"%level","thread":"%thread","logger":"%logger","message":"%message","exception":"%exception"}%n'/>
+
+    <!-- 콘솔 출력을 위한 Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- Redis로 로그를 전송하기 위한 Appender -->
+    <appender name="REDIS" class="com.cwbase.logback.RedisAppender">
+        <!-- Redis 서버 연결 정보 -->
+        <host>${SERVER_URL}</host>
+        <port>6379</port>
+        <password>${REDIS_PASSWORD}</password>
+        <key>logstash</key>    <!-- Logstash가 수집할 Redis key -->
+        <type>redis</type>
+        <!-- Logstash 포맷으로 로그 구조화 -->
+        <layout class="net.logstash.logback.layout.LogstashLayout">
+            <includeMdc>true</includeMdc>          <!-- MDC(Mapped Diagnostic Context) 정보 포함 -->
+            <includeContext>true</includeContext>  <!-- Logback Context 정보 포함 -->
+            <customFields>{"application":"smart-office"}</customFields>
         </layout>
     </appender>
 
-
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS_DIR}/logback.log</file>
-        <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOGS_DIR}/logback.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>5MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
+    <!-- Redis Appender의 비동기 처리를 위한 래퍼 -->
+    <appender name="ASYNC_REDIS" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="REDIS" />
+        <queueSize>512</queueSize>                <!-- 로그 이벤트 큐 크기 -->
+        <discardingThreshold>0</discardingThreshold>  <!-- 큐가 가득 찼을 때 로그 유실 방지 -->
+        <includeCallerData>true</includeCallerData>   <!-- 호출자 정보 포함 -->
+        <neverBlock>true</neverBlock>                 <!-- 로그 처리로 인한 애플리케이션 블로킹 방지 -->
     </appender>
 
-    <appender name="FILE2" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS_DIR}/chart_info.log</file>
+    <!-- SQL 전용 콘솔 출력 Appender -->
+    <appender name="SQL_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss}, %msg%n</pattern>
+            <pattern>[SQL] ${LOG_PATTERN}</pattern>  <!-- SQL 로그 구분을 위한 prefix 추가 -->
         </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOGS_DIR}/chart_info.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>5MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
     </appender>
 
-    <appender name="FILE3" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS_DIR}/power.log</file>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss}, %msg%n</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOGS_DIR}/power.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>5MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
+    <!-- 특정 패키지별 로그 레벨 및 출력 설정 -->
+    <!-- additivity="false": 상위 로거로의 전파 방지 -->
 
-
-    <!--    <logger name="org.springframework.web" level="DEBUG">-->
-    <!--        <appender-ref ref="STDOUT" />-->
-    <!--        <appender-ref ref="FILE" />-->
-    <!--    </logger>-->
-    <logger name="edu.sm.controller.ChartsRestController" level="INFO">
-        <appender-ref ref="FILE2" />
+    <!-- Hibernate SQL 쿼리 로깅 -->
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="SQL_CONSOLE" />
+        <appender-ref ref="ASYNC_REDIS" />
     </logger>
 
-    <logger name="edu.sm.controller.IotRestController" level="INFO">
-        <appender-ref ref="FILE3" />
+    <!-- Hibernate SQL 파라미터 로깅 -->
+    <logger name="org.hibernate.type.descriptor.sql" level="TRACE" additivity="false">
+        <appender-ref ref="SQL_CONSOLE" />
+        <appender-ref ref="ASYNC_REDIS" />
     </logger>
 
+    <!-- Google Cloud Storage 로깅 -->
+    <logger name="com.google.cloud.storage" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ASYNC_REDIS" />
+    </logger>
+
+    <!-- 애플리케이션 코드 로깅 -->
+    <logger name="com.office" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ASYNC_REDIS" />
+    </logger>
+
+    <!-- Spring Web 관련 로깅 -->
+    <logger name="org.springframework.web" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ASYNC_REDIS" />
+    </logger>
+
+    <!-- 기본 로거 설정 (위의 logger에 포함되지 않는 모든 로그) -->
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ASYNC_REDIS" />
     </root>
 
-    <logger name="jdbc" level="OFF" />
-    <logger name="jdbc.sqlonly" level="INFO" />
-    <logger name="jdbc.sqltiming" level="OFF" />
-    <logger name="jdbc.audit" level="OFF" />
-    <logger name="jdbc.resultset" level="OFF" />
-    <logger name="jdbc.resultsettable" level="INFO" />
-    <logger name="jdbc.connection" level="OFF" />
-    <!-- INFO(trace > debug > info > warn > error)  -->
 </configuration>

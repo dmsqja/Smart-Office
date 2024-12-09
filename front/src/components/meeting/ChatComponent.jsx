@@ -16,7 +16,7 @@ import {
     Send as SendIcon,
     Close as CloseIcon
 } from '@mui/icons-material';
-import { api } from "../../utils/api";
+import { meetingApi } from "../../utils/meetingApi";
 
 const ChatComponent = ({ roomId, websocket, isOpen, onClose, messages }) => {
     const [loading, setLoading] = useState(false);
