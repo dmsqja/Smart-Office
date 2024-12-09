@@ -14,7 +14,7 @@ import {
     Alert
 } from '@mui/material';
 import WebRTCComponent from '../components/meeting/WebRTCComponent';
-import { api } from '../utils/api';
+import { meetingApi } from '../utils/meetingApi';
 
 const MeetingRoom = () => {
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ const MeetingRoom = () => {
             try {
                 setIsLoading(true);
                 // getRoomDetails를 사용하여 회의방 정보와 접근 권한을 한 번에 확인
-                const roomDetails = await api.getRoomDetails(state.roomId);
+                const roomDetails = await meetingApi.getRoomDetails(state.roomId);
 
                 // 서버에서 받은 roomDetails에 따라 접근 권한 처리
                 if (roomDetails) {
@@ -69,7 +69,7 @@ const MeetingRoom = () => {
     const handleLeaveRoom = async () => {
         try {
             if (state?.roomId) {
-                await api.leaveRoom(state.roomId);
+                await meetingApi.leaveRoom(state.roomId);
             }
             navigate('/meeting');
         } catch (error) {

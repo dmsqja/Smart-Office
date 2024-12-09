@@ -55,7 +55,7 @@ axiosInstance.interceptors.response.use(
 );
 
 
-export const api = {
+export const meetingApi = {
     // 회의실 목록 조회
     async getRooms() {
         try {
