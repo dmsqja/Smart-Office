@@ -1,18 +1,16 @@
 import React from 'react';
-import HubForm from '../components/file/HubForm';
+import UploadForm from '../components/file/UploadForm';
 import '../styles/filePage.css';
 
 const File = () => {
     return (
-        <div className="page hub-page">
-            <div className="page-header">
-                <h1 className="page-title">
-                    <span className="text-gradient">Hub</span>
-                </h1>
+        <div className="min-h-screen">
+            <div className="border-b border-gray-200">
+                <div className="px-4 py-4">
+                    <h1 className="text-xl font-semibold text-gray-900">Hub</h1>
+                </div>
             </div>
-            <div className="hub-container">
-                <HubForm />
-            </div>
+            <UploadForm />
         </div>
     );
 };

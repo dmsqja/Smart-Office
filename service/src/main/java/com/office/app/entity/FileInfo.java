@@ -28,7 +28,8 @@ public class FileInfo {
     private Long fileSize;
     
     private String contentType;
-    
+
+    @Column(length = 2048)
     private String downloadUrl;
     
     @Column(nullable = false)
