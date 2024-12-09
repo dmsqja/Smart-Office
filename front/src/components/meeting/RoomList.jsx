@@ -29,7 +29,7 @@ import {
     People as PeopleIcon,
     Description as DescriptionIcon
 } from '@mui/icons-material';
-import { api } from '../../utils/api';
+import { meetingApi } from '../../utils/meetingApi';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -81,7 +81,7 @@ const RoomList = ({ mode = 'join', onBack }) => {
     const fetchRooms = async () => {
         try {
             setLoading(true);
-            const data = await api.getRooms();
+            const data = await meetingApi.getRooms();
             setRooms(data);
         } catch (error) {
             setError('Error fetching rooms: ' + (error.message || 'Unknown error'));
@@ -104,7 +104,7 @@ const RoomList = ({ mode = 'join', onBack }) => {
 
             // 디버깅: API 호출 직전
             console.log('Calling API...');
-            const response = await api.createRoom(newRoom);
+            const response = await meetingApi.createRoom(newRoom);
             console.log('API Response:', response);
 
             if (response && response.roomId) {
@@ -132,7 +132,7 @@ const RoomList = ({ mode = 'join', onBack }) => {
 
     const handleJoinRoom = async (room) => {
         try {
-            const response = await api.joinRoom(room.roomId, {
+            const response = await meetingApi.joinRoom(room.roomId, {
                 password: room.hasPassword ? joinPassword : undefined
             });
             if (response.success) {

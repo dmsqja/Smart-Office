@@ -54,13 +54,15 @@ class APISettings(BaseSettings):
         REQUESTS_PER_MINUTE: 분당 최대 요청 처리 수
         MAX_RETRIES: 요청 실패 시 최대 재시도 횟수
         TIMEOUT: 요청 타임아웃 시간 (초)
+        UPSTAGE_API_KEY: Upstage OCR API 인증 키
     """
     OLLAMA_URL: str
-    MODEL_NAME: str = "hf.co/QuantFactory/llama-3.2-Korean-Bllossom-3B-GGUF"
+    MODEL_NAME: str
     MAX_CONCURRENT_REQUESTS: int
     REQUESTS_PER_MINUTE: int
     MAX_RETRIES: int
     TIMEOUT: int
+    UPSTAGE_API_KEY: str
 
 class StorageSettings(BaseSettings):
     """
@@ -76,8 +78,9 @@ class StorageSettings(BaseSettings):
     GOOGLE_CREDENTIALS_PATH: str
     GCS_BUCKET_NAME: str
     GCS_DOWNLOAD_PATH: str = "img/"
-    GCS_UPLOAD_PATH: str = "processing/"
-    LOCAL_DOWNLOAD_PATH: str = "tmp/"
+    GCS_UPLOAD_PATH: str = "processed/"
+    LOCAL_DOWNLOAD_PATH: str = "tmp/img/original/"
+    LOCAL_PROCESSED_PATH: str = "tmp/img/processed/"
 
 class Settings(
     AppSettings,

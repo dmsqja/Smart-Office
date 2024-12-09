@@ -14,7 +14,7 @@ const Contact = lazy(() => import('./pages/Contact'));
 const Calendar = lazy(() => import ('./pages/Calendar'));
 const Messenger = lazy(() => import ('./pages/Messenger'));
 const Ai = lazy(() => import ('./pages/Ai'));
-const Hub = lazy(() => import ('./pages/Hub'));
+const Hub = lazy(() => import ('./pages/File'));
 const Meeting = lazy(() => import ('./pages/Meeting'));
 const Employee = lazy(() => import ('./pages/Employee'));
 const Document = lazy(() => import ('./pages/Document'));

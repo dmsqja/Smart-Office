@@ -1,9 +1,9 @@
-// 게시판 화면
-import HubForm from '../components/hub/HubForm';
-import '../styles/pages.css';
+import React from 'react';
+import HubForm from '../components/file/HubForm';
+import '../styles/filePage.css';
 
-const Hub = () => {
-    return(
+const File = () => {
+    return (
         <div className="page hub-page">
             <div className="page-header">
                 <h1 className="page-title">
@@ -17,4 +17,4 @@ const Hub = () => {
     );
 };
 
-export default Hub;
+export default File;
