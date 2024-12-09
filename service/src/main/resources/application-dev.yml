@@ -113,3 +113,7 @@ file:
     application/zip,
     application/x-zip-compressed,
     application/x-rar-compressed
+
+ocr:
+  api:
+    base-url: ${OCR_SERVER_URL}
