@@ -18,9 +18,6 @@ const ProfileSection = ({ user }) => {
                     <p className="position-text">{user.employeeId}</p>
                     <p className="position-text">{user.email}</p>
                 </div>
-                <button className="notification-button" style={{ marginTop: 'var(--spacing-3)' }}>
-                    <i className="fas fa-bell"></i>
-                </button>
             </div>
         </div>
     );
