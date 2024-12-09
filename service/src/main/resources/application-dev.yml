@@ -6,6 +6,9 @@ server:
       charset: UTF-8  # 문자 인코딩을 UTF-8로 설정
       force: true    # 모든 요청/응답에 강제로 인코딩 적용
 
+  tomcat:
+    max-swallow-size: 50MB      # Tomcat의 최대 스왈로우 크기
+    max-http-form-post-size: 50MB  # Tomcat의 최대 POST 요청 크기
 
 # Spring 프레임워크 관련 설정
 spring:
@@ -38,6 +41,13 @@ spring:
             paths: /**                       # 모든 경로에 적용
       cache:
         period: 0                           # 캐시 비활성화
+
+  servlet:
+    multipart:
+      max-file-size: 50MB        # 단일 파일의 최대 크기
+      max-request-size: 50MB     # 전체 요청의 최대 크기
+      file-size-threshold: 0     # 파일이 메모리에 저장되는 임계값
+      enabled: true              # multipart 업로드 활성화
 
   # MVC 패턴 매칭 전략 설정
   mvc:
@@ -85,6 +95,21 @@ springdoc:
   default-consumes-media-type: application/json  # 기본 요청 미디어 타입
   default-produces-media-type: application/json  # 기본 응답 미디어 타입
 
+# application.yml
 file:
-  max-size: 10485760  # 10MB
-  allowed-types: image/jpeg,image/png,application/pdf
+  max-size: 52428800  # 50MB
+  allowed-types: >
+    image/jpeg,
+    image/png,
+    image/gif,
+    application/pdf,
+    application/msword,
+    application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+    application/vnd.ms-excel,
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+    application/vnd.ms-powerpoint,
+    application/vnd.openxmlformats-officedocument.presentationml.presentation,
+    text/plain,
+    application/zip,
+    application/x-zip-compressed,
+    application/x-rar-compressed

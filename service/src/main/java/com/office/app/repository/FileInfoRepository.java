@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     List<FileInfo> findByUploader_EmployeeId(String employeeId);
     Optional<FileInfo> findByStoredFileName(String fileName);
+    Optional<FileInfo> findByStoredFileNameAndUploader_EmployeeId(String storedFileName, String employeeId);
+
 }

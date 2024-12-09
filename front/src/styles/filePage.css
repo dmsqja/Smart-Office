@@ -1,10 +1,18 @@
-/* Hub Page Styles */
+/* File Page Styles */
 :root {
-    --primary: #007bff;
-    --primary-dark: #0056b3;
-    --text: #333333;
-    --text-secondary: #666666;
-    --gray: #e9ecef;
+    /* Colors from global.css */
+    --primary: #1e30f3;
+    --secondary: #e21e80;
+    --success: #198754;
+    --info: #0dcaf0;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --text: var(--dark);
+    --text-secondary: var(--gray);
+    --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
 }
 
 .hub-container {
@@ -101,21 +109,26 @@
 
 .progress-fill {
     height: 100%;
-    background: var(--primary);
+    background: var(--gradient);
     transition: width 0.3s ease;
 }
+
 .selected-file {
     background: white;
     border-radius: var(--border-radius);
     padding: 1.5rem;
     border: 1px solid var(--primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .file-info {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
+    text-align: center;
 }
 
 .file-name {
@@ -146,7 +159,7 @@
 }
 
 .upload-btn:hover {
-    background: var(--primary-dark);
+    background: var(--secondary);
 }
 
 .cancel-btn {
@@ -157,11 +170,13 @@
 .cancel-btn:hover {
     background: var(--gray);
 }
+
 .error-message {
-    color: red;
+    color: var(--danger);
     margin-top: 0.5rem;
     font-size: 0.875rem;
 }
+
 .file-preview {
     margin-bottom: 1rem;
     text-align: center;
@@ -174,17 +189,60 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.selected-file {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1.5rem;
-    border: 1px solid var(--primary);
-    border-radius: var(--border-radius);
-    background: white;
+.tab-navigation {
+    border-bottom: 1px solid var(--gray);
+    background-color: var(--light);
 }
 
-.file-info {
-    margin: 1rem 0;
-    text-align: center;
+.tab-button {
+    position: relative;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.tab-button::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary);
+    transform: scaleX(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-button.active::after {
+    transform: scaleX(1);
+}
+
+.tab-button-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tab-content {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease-out;
+}
+
+.tab-content.active {
+    opacity: 1;
+    transform: translateY(0);
 }
