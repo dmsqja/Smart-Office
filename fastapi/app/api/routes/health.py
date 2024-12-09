@@ -9,23 +9,23 @@ router = APIRouter()
 @router.get("/health")
 async def health_check():
     """
-    시스템과 서비스의 전반적인 상태 확인
+    ## 시스템과 서비스의 전반적인 상태 확인
 
-    Returns:
-        Dict: 시스템 및 서비스 상태 정보
-            - status: 전체 시스템 상태 ("healthy" 또는 "unhealthy")
-            - version: 애플리케이션 버전
-            - system: 시스템 리소스 상태
-                - cpu_usage: CPU 사용률 (%)
-                - memory_usage: 메모리 사용률 (%)
-                - disk_usage: 디스크 사용률 (%)
-                - swap_usage: 스왑 메모리 사용률 (%)
-                - network: 네트워크 트래픽 정보
-                - uptime: 시스템 가동 시간 정보
-                - load_average: 시스템 부하 평균
-                - processes: 실행 중인 프로세스 수
-            - services: 외부 서비스 상태
-                - llama: LLM 서비스 상태 정보
+        Returns:
+            Dict: 시스템 및 서비스 상태 정보
+                - status: 전체 시스템 상태 ("healthy" 또는 "unhealthy")
+                - version: 애플리케이션 버전
+                - system: 시스템 리소스 상태
+                    - cpu_usage: CPU 사용률 (%)
+                    - memory_usage: 메모리 사용률 (%)
+                    - disk_usage: 디스크 사용률 (%)
+                    - swap_usage: 스왑 메모리 사용률 (%)
+                    - network: 네트워크 트래픽 정보
+                    - uptime: 시스템 가동 시간 정보
+                    - load_average: 시스템 부하 평균
+                    - processes: 실행 중인 프로세스 수
+                - services: 외부 서비스 상태
+                    - llama: LLM 서비스 상태 정보
     """
     cpu_percent = psutil.cpu_percent()
     memory = psutil.virtual_memory()
