@@ -2,16 +2,19 @@ package com.office.handler;
 
 import com.office.app.dto.ErrorResponse;
 import com.office.exception.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RoomNotFoundException.class)
@@ -111,4 +114,25 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, status);
     }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+        log.error("File size exceeded", e);
+        ErrorResponse response = ErrorResponse.builder()
+                .error("File Upload Error")
+                .message("파일 크기가 제한을 초과합니다. (최대 50MB)")
+                .build();
+        return ResponseEntity.badRequest().body(response);
+    }
+
+
+    @ExceptionHandler(GCSException.class)
+    public ResponseEntity<ErrorResponse> handleGCSException(GCSException e) {
+        log.error("GCS operation failed", e);
+        ErrorResponse response = ErrorResponse.builder()
+                .error("File Operation Error")
+                .message(e.getMessage())
+                .build();
+        return ResponseEntity.badRequest().body(response);
+    }
+
 }

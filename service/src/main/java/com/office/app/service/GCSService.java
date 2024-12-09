@@ -1,6 +1,7 @@
 package com.office.app.service;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.storage.*;
 import com.office.app.dto.GCSRequest;
 import com.office.app.dto.GCSResponse;
@@ -21,11 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -82,25 +86,36 @@ public class GCSService {
             String originalFileName = file.getOriginalFilename();
             String storedFileName = generateUniqueFileName(originalFileName);
 
+            // Content Type 설정 추가
             BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, storedFileName)
                     .setContentType(file.getContentType())
+                    .setContentDisposition("inline; filename=\"" + originalFileName + "\"")
                     .build();
 
+            // 파일 업로드
             Blob blob = storage.create(blobInfo, file.getInputStream());
 
+            // Signed URL 생성
+            URL signedUrl = blob.signUrl(15, TimeUnit.MINUTES,
+                    Storage.SignUrlOption.withV4Signature(),
+                    Storage.SignUrlOption.signWith(ServiceAccountCredentials.fromStream(
+                            ResourceUtils.getURL(keyFileName).openStream()
+                    ))
+            );
+
+            // FileInfo 저장
             FileInfo fileInfo = FileInfo.builder()
                     .originalFileName(originalFileName)
                     .storedFileName(storedFileName)
                     .fileSize(file.getSize())
                     .contentType(file.getContentType())
-                    .downloadUrl(blob.getMediaLink())
+                    .downloadUrl(signedUrl.toString())
                     .uploadTime(LocalDateTime.now())
                     .uploader(uploader)
                     .build();
 
             FileInfo savedFileInfo = fileInfoRepository.save(fileInfo);
 
-            // 원본 파일명을 포함하여 응답 생성
             return createGCSResponse(blob, savedFileInfo.getOriginalFileName());
         } catch (IOException e) {
             log.error("Failed to upload file: {}", request.getFile().getOriginalFilename(), e);
@@ -109,45 +124,73 @@ public class GCSService {
     }
     /**
      * 파일 다운로드 시:
-     * 1. FileInfo에서 파일 정보 조회
-     * 2. GCS에서 파일 정보 조회
-     * 3. 원본 파일명을 포함하여 응답
+     * 1. FileInfo에서 employeeId와 일치하는 파일 정보 조회
+     * 2. GCS에서 파일 정보 조회 및 Signed URL 생성
+     * 3. 원본 파일명과 함께 다운로드 정보 응답
+     *
+     * @param fileName 저장된 파일명
+     * @param employeeId 다운로드 요청한 사용자 ID
+     * @throws GCSException 파일을 찾을 수 없거나 접근 권한이 없는 경우
      */
     public GCSResponse downloadObject(String fileName, String employeeId) throws GCSException {
         try {
-            FileInfo fileInfo = fileInfoRepository.findByStoredFileName(fileName)
-                    .orElseThrow(() -> new GCSException("File info not found: " + fileName));
+            // 1. 파일 정보 조회 및 사용자 권한 확인
+            FileInfo fileInfo = fileInfoRepository.findByStoredFileNameAndUploader_EmployeeId(fileName, employeeId)
+                    .orElseThrow(() -> new GCSException("File not found or no permission: " + fileName));
 
-            // 디버깅 로그 추가
-            log.info("Original File Name: {}", fileInfo.getOriginalFileName());
+            log.info("Downloading file: originalName={}, requester={}",
+                    fileInfo.getOriginalFileName(), employeeId);
 
+            // 2. GCS에서 파일 조회
             Blob blob = storage.get(bucketName, fileName);
             if (blob == null) {
                 throw new GCSException("File not found in GCS: " + fileName);
             }
 
-            // 응답 생성 전 로그
-            GCSResponse response = createGCSResponse(blob, fileInfo.getOriginalFileName());
-            log.info("Download Response: {}", response);
+            // 3. Signed URL 생성 (15분 유효)
+            URL signedUrl = blob.signUrl(15, TimeUnit.MINUTES,
+                    Storage.SignUrlOption.withV4Signature(),
+                    Storage.SignUrlOption.signWith(ServiceAccountCredentials.fromStream(
+                            ResourceUtils.getURL(keyFileName).openStream()
+                    ))
+            );
 
+            // 4. 다운로드 응답 생성
+            GCSResponse response = GCSResponse.builder()
+                    .fileName(blob.getName())
+                    .originalFileName(fileInfo.getOriginalFileName())
+                    .downloadUrl(signedUrl.toString())
+                    .fileSize(blob.getSize())
+                    .contentType(fileInfo.getContentType())
+                    .uploadTime(Instant.ofEpochMilli(blob.getCreateTime()).toString())
+                    .build();
+
+            log.info("Download response generated: {}", response);
             return response;
-        } catch (StorageException e) {
+        } catch (StorageException | IOException e) {
             log.error("Failed to download file: {}", fileName, e);
             throw new GCSException("Failed to download file", e);
         }
     }
 
-
     /**
-     * 파일을 삭제하는 메서드
-     * @param fileName 저장된 파일명
+     * 파일 삭제 시:
+     * 1. FileInfo에서 employeeId와 일치하는 파일 정보 조회
+     * 2. GCS에서 파일 삭제
+     * 3. DB에서 파일 정보 삭제
+     *
+     * @param fileName 삭제할 파일명
      * @param employeeId 삭제 요청한 사용자 ID
+     * @throws GCSException 파일을 찾을 수 없거나 접근 권한이 없는 경우
      */
     public void deleteObject(String fileName, String employeeId) throws GCSException {
         try {
-            // 1. FileInfo 조회 및 권한 체크
-            FileInfo fileInfo = fileInfoRepository.findByStoredFileName(fileName)
-                    .orElseThrow(() -> new GCSException("File info not found: " + fileName));
+            // 1. 파일 정보 조회 및 사용자 권한 확인
+            FileInfo fileInfo = fileInfoRepository.findByStoredFileNameAndUploader_EmployeeId(fileName, employeeId)
+                    .orElseThrow(() -> new GCSException("File not found or no permission: " + fileName));
+
+            log.info("Deleting file: originalName={}, requester={}",
+                    fileInfo.getOriginalFileName(), employeeId);
 
             // 2. GCS에서 파일 삭제
             boolean deleted = storage.delete(bucketName, fileName);
@@ -158,13 +201,13 @@ public class GCSService {
             // 3. DB에서 파일 정보 삭제
             fileInfoRepository.delete(fileInfo);
 
-            log.info("Successfully deleted file: {}", fileName);
+            log.info("Successfully deleted file: originalName={}, storedName={}",
+                    fileInfo.getOriginalFileName(), fileName);
         } catch (StorageException e) {
             log.error("Failed to delete file: {}", fileName, e);
             throw new GCSException("Failed to delete file", e);
         }
     }
-
     /**
      * 전체 파일 목록을 조회하는 메서드
      */
