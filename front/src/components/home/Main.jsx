@@ -1,5 +1,4 @@
-// 실제 코드용 Main.jsx 파일
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import ProfileSection from './ProfileSection';
 import StatusGrid from './StatusGrid';
@@ -7,17 +6,59 @@ import ActivityCard from './ActivityCard';
 import CalendarForm from '../calendar/CalendarForm';
 import defaultProfileImage from '../../assets/profile1.png';
 import '../../styles/home.css';
+import { DragDropContext, Draggable } from '@hello-pangea/dnd';
+import MapWidget from './MapWidget';
+import MsgWidget from './MsgWidget';
+import StrictModeDroppable from './StrictModeDroppable';
+import WeatherWidget from './WeatherWidget';
+
+const AVAILABLE_WIDGETS = {
+    status: {
+        id: 'status',
+        title: '근태 현황',
+        component: StatusGrid
+    },
+    activity: {
+        id: 'activity',
+        title: '최근 활동',
+        component: ActivityCard
+    },
+    map: {
+        id: 'map',
+        title: '사무실 맵',
+        component: MapWidget
+    },
+    message: {
+        id: 'message',
+        title: '메시지',
+        component: MsgWidget
+    }
+};
 
 const Main = () => {
 
-    const [user, setUser] = useState({
-        name: "",
-        position: "",
-        department: "",
-        employeeId: "",
-        email: "",
+    {/* 실제 코드 */}
+    // const [user, setUser] = useState({
+    //     name: "",
+    //     position: "",
+    //     department: "",
+    //     employeeId: "",
+    //     email: "",
+    //     profileImage: defaultProfileImage
+    // });
+    {/* 실제 코드 */}
+
+
+    {/* 테스트 정보 */}
+    const mockUser = {
+        name: "김지원",
+        position: "선임연구원",
+        department: "AI연구소",
+        employeeId: "EMP2024001",
+        email: "jiwon.kim@company.com",
         profileImage: defaultProfileImage
-    });
+    };
+    {/* 테스트 정보 */}
 
     // // 목업 통계 데이터
     const mockStats = {
@@ -92,59 +133,67 @@ const Main = () => {
         }
     ];
     
-    // const [user, setUser] = useState(mockUser);
+    const [user, setUser] = useState(mockUser);    // 이거 테스트 정보니까 주석처리
     const [stats, setStats] = useState(mockStats); // 나중에 이 mockStats 실제 데이터로 가져오기
     const [activities, setActivities] = useState(mockActivities);
-    {/* 테스트 정보 */}
+
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [activeWidgets, setActiveWidgets] = useState(['status', 'activity']);
 
-
-    {/* 실제 기능 */}
     useEffect(() => {
-        const getUserFromSession = () => {
+        const fetchUserData = async () => {
             try {
-                const userInfoStr = sessionStorage.getItem('userInfo');
-
-                const userData = JSON.parse(userInfoStr);
-                setUser({
-                    name: userData.name,
-                    position: userData.position,
-                    department: userData.department,
-                    employeeId: userData.employeeId,
-                    email: userData.email,
-                    profileImage: defaultProfileImage // 프로필 이미지는 현재 기본 이미지 사용
-                });
-
-                // 비밀번호 변경이 필요한 경우
-                if (userData.passwordChangeRequired) {
-                    window.location.href = '/password-change';
-                }
+                setTimeout(() => {
+                    setUser(mockUser);
+                    setStats(mockStats);
+                    setActivities(mockActivities);
+                    setLoading(false);
+                }, 500);
             } catch (error) {
-                console.error('Failed to get user data from session:', error);
                 setError('사용자 정보를 불러오는데 실패했습니다.');
-                window.location.href = '/';
-            } finally {
                 setLoading(false);
             }
         };
 
-        getUserFromSession();
+        // 저장된 위젯 설정 불러오기
+        const savedWidgets = localStorage.getItem('userWidgets');
+        if (savedWidgets) {
+            setActiveWidgets(JSON.parse(savedWidgets));
+        }
+
+        fetchUserData();
     }, []);
-    {/* 실제 기능 */}
 
-    if (loading) {
-        return <div className="dashboard-content container">
-            <div className="loading">Loading...</div>
-        </div>;
-    }
+    // 위젯 관리 함수들
+    const handleAddWidget = (widgetId) => {
+        if (!activeWidgets.includes(widgetId)) {
+            const newWidgets = [...activeWidgets, widgetId];
+            setActiveWidgets(newWidgets);
+            localStorage.setItem('userWidgets', JSON.stringify(newWidgets));
+        }
+    };
 
-    if (error) {
-        return <div className="dashboard-content container">
-            <div className="error">{error}</div>
-        </div>;
-    }
+    const handleRemoveWidget = (widgetId) => {
+        const newWidgets = activeWidgets.filter(id => id !== widgetId);
+        setActiveWidgets(newWidgets);
+        localStorage.setItem('userWidgets', JSON.stringify(newWidgets));
+    };
+
+    const handleDragEnd = (result) => {
+        if (!result.destination) return;
+
+        const items = Array.from(activeWidgets);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+
+        setActiveWidgets(items);
+        localStorage.setItem('userWidgets', JSON.stringify(items));
+    };
+
+    if (loading) return <div className="dashboard-content container"><div className="loading">Loading...</div></div>;
+    if (error) return <div className="dashboard-content container"><div className="error">{error}</div></div>;
 
     return (
         <div className="dashboard-content container">
@@ -160,16 +209,71 @@ const Main = () => {
                             <CalendarForm height="100%" minimode={true} />
                         </div>
                     </div>
+                    <div className="weather-card">
+                        <WeatherWidget />
+                    </div>
                 </div>
 
                 {/* Right Column */}
                 <div className="dashboard-column">
-                    <StatusGrid stats={stats} />
-                    <ActivityCard activities={activities} />
+                    <div className="widget-selector">
+                        <h3 style={{ marginBottom: 'var(--spacing-3)' }}>위젯 추가</h3>
+                        {Object.values(AVAILABLE_WIDGETS).map(widget => (
+                            <button
+                                key={widget.id}
+                                onClick={() => handleAddWidget(widget.id)}
+                                disabled={activeWidgets.includes(widget.id)}
+                                style={{ opacity: activeWidgets.includes(widget.id) ? 0.5 : 1 }}
+                            >
+                                {widget.title}
+                            </button>
+                        ))}
+                    </div>
+
+                    <DragDropContext onDragEnd={handleDragEnd}>
+                        <div className="widgets-wrapper">
+                            <StrictModeDroppable droppableId="widgets">
+                                {activeWidgets.map((widgetId, index) => {
+                                    const Widget = AVAILABLE_WIDGETS[widgetId].component;
+                                    return (
+                                        <Draggable
+                                            key={widgetId}
+                                            draggableId={widgetId}
+                                            index={index}
+                                        >
+                                            {(provided, snapshot) => (
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    className={`widget-container ${snapshot.isDragging ? 'dragging' : ''}`}
+                                                >
+                                                    <div 
+                                                        className="widget-controls"
+                                                        {...provided.dragHandleProps}
+                                                    >
+                                                        <span title="드래그하여 위치 변경">⋮⋮</span>
+                                                        <button
+                                                            onClick={() => handleRemoveWidget(widgetId)}
+                                                            title="��젯 제거"
+                                                        >
+                                                            ✕
+                                                        </button>
+                                                    </div>
+                                                    <Widget
+                                                        {...(widgetId === 'status' ? { stats } : {})}
+                                                        {...(widgetId === 'activity' ? { activities } : {})}
+                                                    />
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    );
+                                })}
+                            </StrictModeDroppable>
+                        </div>
+                    </DragDropContext>
                 </div>
             </div>
         </div>
-
     );
 };
 

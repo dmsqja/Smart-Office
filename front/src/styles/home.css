@@ -306,3 +306,260 @@
     padding: var(--spacing-3);
   }
 }
+
+/* 위젯 관련 스타일 */
+.widget-selector {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.widget-selector button {
+  padding: var(--spacing-2) var(--spacing-3);
+  margin-right: var(--spacing-2);
+  border-radius: var(--border-radius);
+  background: var(--light);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.widget-selector button:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.widget-container {
+  position: relative;
+  margin-bottom: var(--spacing-4);
+}
+
+.widget-controls {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-2);
+  display: flex;
+  gap: var(--spacing-2);
+  z-index: 10;
+}
+
+.widget-controls button {
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--border-radius);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--light);
+  cursor: pointer;
+}
+
+.widget-controls button:hover {
+  background: var(--light);
+}
+
+.draggable-widget {
+  cursor: move;
+}
+
+.widget-placeholder {
+  border: 2px dashed var(--light);
+  border-radius: var(--border-radius-lg);
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+  margin-bottom: var(--spacing-4);
+}
+
+/* 위젯 공통 스타일 */
+.widget-content {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.widget-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: var(--spacing-3);
+}
+
+/* 맵 위젯 스타일 */
+.map-widget {
+    height: auto;
+    width: 100%;
+    min-height: 500px;
+    position: relative;
+}
+
+.map-widget-container {
+    width: 100% !important;
+    height: 450px !important;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+}
+
+.map-widget-container > div {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.map-widget-container {
+    height: 400px !important;
+    min-height: 400px;
+    width: 100% !important;
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.map-widget-container #map {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+}
+
+/* 메신저 위젯 스타일 */
+.messenger-widget-container {
+  height: 400px;
+}
+
+.messenger-widget-container .messenger-container {
+  height: 100%;
+  margin: 0;
+}
+
+/* 위젯 반응형 스타일 */
+@media (max-width: 768px) {
+  .map-widget {
+    height: 400px;
+  }
+}
+
+@media (max-width: 576px) {
+  .map-widget {
+    height: 300px;
+  }
+}
+
+/* 위젯 반응형 스타일 */
+@media (max-width: 768px) {
+  .map-widget-container,
+  .messenger-widget-container {
+    height: 300px;
+  }
+}
+
+/* 날씨 위젯 스타일 */
+.weather-card {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.weather-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    align-items: center;
+    padding: var(--spacing-2);
+}
+
+.weather-location {
+    font-size: 1rem;
+    color: var(--gray);
+}
+
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.weather-info .temperature {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.weather-info .condition {
+    font-size: 1.1rem;
+    color: var(--dark);
+}
+
+@media (max-width: 768px) {
+    .weather-info .temperature {
+        font-size: 2rem;
+    }
+}
+
+.widgets-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-height: 100px;
+}
+
+.widget-container {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-4);
+  position: relative;
+}
+
+.widgets-wrapper {
+  min-height: 100px;
+}
+
+.widgets-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.widget-container {
+  position: relative;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.widget-container.dragging {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.widget-controls {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-2);
+  display: flex;
+  gap: var(--spacing-2);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px;
+  border-radius: var(--border-radius);
+  cursor: grab;
+}
+
+.widget-controls span {
+  padding: 0 var(--spacing-2);
+}
+
+.widget-placeholder {
+  border: 2px dashed var(--light);
+  border-radius: var(--border-radius-lg);
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/messenger.css';
 
@@ -8,7 +8,6 @@ const MessengerForm = () => {
   const [newMessage, setNewMessage] = useState('');
   const [selectedChat, setSelectedChat] = useState(null);
   const [loading, setLoading] = useState(false);
-  const messagesEndRef = useRef(null);
 
   // 채팅 목록 불러오기
   useEffect(() => {
@@ -45,11 +44,6 @@ const MessengerForm = () => {
 
     fetchMessages();
   }, [selectedChat]);
-
-  // 메시지 자동 스크롤
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -108,7 +102,7 @@ const MessengerForm = () => {
             <h2>{selectedChat.name}</h2>
           </div>
 
-          <div className="messages-container">
+          <div className="messages-container" style={{ display: 'flex', flexDirection: 'column-reverse' }}>
             {loading ? (
               <div className="loading-message">메시지를 불러오는 중...</div>
             ) : (
@@ -126,7 +120,6 @@ const MessengerForm = () => {
                 </div>
               ))
             )}
-            <div ref={messagesEndRef} />
           </div>
 
           <div className="input-container">

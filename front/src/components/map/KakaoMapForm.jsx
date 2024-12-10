@@ -10,6 +10,7 @@ const KakaoMapForm = () => {
     const mapContainerRef = useRef(null);
     const [openInfowindow, setOpenInfowindow] = useState(null);
     const [userMarkers, setUserMarkers] = useState([]);
+    const [currentUserPosition, setCurrentUserPosition] = useState(null);  // 추가
 
     useEffect(() => {
         const loadKakaoMap = () => {
@@ -40,6 +41,11 @@ const KakaoMapForm = () => {
                 const newMap = new window.kakao.maps.Map(container, options);
                 setMap(newMap);
 
+                // 맵 리사이즈 이벤트 핸들러 추가
+                window.addEventListener('resize', () => {
+                    newMap.relayout();
+                });
+
                 // 지도 클릭 이벤트
                 window.kakao.maps.event.addListener(newMap, 'click', function(mouseEvent) {
                     const latlng = mouseEvent.latLng;
@@ -50,7 +56,7 @@ const KakaoMapForm = () => {
         };
 
         const script = document.createElement('script');
-        script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
+        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
         script.async = true;
         script.onload = loadKakaoMap;
         document.head.appendChild(script);
@@ -142,30 +148,40 @@ const KakaoMapForm = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        const searchValue = e.target.search.value.toLowerCase();
+        const searchValue = e.target.search.value.toLowerCase().trim();
         
-        if (!searchValue.trim()) return;
+        if (!searchValue) return;
 
-        // Close previous infowindow if open
-        if (openInfowindow) {
-            openInfowindow.close();
-            setOpenInfowindow(null);
-        }
+        handleClearSearch();
 
-        // Clear previous markers
-        markers.forEach(({ marker, infowindow }) => {
-            marker.setMap(null);
-            infowindow.close();
+        const bounds = new window.kakao.maps.LatLngBounds();
+        let combinedResults = [];
+
+        // 1. 사용자 마커 먼저 검색
+        const matchingUserMarkers = userMarkers.filter(userMarker => 
+            userMarker.memo && userMarker.memo.toLowerCase().includes(searchValue)
+        );
+
+        // 2. 사용자 마커를 검색 결과에 추가
+        matchingUserMarkers.forEach(userMarker => {
+            const position = userMarker.marker.getPosition();
+            bounds.extend(position);
+            
+            combinedResults.push({
+                id: userMarker.id,
+                place_name: userMarker.memo || '(메모 없음)',
+                address_name: '사용자 마커',
+                y: position.getLat(),
+                x: position.getLng(),
+                isUserMarker: true
+            });
         });
-        setMarkers([]);
 
+        // 3. 카카오 Places API 검색
         const ps = new window.kakao.maps.services.Places();
-        ps.keywordSearch(searchValue, (data, status) => {
+        ps.keywordSearch(searchValue, (searchData, status) => {
             if (status === window.kakao.maps.services.Status.OK) {
-                setSearchResults(data);
-                const bounds = new window.kakao.maps.LatLngBounds();
-                
-                const newMarkers = data.map(place => {
+                const newMarkers = searchData.map(place => {
                     const position = new window.kakao.maps.LatLng(place.y, place.x);
                     bounds.extend(position);
                     
@@ -179,7 +195,7 @@ const KakaoMapForm = () => {
                             <div class="info-window-title">${place.place_name}</div>
                             <div>${place.address_name}</div>
                         </div>`,
-                        removable: true // ��기 버튼 표시
+                        removable: true
                     });
 
                     window.kakao.maps.event.addListener(marker, 'click', () => {
@@ -192,34 +208,36 @@ const KakaoMapForm = () => {
                 });
 
                 setMarkers(newMarkers);
-                map.setBounds(bounds);
+                
+                // 4. 모든 검색 결과 합치기
+                combinedResults = [...combinedResults, ...searchData];
+                setSearchResults(combinedResults);
+
+                // 5. 지도 범위 설정
+                if (combinedResults.length > 0) {
+                    try {
+                        map.setBounds(bounds);
+                    } catch (error) {
+                        console.error('지도 범위 설정 중 오류:', error);
+                        // 첫 번째 결과로 중심 이동
+                        const firstResult = combinedResults[0];
+                        map.setCenter(new window.kakao.maps.LatLng(firstResult.y, firstResult.x));
+                        map.setLevel(3);
+                    }
+                }
+            } else {
+                // API 검색 결과가 없어도 사용자 마커 결과는 표시
+                if (combinedResults.length > 0) {
+                    setSearchResults(combinedResults);
+                    map.setBounds(bounds);
+                }
             }
         });
 
-        // 사용자 마커 검색
-        const matchingUserMarkers = userMarkers.filter(
-            marker => marker.memo.toLowerCase().includes(searchValue)
-        );
-
-        if (matchingUserMarkers.length > 0) {
-            const bounds = new window.kakao.maps.LatLngBounds();
-            matchingUserMarkers.forEach(({ marker }) => {
-                bounds.extend(marker.getPosition());
-            });
-            map.setBounds(bounds);
-
-            setSearchResults(prev => [
-                ...prev,
-                ...matchingUserMarkers.map(m => ({
-                    id: m.id,
-                    place_name: m.memo,
-                    address_name: '사용자 마커',
-                    y: m.marker.getPosition().getLat(),
-                    x: m.marker.getPosition().getLng(),
-                    isUserMarker: true
-                }))
-            ]);
-        }
+        // 모든 사용자 마커 표시 유지
+        userMarkers.forEach(marker => {
+            marker.marker.setMap(map);
+        });
     };
 
     const handleClearSearch = () => {
@@ -232,6 +250,11 @@ const KakaoMapForm = () => {
         
         // 검색 결과 초기화
         setSearchResults([]);
+        
+        // 사용자 마커 다시 표시
+        userMarkers.forEach(marker => {
+            marker.marker.setMap(map);
+        });
         
         // 열린 인포윈도우 닫기
         if (openInfowindow) {
@@ -343,6 +366,29 @@ const KakaoMapForm = () => {
         };
     }, [openInfowindow]);
 
+    // 현재 위치 찾기 함수
+    const getCurrentLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const userPosition = new window.kakao.maps.LatLng(lat, lng);
+                    
+                    setCurrentUserPosition(userPosition);
+                    map.setCenter(userPosition);
+                    map.setLevel(3);
+                },
+                (error) => {
+                    console.error('현재 위치를 찾을 수 없습니다:', error);
+                    alert('현재 위치를 찾을 수 없습니다.');
+                }
+            );
+        } else {
+            alert('이 브라우저에서는 위치 서비스를 지원하지 않습니다.');
+        }
+    };
+
     return (
         <div style={{ position: 'relative' }}>
             <div className="map-search-container">
@@ -355,6 +401,14 @@ const KakaoMapForm = () => {
                     />
                     <button type="submit">검색</button>
                     <button type="button" onClick={handleClearSearch}>초기화</button>
+                    <button 
+                        type="button" 
+                        onClick={getCurrentLocation}
+                        className="location-button"
+                        title="현재 위치로 이동"
+                    >
+                        📍
+                    </button>
                 </form>
             </div>
             
