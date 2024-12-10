@@ -50,7 +50,7 @@ const KakaoMapForm = () => {
         };
 
         const script = document.createElement('script');
-        script.src = `http://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
+        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`;
         script.async = true;
         script.onload = loadKakaoMap;
         document.head.appendChild(script);

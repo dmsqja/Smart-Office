@@ -114,6 +114,6 @@ file:
     application/x-zip-compressed,
     application/x-rar-compressed
 
-ocr:
+fast-api:
   api:
-    base-url: ${OCR_SERVER_URL}
+    base-url: ${FAST_API_SERVER_URL}
