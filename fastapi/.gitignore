@@ -1,0 +1,80 @@
+# 가상환경
+venv/
+env/
+
+# 파이썬 캐시 파일
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 환경 설정 파일
+.env
+.env.*
+!.env.example
+
+# IDE 설정
+.vscode/
+.idea/
+
+# 로그 파일
+*.log
+logs/
+
+# 테스트 커버리지
+.coverage
+htmlcov/
+
+# 임시 파일
+*.swp
+.DS_Store
+
+# 업로드된 파일 저장소
+uploads/
+media/
+
+# 의존성 관리
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 빌드 산출물
+dist/
+build/
+*.egg-info/
+
+# 파이썬 프로파일링
+*.prof
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# API 문서 자동생성 파일
+docs/_build/
+docs/generated/
+
+# 모델 파일 및 가중치
+*.pt
+*.pth
+*.onnx
+*.bin
+models/
+
+# 임시 테스트 파일들
+tmp/
+temp/
+test_outputs/
+
+# SSL 인증서
+*.pem
+*.key
+*.crt
+*.der
+*.pfx
+*.p12
+*.cer
+
+# GCS 클라이언트 인증
+gcs-client*.json
+gcs-credentials.json
+google-credentials.json
+application_default_credentials.json
+service-account*.json

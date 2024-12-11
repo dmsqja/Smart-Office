@@ -2,15 +2,27 @@
 import React from 'react';
 import '../../styles/home.css';
 
-const StatusCard = ({ title, stats }) => {
+const StatusCard = ({ title, mainStat, stats }) => {
     return (
-        <div className="status-card p-4 rounded-lg shadow-sm">
-            <h3 className="text-lg font-semibold mb-3">{title}</h3>
+        <div className="status-card">
+            <h3 className="status-card-title">{title}</h3>
+
+            <div className="main-stat">
+                <div className="main-stat-value">
+                    <span className="value">{mainStat.value}</span>
+                    <span className="unit">{mainStat.unit}</span>
+                </div>
+                <span className="main-stat-label">{mainStat.label}</span>
+            </div>
+
             <div className="stats-grid">
                 {stats.map((stat, index) => (
                     <div key={index} className="stat-item">
                         <span className="stat-label">{stat.label}</span>
-                        <span className="stat-value">{stat.value}</span>
+                        <span className="stat-value">
+                            {stat.value}
+                            <span className="stat-unit">{stat.unit}</span>
+                        </span>
                     </div>
                 ))}
             </div>

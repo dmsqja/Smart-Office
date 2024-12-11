@@ -1,0 +1,248 @@
+/* File Page Styles */
+:root {
+    /* Colors from global.css */
+    --primary: #1e30f3;
+    --secondary: #e21e80;
+    --success: #198754;
+    --info: #0dcaf0;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --text: var(--dark);
+    --text-secondary: var(--gray);
+    --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+}
+
+.hub-container {
+    padding: 2rem;
+    background-color: var(--light);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.hub-form {
+    margin-bottom: 2rem;
+}
+
+.upload-section {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.upload-dropzone {
+    border: 2px dashed var(--primary);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.active {
+    background: var(--light);
+}
+
+.upload-icon {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.upload-hint {
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.file-section {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+}
+
+.file-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.file-table th,
+.file-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--light);
+}
+
+.file-table th {
+    font-weight: 600;
+    background: var(--light);
+}
+
+.file-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.file-action-btn {
+    padding: 0.5rem;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--primary);
+}
+
+.file-action-btn:hover {
+    background: var(--light);
+}
+
+.progress-bar {
+    margin-top: 1rem;
+    height: 4px;
+    background: var(--light);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient);
+    transition: width 0.3s ease;
+}
+
+.selected-file {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 1px solid var(--primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.file-name {
+    font-weight: 500;
+}
+
+.file-size {
+    color: var(--text-secondary);
+}
+
+.file-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.upload-btn,
+.cancel-btn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.upload-btn:hover {
+    background: var(--secondary);
+}
+
+.cancel-btn {
+    background: var(--light);
+    color: var(--text);
+}
+
+.cancel-btn:hover {
+    background: var(--gray);
+}
+
+.error-message {
+    color: var(--danger);
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.file-preview {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.preview-image {
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tab-navigation {
+    border-bottom: 1px solid var(--gray);
+    background-color: var(--light);
+}
+
+.tab-button {
+    position: relative;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.tab-button:hover {
+    color: var(--text);
+}
+
+.tab-button.active {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.tab-button::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary);
+    transform: scaleX(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-button.active::after {
+    transform: scaleX(1);
+}
+
+.tab-button-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tab-content {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease-out;
+}
+
+.tab-content.active {
+    opacity: 1;
+    transform: translateY(0);
+}
