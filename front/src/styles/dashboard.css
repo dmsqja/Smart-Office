@@ -65,7 +65,7 @@
   .grid-layout {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, minmax(300px, 1fr));
+    grid-template-rows: repeat(2, auto);
     gap: var(--spacing-4);
     margin-top: var(--spacing-4);
   }
@@ -74,6 +74,7 @@
     background: rgba(255, 255, 255, 0.5);
     border: 2px dashed var(--light);
     border-radius: var(--border-radius-lg);
+    height: fit-content;
     min-height: 300px;
     position: relative;
     transition: all 0.2s ease;
@@ -111,7 +112,7 @@
      Widget Base
      ========================================================================== */
   .widget-container {
-    height: 100%;
+    height: fit-content;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -440,6 +441,23 @@
     height: 100%;
     margin: 0;
   }
+  
+  /* ==========================================================================
+     Refresh Indicator
+     ========================================================================== */
+  .mini-calendar-card {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .mini-calendar-card .card-title {
+    margin: 0 0 var(--spacing-3);
+    font-size: 1.1rem;
+    color: var(--dark);
+  }
+  
   
   /* ==========================================================================
      Animations
