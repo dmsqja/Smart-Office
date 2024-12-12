@@ -1,6 +1,6 @@
 // ActivityCard.jsx
 import React from 'react';
-import '../../styles/home.css';
+import '../../styles/dashboard.css';
 
 const ActivityCard = ({ activities }) => {
     return (

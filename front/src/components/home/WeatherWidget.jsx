@@ -58,16 +58,19 @@ const WeatherWidget = () => {
 
     if (loading) return (
         <div className="weather-card">
-            <div className="weather-content">
-                <div className="loading">날씨 정보를 불러오는 중...</div>
+            <h2 className="card-title">현재 날씨</h2>
+            <div className="weather-content loading-state">
+                <div className="loading-spinner"></div>
+                <div className="loading-text">날씨 정보를 불러오는 중...</div>
             </div>
         </div>
     );
 
     if (error) return (
         <div className="weather-card">
-            <div className="weather-content">
-                <div className="error">{error}</div>
+            <h2 className="card-title">현재 날씨</h2>
+            <div className="weather-content error-state">
+                <div className="error-text">{error}</div>
             </div>
         </div>
     );

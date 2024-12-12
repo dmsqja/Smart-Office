@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import KakaoMapForm from '../map/KakaoMapForm';
-import '../../styles/home.css';
+import '../../styles/dashboard.css';
 
 const MapWidget = () => {
     const mapContainerRef = useRef(null);

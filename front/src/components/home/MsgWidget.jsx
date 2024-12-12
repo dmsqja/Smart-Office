@@ -1,6 +1,6 @@
 import React from 'react';
 import MessengerForm from '../messenger/MessengerForm';
-import '../../styles/home.css';
+import '../../styles/dashboard.css';
 
 const MsgWidget = () => {
     return (
