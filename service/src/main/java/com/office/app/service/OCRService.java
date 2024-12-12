@@ -21,7 +21,7 @@ public class OCRService {
 
     private final RestTemplate restTemplate;
 
-    @Value("${ocr.api.base-url}")
+    @Value("${fast-api.api.base-url}")
     private String ocrApiBaseUrl;
 
     public OCRResponse processOCR(String storedFileName) {
