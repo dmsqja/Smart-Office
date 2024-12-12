@@ -63,6 +63,7 @@
     border-radius: var(--border-radius);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     z-index: 1000;
+    cursor: default;
 }
 
 .notification-header {
@@ -128,131 +129,6 @@
     text-align: center;
     color: var(--gray);
 }
-
-/* 클릭 이벤트가 모달 외부로 전파되지 않도록 */
-.notification-modal {
-    cursor: default;
-}
-
-
-
-
-.notification-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--light);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
-}
-
-.notification-btn:hover {
-    background-color: #ebebeb;
-}
-
-.notification-btn i {
-    color: var(--gray);
-}
-
-.notification-wrapper {
-    position: relative;
-}
-
-.notification-badge {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 8px;
-    height: 8px;
-    background-color: #ff4d4f;
-    border-radius: 50%;
-}
-
-.notification-modal {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: 300px;
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-}
-
-.notification-header {
-    padding: var(--spacing-3);
-    border-bottom: 1px solid var(--light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.notification-header h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--gray);
-    padding: var(--spacing-1);
-}
-
-.close-btn:hover {
-    color: var(--dark);
-}
-
-.notification-content {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.notification-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.notification-item {
-    padding: var(--spacing-3);
-    border-bottom: 1px solid var(--light);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.notification-item:hover {
-    background-color: var(--light);
-}
-
-.notification-item p {
-    margin: 0 0 var(--spacing-1);
-    font-size: 0.875rem;
-}
-
-.notification-date {
-    font-size: 0.75rem;
-    color: var(--gray);
-}
-
-.no-notifications {
-    padding: var(--spacing-4);
-    text-align: center;
-    color: var(--gray);
-}
-
-/* 클릭 이벤트가 모달 외부로 전파되지 않도록 */
-.notification-modal {
-    cursor: default;
-}
-
-
 
 
 .notification-btn {
