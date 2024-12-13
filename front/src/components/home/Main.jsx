@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ProfileSection from './ProfileSection';
 import StatusGrid from './StatusGrid';
 import ActivityCard from './ActivityCard';
@@ -64,21 +64,73 @@ const EmptyCell = ({ onAddWidget, availableWidgets }) => {
     );
 };
 
-const Widget = ({ widgetId, data, onRemove }) => {
+const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget, gridCells }) => {
+    const [showMenu, setShowMenu] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef(null);
     const config = WIDGET_CONFIG[widgetId];
     const WidgetComponent = config.component;
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setShowMenu(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
         <div className="widget-container">
             <div className="widget-header">
                 <h3>{config.title}</h3>
-                <div className="widget-controls">
-                    <button onClick={onRemove} title="위젯 제거">✕</button>
+                <div className="widget-controls" ref={menuRef}>
+                    <button 
+                        className="widget-control-button"
+                        onClick={() => setShowMenu(!showMenu)}
+                    >
+                        <span>•••</span>
+                    </button>
+                    {showMenu && (
+                        <div className="widget-control-menu">
+                            <button onClick={() => {
+                                setIsOpen(true);
+                                setShowMenu(false);
+                            }}>
+                                <span>위젯 변경</span>
+                            </button>
+                            <button 
+                                className="danger"
+                                onClick={() => {
+                                    onRemove();
+                                    setShowMenu(false);
+                                }}
+                            >
+                                <span>위젯 삭제</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="widget-content">
                 <WidgetComponent {...config.props(data)} />
             </div>
+            <WidgetSelector
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+                onSelectWidget={(newWidgetId) => {
+                    onRemove();
+                    handleAddWidget(gridCells.indexOf(widgetId), newWidgetId);
+                    setIsOpen(false);
+                }}
+                availableWidgets={[
+                    ...getAvailableWidgets(),
+                    // 현재 위젯도 선택 가능하도록 포함
+                    WIDGET_CONFIG[widgetId]
+                ]}
+            />
         </div>
     );
 };
@@ -215,6 +267,9 @@ const Main = () => {
                                             widgetId={widgetId}
                                             data={widgetData}
                                             onRemove={() => handleRemoveWidget(index)}
+                                            getAvailableWidgets={getAvailableWidgets}
+                                            handleAddWidget={handleAddWidget}
+                                            gridCells={gridCells}
                                         />
                                     ) : (
                                         <EmptyCell
