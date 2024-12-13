@@ -145,7 +145,7 @@ const Main = () => {
             <div className="dashboard-grid">
                 {/* Left Column */}
                 <div className="dashboard-column">
-                    <div className="status-card">
+                    <div className="profile-card">
                         <ProfileSection user={user} />
                     </div>
                     <div className="mini-calendar-card">

@@ -11,7 +11,12 @@ const MapWidget = () => {
 
         const handleResize = () => {
             if (window.kakao && window.kakao.maps) {
-                window.dispatchEvent(new Event('resize'));
+                if (window.kakao.maps.Map && mapContainerRef.current) {
+                    const mapInstance = mapContainerRef.current.querySelector('[id^="map_"]');
+                    if (mapInstance) {
+                        window.kakao.maps.Map.relayout();
+                    }
+                }
             }
         };
 
@@ -24,7 +29,6 @@ const MapWidget = () => {
 
     return (
         <div className="widget-content map-widget" ref={mapContainerRef}>
-            <h3 className="widget-title">사무실 맵</h3>
             <div className="map-widget-container">
                 {mounted && <KakaoMapForm />}
             </div>

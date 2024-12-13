@@ -32,6 +32,13 @@
     display: flex;
     align-items: center;
   }
+
+  .profile-card {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
   
   .profile-image-wrapper {
     border-radius: 50%;
@@ -83,6 +90,14 @@
   .grid-cell.occupied {
     border: none;
     background: white;
+  }
+
+  .status-grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+    max-width: 100%;
   }
   
   /* Empty Cell 스타일 */
@@ -313,23 +328,26 @@
   .status-card {
     background: white;
     border-radius: var(--border-radius-lg);
-    padding: var(--spacing-4);
+    padding: var(--spacing-3);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-4);
+    gap: var(--spacing-2);
+    min-width: 0;
+    max-width: 100%;
+    max-height: 400px;
   }
   
   .status-card-title {
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: var(--gray);
-    margin-bottom: var(--spacing-2);
+    margin-bottom: var(--spacing-1);
   }
   
   .main-stat {
     text-align: center;
-    padding: var(--spacing-3) 0;
+    padding: var(--spacing-1) 0;
   }
   
   .main-stat-value {
@@ -340,13 +358,13 @@
   }
   
   .main-stat-value .value {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
     color: var(--primary);
   }
   
   .main-stat-value .unit {
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: var(--gray);
     margin-left: var(--spacing-1);
   }
@@ -354,7 +372,7 @@
   .main-stat-label {
     display: block;
     color: var(--gray);
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     margin-top: var(--spacing-1);
   }
   
@@ -364,6 +382,29 @@
     gap: var(--spacing-2);
     padding-top: var(--spacing-2);
     border-top: 1px solid var(--light);
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--gray);
+  }
+
+  .stat-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--dark);
+  }
+
+  .stat-unit {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-left: 0.25rem;
   }
   
   /* ==========================================================================
@@ -435,11 +476,58 @@
      ========================================================================== */
   .messenger-widget-container {
     height: 400px;
+    border-radius: var(--border-radius-lg);
+    background: white;
+    overflow: hidden;
+    display: flex;
   }
   
   .messenger-widget-container .messenger-container {
     height: 100%;
     margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .messenger-widget-container .chat-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  .messenger-widget-container .chat-list {
+    width: 280px;
+    min-width: 280px;
+    transition: all 0.3s ease;
+  }
+
+  .messenger-widget-container .messenger-container.has-selected-chat .chat-list {
+    display: none;
+  }
+  
+  .messenger-widget-container .chat-list-header {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+  
+  .messenger-widget-container .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-3);
+    height: auto;
+    min-height: 0;
+  }
+  
+  .messenger-widget-container .input-container {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid var(--light);
   }
   
   /* ==========================================================================
@@ -486,6 +574,10 @@
     .dashboard-grid {
       grid-template-columns: 1fr;
     }
+
+    .status-grid-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
   
   @media (max-width: 768px) {
@@ -515,6 +607,16 @@
     .messenger-widget-container {
       height: 300px;
     }
+
+    .messenger-widget-container .chat-list {
+      width: 240px;
+      min-width: 240px;
+    }
+
+    .messenger-widget-container .messages-container {
+      height: calc(100% - 50px);
+      padding: var(--spacing-2);
+    }
   
     .profile-container {
       flex-direction: column;
@@ -533,5 +635,14 @@
   
     .map-widget {
       height: 250px;
+    }
+
+    .status-grid-container {
+      grid-template-columns: 1fr;
+    }
+
+    .messenger-widget-container .chat-list {
+      width: 200px;
+      min-width: 200px;
     }
   }
