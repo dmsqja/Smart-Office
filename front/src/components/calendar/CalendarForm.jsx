@@ -113,6 +113,7 @@ const CalendarForm = ({ height = 'calc(100vh - 2rem)', minimode = false }) => {
       return {
         style: {
           color: '#ff0000',
+          backgroundColor: 'rgba(255, 0, 0, 0.03)'  // 연한 빨간색 배경
         }
       };
     }
@@ -120,6 +121,7 @@ const CalendarForm = ({ height = 'calc(100vh - 2rem)', minimode = false }) => {
       return {
         style: {
           color: '#0000ff',
+          backgroundColor: 'rgba(0, 0, 255, 0.03)'  // 연한 파란색 배경
         }
       };
     }
