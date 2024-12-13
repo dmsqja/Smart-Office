@@ -19,6 +19,7 @@ services:
       REACT_APP_TURN_USERNAME: ${TURN_USERNAME}
       REACT_APP_TURN_PASSWORD: ${TURN_PASSWORD}
       REACT_APP_KAKAO_MAP_API_KEY: ${KAKAO_MAP_API_KEY}
+      REACT_APP_WEATHER_API_KEY: ${WEATHER_API_KEY}
     volumes:
       - /home/tae4an/gcs/gcs-credentials.json:/app/credentials.json
     healthcheck:
