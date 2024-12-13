@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import defaultProfileImage from '../../assets/profile1.png';
 import React, { useState, useEffect, useRef } from 'react';
 import ProfileSection from './ProfileSection';
 import StatusGrid from './StatusGrid';
@@ -252,6 +254,9 @@ const Main = () => {
                                 onNavigate={handleNavigate}
                             />
                         </div>
+                    </div>
+                    <div className="weather-card">
+                        <WeatherWidget />
                     </div>
                 </div>
 

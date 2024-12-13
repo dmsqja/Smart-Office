@@ -404,6 +404,7 @@ const Header = ({ setIsMenuOpen }) => {
     const handleSearch = useCallback((e) => {
         e.preventDefault();
         
+        
         let results = userData.filter(item => {
             return (
                 item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
