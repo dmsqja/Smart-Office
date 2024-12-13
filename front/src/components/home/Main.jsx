@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import defaultProfileImage from '../../assets/profile1.png';
 import ProfileSection from './ProfileSection';
 import StatusGrid from './StatusGrid';
 import ActivityCard from './ActivityCard';
@@ -85,7 +86,44 @@ const Widget = ({ widgetId, data, onRemove }) => {
 };
 
 const Main = () => {
-    const [user, setUser] = useState(mockUser);
+    const [user, setUser] = useState({
+        name: "",
+        position: "",
+        department: "",
+        employeeId: "",
+        email: "",
+        profileImage: defaultProfileImage
+    });
+
+    // 목업 데이터
+    const mockStats = {
+        attendanceStats: {
+            title: '근태 현황',
+            mainStat: { value: '15', unit: '일', label: '정상 출근' },
+            stats: [
+                { label: '지각', value: '1', unit: '회' },
+                { label: '조퇴', value: '0', unit: '회' },
+                { label: '결근', value: '0', unit: '회' }
+            ]
+        },
+        leaveStats: {
+            title: '휴가 현황',
+            mainStat: { value: '10', unit: '일', label: '잔여 휴가' },
+            stats: [
+                { label: '총 휴가', value: '15', unit: '일' },
+                { label: '사용 휴가', value: '5', unit: '일' }
+            ]
+        },
+        overtimeStats: {
+            title: '초과근무 현황',
+            mainStat: { value: '12', unit: '시간', label: '이번달 초과근무' },
+            stats: [
+                { label: '승인됨', value: '10', unit: '시간' },
+                { label: '수당 지급 예정', value: '10', unit: '시간' }
+            ]
+        }
+    };
+
     const [stats, setStats] = useState(mockStats);
     const [activities, setActivities] = useState(mockActivities);
     const [loading, setLoading] = useState(true);
@@ -93,16 +131,28 @@ const Main = () => {
     const [gridCells, setGridCells] = useState(Array(4).fill(null));
 
     useEffect(() => {
-        const fetchUserData = async () => {
+        const getUserFromSession = () => {
             try {
-                setTimeout(() => {
-                    setUser(mockUser);
-                    setStats(mockStats);
-                    setActivities(mockActivities);
-                    setLoading(false);
-                }, 500);
+                const userInfoStr = sessionStorage.getItem('userInfo');
+                const userData = JSON.parse(userInfoStr);
+                
+                setUser({
+                    name: userData.name,
+                    position: userData.position,
+                    department: userData.department,
+                    employeeId: userData.employeeId,
+                    email: userData.email,
+                    profileImage: defaultProfileImage
+                });
+
+                if (userData.passwordChangeRequired) {
+                    window.location.href = '/password-change';
+                }
             } catch (error) {
+                console.error('Failed to get user data from session:', error);
                 setError('사용자 정보를 불러오는데 실패했습니다.');
+                window.location.href = '/';
+            } finally {
                 setLoading(false);
             }
         };
@@ -112,7 +162,7 @@ const Main = () => {
             setGridCells(JSON.parse(savedWidgets));
         }
 
-        fetchUserData();
+        getUserFromSession();
     }, []);
 
     const getAvailableWidgets = () => {
