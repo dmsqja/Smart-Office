@@ -1,20 +1,15 @@
 import { NavLink } from "react-router-dom";
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import '../../styles/layout.css';
 
 const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
     const menuItems = [
         { path: "/home", label: "Home", icon: "fas fa-home" },
-        { path: "/resume", label: "Resume", icon: "fas fa-file-alt" },
-        { path: "/projects", label: "Projects", icon: "fas fa-folder-open" },
-        { path: "/contact", label: "Contact", icon: "fas fa-phone" },
         { path: "/calendar", label: "Calendar", icon: "fas fa-calendar" },
         { path: "/messenger", label: "Messenger", icon: "fas fa-comment" },
-        { path: "/ai", label: "AI", icon: "fas fa-robot" },
-        { path: "/hub", label: "Hub", icon: "fas fa-cubes" },
+        { path: "/file", label: "File", icon: "fas fa-file" },
         { path: "/meeting", label: "Meeting", icon: "fas fa-video" },
-        { path: "/employee", label: "Emp", icon: "fas fa-users" },
-        { path: "/document", label: "Doc", icon: "fas fa-file" },
         { path: "/map", label: "Map", icon: "fas fa-map-marked-alt" }
     ];
 
@@ -55,6 +50,6 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
 Sidebar.propTypes = {
     isMenuOpen: PropTypes.bool.isRequired,
     setIsMenuOpen: PropTypes.func.isRequired
-}
+};
 
 export default Sidebar;
