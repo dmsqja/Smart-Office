@@ -37,14 +37,8 @@
 }
 
 /* Container */
-.resume-container,
-.projects-container,
 .calendar-container,
-.ai-container,
-.hub-container,
 .meeting-container,
-.emp-container,
-.doc-container,
 .map-container {
   max-width: 1200px;
   margin: 3rem auto;
@@ -52,8 +46,13 @@
 }
 
 .msg-container {
-  max-width: auto;
+  max-width: 100%;
+  margin: 1rem auto;
+  padding: 0 1rem;
+  height: calc(100vh - 200px);
+  min-height: 600px;
 }
+
 /* Page Headers */
 .page-header {
   padding: var(--section-spacing);
@@ -162,10 +161,23 @@
   .page-title {
     font-size: 2rem;
   }
+
+  .msg-container {
+    height: calc(100vh - 120px);
+    min-height: 500px;
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
 }
 
 @media (max-width: 576px) {
   .page-title {
     font-size: 1.5rem;
+  }
+
+  .msg-container {
+    height: calc(100vh - 100px);
+    margin: 0.5rem auto;
+    padding: 0;
   }
 }
