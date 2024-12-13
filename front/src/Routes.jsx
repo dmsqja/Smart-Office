@@ -14,6 +14,7 @@ const File = lazy(() => import ('./pages/File'));
 const Meeting = lazy(() => import ('./pages/Meeting'));
 const MeetingRoom = lazy(() => import('./pages/MeetingRoom'));
 const KakaoMap = lazy(() => import('./pages/KakaoMap'));
+const Settings = lazy(() => import('./components/settings/Settings'));
 
 const AppRoutes = () => {
     return (
@@ -32,6 +33,7 @@ const AppRoutes = () => {
                 <Route path="/meeting" element={<Meeting/>}/>
                 <Route path="/meetingRoom" element={<MeetingRoom/>}/>
                 <Route path="/map" element={<KakaoMap/>}/>
+                <Route path="/settings" element={<Settings/>}/>
             </Route>
 
                 {/* Error routes */}

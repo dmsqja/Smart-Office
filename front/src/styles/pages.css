@@ -32,7 +32,8 @@
 .meeting-page,
 .emp-page,
 .doc-page,
-.map-page {
+.map-page,
+.settings-page {
   background-color: var(--light);
 }
 

@@ -1,7 +1,7 @@
 // NavLink 제거 (사용하지 않음)
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import { fetchWeatherData } from '../../utils/WeatherUtils';
 import '../../styles/layout.css';
@@ -9,7 +9,6 @@ import '../../styles/layout.css';
 const Header = ({ setIsMenuOpen }) => {
     const navigate = useNavigate();
     const [showNotifications, setShowNotifications] = useState(false);
-    const [showSearchModal, setShowSearchModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [displayedResults, setDisplayedResults] = useState([]);
@@ -27,7 +26,7 @@ const Header = ({ setIsMenuOpen }) => {
     ];
 
     // JSON 서버에서 데이터 가져오기 부분을 하드코딩된 데이터로 변경
-    const userData = [
+    const userData = useMemo(() => [
         {
             "id": "EMP001",
             "name": "김지원",
@@ -378,7 +377,7 @@ const Header = ({ setIsMenuOpen }) => {
             "department": "재무팀",
             "email": "miran.choo@company.com"
         }
-    ];
+    ], []);
 
     const handleLogout = async () => {
         try {
@@ -573,6 +572,12 @@ const Header = ({ setIsMenuOpen }) => {
                             </div>
                         )}
                     </div>
+                    <button
+                        className="notification-btn"
+                        onClick={() => navigate('/settings')}
+                    >
+                        <i className="fas fa-cog"></i>
+                    </button>
                     <button
                         className="logout-btn"
                         onClick={handleLogout}
