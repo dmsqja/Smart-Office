@@ -1,10 +1,25 @@
 // ProfileSection.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ProfileModal from './ProfileModal';
 import '../../styles/dashboard.css';
 
-const ProfileSection = ({ user, stats }) => {
+const ProfileSection = ({ user: initialUser, stats }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [user, setUser] = useState(initialUser);
     const { attendanceStats, leaveStats, overtimeStats } = stats;
-    
+
+    useEffect(() => {
+        // 로컬 스토리지에서 저장된 프로필 정보 불러오기
+        const savedProfile = localStorage.getItem('userProfile');
+        if (savedProfile) {
+            setUser(JSON.parse(savedProfile));
+        }
+    }, []);
+
+    const handleUpdateProfile = (updatedUser) => {
+        setUser(updatedUser);
+    };
+
     const statsData = [
         {
             label: '출근 일수',
@@ -31,7 +46,16 @@ const ProfileSection = ({ user, stats }) => {
 
     return (
         <div className="welcome-info">
-            <div className="profile-container" style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            <div 
+                className="profile-container" 
+                style={{ 
+                    flexDirection: 'column', 
+                    alignItems: 'center', 
+                    textAlign: 'center',
+                    cursor: 'pointer'
+                }}
+                onClick={() => setIsModalOpen(true)}
+            >
                 {/* 기존 프로필 정보 */}
                 <div className="profile-image-wrapper" style={{ width: '80px', height: '80px', marginBottom: 'var(--spacing-2)' }}>
                     <img src={user.profileImage} alt="profile" className="profile-image" />
@@ -71,6 +95,12 @@ const ProfileSection = ({ user, stats }) => {
                     ))}
                 </div>
             </div>
+            <ProfileModal 
+                user={user}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onUpdate={handleUpdateProfile}
+            />
         </div>
     );
 };

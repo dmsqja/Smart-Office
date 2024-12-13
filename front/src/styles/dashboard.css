@@ -70,6 +70,21 @@
     font-size: 0.75rem;  /* 폰트 크기 축소 */
   }
   
+  /* Profile Modal Styles */
+  .profile-table {
+    width: 100%;
+    margin-top: var(--spacing-4);
+  }
+  
+  .profile-table td {
+    padding: var(--spacing-2);
+    border-bottom: 1px solid var(--light);
+  }
+  
+  .profile-table td:first-child {
+    width: 100px;
+  }
+  
   /* ==========================================================================
      Grid Layout
      ========================================================================== */
@@ -714,4 +729,40 @@
     height: 100%;
     border-radius: 2px;
     transition: width 0.3s ease;
+  }
+
+  /* Profile Edit Styles */
+  .edit-input {
+    width: 100%;
+    padding: var(--spacing-1);
+    border: 1px solid var(--light);
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    transition: all 0.2s;
+  }
+
+  .edit-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+  }
+
+  .edit-button,
+  .save-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-2);
+    color: var(--gray);
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+  }
+
+  .edit-button:hover {
+    color: var(--primary);
+  }
+
+  .save-button:hover {
+    color: var(--success);
   }
