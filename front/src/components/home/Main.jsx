@@ -28,8 +28,8 @@ const WIDGET_CONFIG = {
     },
     map: {
         id: 'map',
-        title: '사무실 맵',
-        description: '사무실 내 좌석 배치와 현재 상태를 확인할 수 있습니다.',
+        title: '지도',
+        description: '회사 주변 또는 원하는 장소를 지도에서 확인하고 관리할 수 있습니다.',
         component: MapWidget,
         props: () => ({})
     },

@@ -1,10 +1,80 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import axios from 'axios';
 import '../../styles/messenger.css';
 
 const MessengerForm = ({ isWidget }) => {
-  const [chats, setChats] = useState([]);
+  const [chats] = useState([
+    {
+      id: 1,
+      name: "홍길동",
+      lastMessage: "알겠습니다. 오후에 회의 준비 잘 부탁드립니다.",
+      time: "1시간 전",
+      avatar: "/assets/profile2.png"
+    },
+    {
+      id: 2,
+      name: "김철수",
+      lastMessage: "새로운 위젯 추가했는데 한번 봐주실 수 있나요?",
+      time: "2시간 전",
+      avatar: "/assets/profile3.png"
+    }
+  ]);
+
+  const mockMessages = {
+    1: [
+      {
+        id: 1,
+        text: "홍 팀장님, 오후 3시 프로젝트 중간 보고 회의 자료 검토 부탁드립니다.",
+        sender: "user",
+        timestamp: "2024-12-06T09:00:00"
+      },
+      {
+        id: 2,
+        text: "네, 지금 확인해보겠습니다. 특별히 중점적으로 봐야할 부분이 있을까요?",
+        sender: "received",
+        timestamp: "2024-12-06T09:02:00"
+      },
+      {
+        id: 3,
+        text: "3페이지 실적 분석 부분과 마지막 페이지 향후 계획 부분입니다.",
+        sender: "user",
+        timestamp: "2024-12-06T09:05:00"
+      },
+      {
+        id: 4,
+        text: "알겠습니다. 점심 식사 후 바로 검토해서 피드백 드리도록 하겠습니다.",
+        sender: "received",
+        timestamp: "2024-12-06T09:07:00"
+      },
+      {
+        id: 5,
+        text: "알겠습니다. 오후에 회의 준비 잘 부탁드립니다.",
+        sender: "user",
+        timestamp: "2024-12-06T09:10:00"
+      }
+    ],
+    2: [
+      {
+        id: 1,
+        text: "새로운 위젯 추가했는데 한번 봐주실 수 있나요? 근태 현황이랑 지도 위젯 연동해서 재택근무 시 위치 기반으로 출근 체크되게 했어요.",
+        sender: "received",
+        timestamp: "2024-12-06T10:00:00"
+      },
+      {
+        id: 2,
+        text: "오, 정말 좋은 아이디어네요! 제가 테스트해보고 피드백 드릴게요. 혹시 지도 위젯에 회사 근처 식당 정보도 같이 표시되나요?",
+        sender: "user",
+        timestamp: "2024-12-06T10:02:00"
+      },
+      {
+        id: 3,
+        text: "네, 점심시간에 맞춰서 주변 맛집 정보랑 크라우드 혼잡도까지 표시되도록 업데이트했습니다!",
+        sender: "received",
+        timestamp: "2024-12-06T10:05:00"
+      }
+    ]
+  };
+
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [selectedChat, setSelectedChat] = useState(null);
@@ -24,7 +94,6 @@ const MessengerForm = ({ isWidget }) => {
     scrollToBottom();
   }, [messages]);
 
-  // 모바일 환경 감지
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -35,42 +104,18 @@ const MessengerForm = ({ isWidget }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // 채팅 목록 불러오기
   useEffect(() => {
-    const fetchChats = async () => {
-      try {
-        const response = await axios.get('http://localhost:3002/chats');
-        setChats(response.data);
-      } catch (error) {
-        console.error('채팅 목록을 불러오는데 실패했습니다:', error);
-      }
-    };
-
-    fetchChats();
-  }, []);
-
-  // 선택된 채팅방의 메시지 불러오기
-  useEffect(() => {
-    const fetchMessages = async () => {
-      if (!selectedChat) return;
-      
+    if (selectedChat) {
       setLoading(true);
-      try {
-        const response = await axios.get(`http://localhost:3002/messages?chatId=${selectedChat.id}`);
-        const chatData = response.data[0];
-        if (chatData) {
-          setMessages(chatData.messages);
-        }
-      } catch (error) {
-        console.error('메시지를 불러오는데 실패했습니다:', error);
-      } finally {
+      // 약간의 로딩 시간을 시뮬레이션
+      setTimeout(() => {
+        setMessages(mockMessages[selectedChat.id]);
         setLoading(false);
-      }
-    };
-    fetchMessages();
+      }, 500);
+    }
   }, [selectedChat]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !selectedChat) return;
     
@@ -83,15 +128,6 @@ const MessengerForm = ({ isWidget }) => {
 
     setMessages(prev => [...prev, messageData]);
     setNewMessage('');
-
-    try {
-      await axios.post(`http://localhost:3002/messages/${selectedChat.id}`, {
-        messages: [...messages, messageData]
-      });
-    } catch (error) {
-      console.error('메시지 전송에 실패했습니다:', error);
-      setMessages(prev => prev.filter(msg => msg.id !== messageData.id));
-    }
   };
 
   const handleBack = () => {
