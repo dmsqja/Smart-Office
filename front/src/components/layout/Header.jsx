@@ -1,13 +1,14 @@
-import { NavLink, useNavigate } from "react-router-dom";
+// NavLink 제거 (사용하지 않음)
+import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
+import { fetchWeatherData } from '../../utils/WeatherUtils';
 import '../../styles/layout.css';
 
 const Header = ({ setIsMenuOpen }) => {
     const navigate = useNavigate();
     const [showNotifications, setShowNotifications] = useState(false);
-    const [showSearchModal, setShowSearchModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [displayedResults, setDisplayedResults] = useState([]);
@@ -15,13 +16,17 @@ const Header = ({ setIsMenuOpen }) => {
     const [isLoading, setIsLoading] = useState(false);
     const itemsPerPage = 5;
 
-    const [notifications, setNotifications] = useState([
-        // 알림이 있을 경우
-        // { id: 1, message: "새로운 공지사항이 등록되었습니다.", date: "2024-12-09" }
-    ]);
+    // notifications 상태를 const로 변경 (setNotifications 사용하지 않음)
+    const notifications = [
+        { id: 1, message: "새로운 공지사항이 등록되었습니다.", date: "2024-12-09" },
+        { id: 2, message: "12월 정기 회의 일정이 변경되었습니다.", date: "2024-12-08" },
+        { id: 3, message: "연말 워크샵 참석 여부를 확인해주세요.", date: "2024-12-07" },
+        { id: 4, message: "새로운 프로젝트 킥오프 미팅이 예정되어 있습니다.", date: "2024-12-06" },
+        { id: 5, message: "보안 교육 이수 기간이 7일 남았습니다.", date: "2024-12-05" }
+    ];
 
     // JSON 서버에서 데이터 가져오기 부분을 하드코딩된 데이터로 변경
-    const userData = [
+    const userData = useMemo(() => [
         {
             "id": "EMP001",
             "name": "김지원",
@@ -372,7 +377,7 @@ const Header = ({ setIsMenuOpen }) => {
             "department": "재무팀",
             "email": "miran.choo@company.com"
         }
-    ];
+    ], []);
 
     const handleLogout = async () => {
         try {
@@ -395,18 +400,10 @@ const Header = ({ setIsMenuOpen }) => {
         setShowNotifications(!showNotifications);
     }
 
-    // 검색 모달 토글
-    const toggleSearchModal = () => {
-        setShowSearchModal(!showSearchModal);
-        if(!showSearchModal) {
-            setSearchTerm('');
-            setDisplayedResults([]);
-        }
-    };
-
-    // EmployeeForm.jsx의 검색 로직
-    const handleSearch = (e) => {
+    // handleSearch를 useCallback으로 감싸서 의존성 문제 해결
+    const handleSearch = useCallback((e) => {
         e.preventDefault();
+        
         
         let results = userData.filter(item => {
             return (
@@ -421,7 +418,7 @@ const Header = ({ setIsMenuOpen }) => {
         setSearchResults(results);
         setDisplayedResults(results.slice(0, itemsPerPage));
         setPage(1);
-    };
+    }, [searchTerm, userData]); // userData 의존성 추가
 
     // loadMore 함수 수정
     const loadMore = useCallback(() => {
@@ -444,7 +441,7 @@ const Header = ({ setIsMenuOpen }) => {
         if (searchTerm) {
             handleSearch({ preventDefault: () => {} });
         }
-    }, [searchTerm]);
+    }, [searchTerm, handleSearch]);
 
     // 스크롤 이벤트 처리기 수정
     useEffect(() => {
@@ -468,6 +465,27 @@ const Header = ({ setIsMenuOpen }) => {
             }
         };
     }, [searchTerm, loadMore, isLoading]);
+
+    const [weather, setWeather] = useState(null);
+    const [weatherLoading, setWeatherLoading] = useState(true);
+
+    useEffect(() => {
+        const getWeather = async (position) => {
+            try {
+                const { latitude, longitude } = position.coords;
+                const weatherData = await fetchWeatherData(latitude, longitude);
+                setWeather(weatherData);
+                setWeatherLoading(false);
+            } catch (error) {
+                console.error('날씨 정보를 가져오는데 실패했습니다:', error);
+                setWeatherLoading(false);
+            }
+        };
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getWeather);
+        }
+    }, []);
 
     return(
         <header className="header">
@@ -514,6 +532,12 @@ const Header = ({ setIsMenuOpen }) => {
                     )}
                 </div>
                 <div className="header-right">
+                    {!weatherLoading && weather && (
+                        <div className="weather-info-mini">
+                            <span className="weather-temp">{weather.temperature}°</span>
+                            <span className="weather-desc">{weather.sky}</span>
+                        </div>
+                    )}
                     <div className="notification-wrapper">
                         <button className="notification-btn" onClick={toggleNotifications}>
                             <i className="fas fa-bell"></i>
@@ -549,6 +573,12 @@ const Header = ({ setIsMenuOpen }) => {
                             </div>
                         )}
                     </div>
+                    <button
+                        className="notification-btn"
+                        onClick={() => navigate('/settings')}
+                    >
+                        <i className="fas fa-cog"></i>
+                    </button>
                     <button
                         className="logout-btn"
                         onClick={handleLogout}

@@ -615,3 +615,31 @@
     background-color: white;
     box-shadow: 0 0 0 3px rgba(30, 48, 243, 0.1);
 }
+
+/* Weather Info Mini Styles */
+.weather-info-mini {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-3);
+    background: var(--light);
+    border-radius: var(--border-radius);
+    margin-right: var(--spacing-2);
+}
+
+.weather-temp {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.weather-desc {
+    font-size: 0.875rem;
+    color: var(--gray);
+}
+
+@media (max-width: 768px) {
+    .weather-info-mini {
+        display: none;
+    }
+}
