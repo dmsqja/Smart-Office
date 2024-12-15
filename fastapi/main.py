@@ -1,8 +1,8 @@
 import uvicorn
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import chat, health, ocr
+from app.api.routes import chat, health, ocr, log_test
 from app.core.logging import logger
 from app.core.logging.logger import setup_uvicorn_logging
 from app.core.config import settings
@@ -64,10 +64,26 @@ app.add_middleware(
     allow_headers=["*"],    # 허용할 HTTP 헤더
 )
 
+# CORS 미들웨어 설정 이후에 로깅 미들웨어 추가
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    """모든 HTTP 요청과 응답을 로깅하는 미들웨어"""
+    # 요청 로깅
+    logger.info(f"Request: {request.method} {request.url}")
+    
+    # 요청 처리
+    response = await call_next(request)
+    
+    # 응답 로깅
+    logger.info(f"Response: Status {response.status_code}")
+    
+    return response
+
 # API 라우터 설정
 app.include_router(chat.router, prefix="/api/v1/llama", tags=["llama"])
 app.include_router(health.router, prefix="/api/v1", tags=["health"])
 app.include_router(ocr.router, prefix="/api/v1/ocr", tags=["ocr"])
+app.include_router(log_test.router, prefix="/api/v1/logs", tags=["logs"])  # 로그 테스트 라우터 추가
 
 if __name__ == "__main__":
     setup_uvicorn_logging()
