@@ -342,21 +342,29 @@
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--spacing-3);
-}
-
-.copyright {
-    color: var(--gray);
-    font-size: 0.875rem;
+    flex-direction: row;  /* 가로 방향으로 변경 */
+    align-items: center;  /* 세로 중앙 정렬 */
+    gap: var(--spacing-4); /* 간격 조정 */
 }
 
 .footer-links {
     display: flex;
     align-items: center;
     gap: var(--spacing-3);
+    margin-top: -5px;        /* 위쪽 간격 조정 */
+}
+
+.copyright {
+    color: var(--gray);
+    font-size: 0.875rem;
+    margin: 0;  /* 기존 마진 제거 */
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    margin: 0;  /* 기존 마진 제거 */
 }
 
 .footer-link {
