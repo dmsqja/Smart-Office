@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import defaultProfileImage from '../../assets/profile1.png';
 import React, { useState, useEffect, useRef } from 'react';
 import ProfileSection from './ProfileSection';
@@ -12,6 +11,7 @@ import { mockUser, mockStats, mockActivities } from '../../mock/mockData';
 import '../../styles/dashboard.css';
 import { Cloud, Sun, CloudRain } from 'lucide-react';
 import { fetchWeatherData } from '../../utils/WeatherUtils';
+import WeatherWidget from "./WeatherWidget";
 
 // 위젯 구성 객체
 const WIDGET_CONFIG = {
@@ -247,7 +247,7 @@ const Main = () => {
                                 </span>
                             )}
                         </div>
-                        <div style={{ height: '280px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
+                        <div style={{ height: '400px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
                             <CalendarForm 
                                 height="100%"
                                 minimode={true} 

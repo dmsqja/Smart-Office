@@ -1,9 +1,15 @@
+// components/layout/Sidebar.js
 import { NavLink } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { BoardAPI } from '../../utils/boardApi';
 import '../../styles/layout.css';
 
 const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
+    const [boards, setBoards] = useState([]);
+    const [isBoardOpen, setIsBoardOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     const menuItems = [
         { path: "/home", label: "Home", icon: "fas fa-home" },
         { path: "/calendar", label: "Calendar", icon: "fas fa-calendar" },
@@ -12,6 +18,28 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
         { path: "/meeting", label: "Meeting", icon: "fas fa-video" },
         { path: "/map", label: "Map", icon: "fas fa-map-marked-alt" }
     ];
+
+    useEffect(() => {
+        const fetchBoards = async () => {
+            try {
+                setIsLoading(true);
+                const response = await BoardAPI.getAllBoards();
+                setBoards(response.data);
+            } catch (error) {
+                console.error('게시판 목록을 불러오는데 실패했습니다:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (isBoardOpen) {
+            fetchBoards();
+        }
+    }, [isBoardOpen]);
+
+    const toggleBoardMenu = () => {
+        setIsBoardOpen(!isBoardOpen);
+    };
 
     return (
         <>
@@ -36,6 +64,36 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                                 </NavLink>
                             </li>
                         ))}
+                        {/* 게시판 메뉴 추가 */}
+                        <li className="nav-item">
+                            <div
+                                className={`nav-link board-toggle ${isBoardOpen ? 'active' : ''}`}
+                                onClick={toggleBoardMenu}
+                            >
+                                <i className="fas fa-list"></i>
+                                <span>게시판</span>
+                                <i className={`fas fa-chevron-${isBoardOpen ? 'up' : 'down'} board-arrow`}></i>
+                            </div>
+                            <ul className={`board-submenu ${isBoardOpen ? 'open' : ''}`}>
+                                {isLoading ? (
+                                    <li className="board-submenu-item loading">
+                                        <i className="fas fa-spinner fa-spin"></i>
+                                    </li>
+                                ) : (
+                                    boards.map((board) => (
+                                        <li key={board.id} className="board-submenu-item">
+                                            <NavLink
+                                                to={`/boards/${board.id}`}
+                                                className={({ isActive }) => `board-link ${isActive ? 'active' : ''}`}
+                                                onClick={() => setIsMenuOpen(false)}
+                                            >
+                                                <span>{board.name}</span>
+                                            </NavLink>
+                                        </li>
+                                    ))
+                                )}
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
             </aside>

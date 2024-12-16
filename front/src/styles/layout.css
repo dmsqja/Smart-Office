@@ -643,3 +643,55 @@
         display: none;
     }
 }
+/* 게시판 메뉴 스타일 */
+.board-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.board-arrow {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.board-submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.board-submenu.open {
+    max-height: 500px; /* 충분한 높이 */
+}
+
+.board-submenu-item {
+    padding-left: 2.5rem;
+}
+
+.board-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.board-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.board-link.active {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--primary);
+}
+
+/* 로딩 스타일 */
+.board-submenu-item.loading {
+    text-align: center;
+    padding: 1rem;
+}
