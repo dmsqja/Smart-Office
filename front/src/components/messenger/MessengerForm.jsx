@@ -244,7 +244,7 @@ const MessengerForm = ({ isWidget }) => {
 
   const messagesContainerRef = useRef(null);
   const messagesEndRef = useRef(null);
-  const [emails] = useState(mockEmails);
+  const [emails,setEmails] = useState(mockEmails);
 
   const scrollToBottom = () => {
     if (messagesContainerRef.current && messagesEndRef.current) {
