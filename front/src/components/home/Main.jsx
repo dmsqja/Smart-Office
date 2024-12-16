@@ -88,7 +88,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
             <div className="widget-header">
                 <h3>{config.title}</h3>
                 <div className="widget-controls" ref={menuRef}>
-                    <button 
+                    <button
                         className="widget-control-button"
                         onClick={() => setShowMenu(!showMenu)}
                     >
@@ -102,7 +102,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                             }}>
                                 <span>위젯 변경</span>
                             </button>
-                            <button 
+                            <button
                                 className="danger"
                                 onClick={() => {
                                     onRemove();
@@ -161,7 +161,7 @@ const Main = () => {
             try {
                 const userInfoStr = sessionStorage.getItem('userInfo');
                 const userData = JSON.parse(userInfoStr);
-                
+
                 setUser({
                     name: userData.name,
                     position: userData.position,
@@ -256,8 +256,8 @@ const Main = () => {
                         <ProfileSection user={user} stats={stats} />
                     </div>
                     <div className="mini-calendar-card">
-                        <div className="card-title flex items-center justify-between mb-0" 
-                            style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+                        <div className="card-title flex items-center justify-between mb-0"
+                             style={{ paddingLeft: '16px', paddingRight: '16px' }}>
                             <span className="text-gray-600 text-base font-medium">
                                 {currentDate.getFullYear()}.{currentDate.getMonth() + 1}.{currentDate.getDate()}
                             </span>
@@ -268,10 +268,10 @@ const Main = () => {
                                 </span>
                             )}
                         </div>
-                        <div style={{ height: '280px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
-                            <CalendarForm 
+                        <div style={{ height: '400px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
+                            <CalendarForm
                                 height="100%"
-                                minimode={true} 
+                                minimode={true}
                                 onNavigate={handleNavigate}
                             />
                         </div>
@@ -283,8 +283,8 @@ const Main = () => {
                         {gridCells.map((widgetId, index) => {
                             if (index > getActiveWidgetCount() && !widgetId) return null;
                             return (
-                                <div key={index} 
-                                    className={`grid-cell ${widgetId ? 'occupied' : ''}`}>
+                                <div key={index}
+                                     className={`grid-cell ${widgetId ? 'occupied' : ''}`}>
                                     {widgetId ? (
                                         <Widget
                                             widgetId={widgetId}

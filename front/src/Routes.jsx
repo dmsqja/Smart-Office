@@ -15,6 +15,9 @@ const Meeting = lazy(() => import ('./pages/Meeting'));
 const MeetingRoom = lazy(() => import('./pages/MeetingRoom'));
 const KakaoMap = lazy(() => import('./pages/KakaoMap'));
 const Settings = lazy(() => import('./components/settings/Settings'));
+const PostList = lazy(()=>import('./components/board/PostList'));
+const PostDetail = lazy(() => import('./components/board/PostDetail'));
+const PostForm = lazy(() => import('./components/board/PostForm'));
 
 const AppRoutes = () => {
     return (
@@ -34,6 +37,11 @@ const AppRoutes = () => {
                 <Route path="/meetingRoom" element={<MeetingRoom/>}/>
                 <Route path="/map" element={<KakaoMap/>}/>
                 <Route path="/settings" element={<Settings/>}/>
+                <Route path="/boards/:boardId" element={<PostList />} />
+                <Route path="/boards/:boardId/posts/:postId" element={<PostDetail />} />
+                <Route path="/boards/:boardId/posts/new" element={<PostForm />} />
+                <Route path="/boards/:boardId/posts/:postId/edit" element={<PostForm />} />
+
             </Route>
 
                 {/* Error routes */}
