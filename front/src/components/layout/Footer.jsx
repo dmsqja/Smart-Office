@@ -11,8 +11,8 @@ const Footer = () => {
                     </div>
 
                     <div className="footer-links">
-                        <a
-                            href="https://github.com/Tae4an/Smart-Office"
+                        <a 
+                            href="https://github.com/Tae4an/Smart-Office" 
                             className="footer-link"
                             target="_blank"
                             rel="noopener noreferrer"

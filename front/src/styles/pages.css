@@ -54,19 +54,6 @@
   min-height: 600px;
 }
 
-/* Page Headers */
-.page-header {
-  padding: var(--section-spacing);
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.page-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
 /* Projects Page Sepcific */
 .projects-cta {
   background: var(--gradient);
