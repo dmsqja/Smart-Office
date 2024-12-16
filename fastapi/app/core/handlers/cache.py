@@ -35,9 +35,16 @@ class RedisCacheHandler(BaseRedisHandler):
     """
     
     def __init__(self):
+        """
+        Redis 캐시 핸들러 초기화
+
+        Properties:
+            default_ttl (int): 기본 캐시 유효 기간 (초)
+            _lock_ttl (int): 분산 락 유효 기간 (초)
+        """
         super().__init__()
-        self.default_ttl = 3600
-        self._lock_ttl = 30  # 락 타임아웃 30초
+        self.default_ttl = 300  # 5분
+        self._lock_ttl = 30
 
     def _generate_key(self, key: str) -> str:
         """캐시 키 생성 (충돌 방지)"""
