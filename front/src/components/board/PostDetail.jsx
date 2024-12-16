@@ -1,21 +1,21 @@
-// components/board/PostDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     Box,
     Typography,
-    Paper,
-    Divider,
     Button,
     IconButton,
-    Stack
+    Stack,
+    Divider
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { BoardAPI } from '../../utils/boardApi';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
+import '../../styles/postDetail.css';
 
 const PostDetail = () => {
     const { boardId, postId } = useParams();
@@ -74,7 +74,7 @@ const PostDetail = () => {
     const handleCommentSubmit = async (commentData) => {
         try {
             await BoardAPI.createComment(commentData);
-            await fetchComments();  // 댓글 목록 새로고침
+            await fetchComments();
         } catch (error) {
             console.error('댓글 작성 실패:', error);
             alert('댓글 작성에 실패했습니다.');
@@ -85,95 +85,107 @@ const PostDetail = () => {
         if (window.confirm('댓글을 삭제하시겠습니까?')) {
             try {
                 await BoardAPI.deleteComment(commentId);
-                await fetchComments();  // 댓글 목록 새로고침
+                await fetchComments();
             } catch (error) {
                 console.error('댓글 삭제 실패:', error);
                 alert('댓글 삭제에 실패했습니다.');
             }
         }
     };
+
     if (loading) {
-        return <Box>Loading...</Box>;
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner" />
+            </div>
+        );
     }
 
     return (
-        <Box className="container">
-            <Paper elevation={3} sx={{ p: 3 }}>
+        <div className="post-detail-page">
+            <div className="post-detail-container">
                 {/* 헤더 영역 */}
-                <Stack
-                    direction="row"
-                    alignItems="center"
-                    spacing={2}
-                    sx={{ mb: 3 }}
-                >
-                    <IconButton onClick={handleBack}>
-                        <ArrowBackIcon />
-                    </IconButton>
-                    <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
-                        {post?.title}
-                    </Typography>
-                    {userInfo.employeeId === post?.authorEmployeeId && (
-                        <Stack direction="row" spacing={1}>
-                            <Button
-                                startIcon={<EditIcon />}
-                                onClick={handleEdit}
-                                variant="outlined"
-                            >
-                                수정
-                            </Button>
-                            <Button
-                                startIcon={<DeleteIcon />}
-                                onClick={handleDelete}
-                                variant="outlined"
-                                color="error"
-                            >
-                                삭제
-                            </Button>
-                        </Stack>
-                    )}
-                </Stack>
-
-                {/* 게시글 정보 */}
-                <Box sx={{ mb: 2 }}>
+                <div className="post-header">
                     <Stack
                         direction="row"
+                        alignItems="center"
                         spacing={2}
-                        sx={{ color: 'text.secondary', mb: 1 }}
                     >
-                        <Typography>작성자: {post?.authorEmployeeId}</Typography>
-                        <Typography>
+                        <IconButton
+                            onClick={handleBack}
+                            className="back-button"
+                        >
+                            <ArrowBackIcon />
+                        </IconButton>
+                        <Typography className="post-title" component="h1">
+                            {post?.title}
+                        </Typography>
+                        {userInfo.employeeId === post?.authorEmployeeId && (
+                            <Stack direction="row" spacing={1} className="action-buttons">
+                                <Button
+                                    startIcon={<EditIcon />}
+                                    onClick={handleEdit}
+                                    variant="contained"
+                                    className="edit-button"
+                                >
+                                    수정
+                                </Button>
+                                <Button
+                                    startIcon={<DeleteIcon />}
+                                    onClick={handleDelete}
+                                    variant="contained"
+                                    className="delete-button"
+                                >
+                                    삭제
+                                </Button>
+                            </Stack>
+                        )}
+                    </Stack>
+                </div>
+
+                {/* 게시글 정보 */}
+                <Box className="post-info">
+                    <Stack
+                        direction="row"
+                        spacing={3}
+                        alignItems="center"
+                    >
+                        <Typography className="info-text">
+                            작성자: {post?.authorEmployeeId}
+                        </Typography>
+                        <Typography className="info-text">
                             작성일: {new Date(post?.createdAt).toLocaleString('ko-KR')}
                         </Typography>
                     </Stack>
                 </Box>
 
-                <Divider sx={{ my: 2 }} />
-
                 {/* 게시글 내용 */}
-                <Box sx={{ minHeight: '200px', whiteSpace: 'pre-wrap' }}>
+                <div className="post-content">
                     {post?.content}
-                </Box>
+                </div>
 
-                {/* 댓글 섹션 추가 */}
-                <Divider sx={{ my: 3 }} />
+                {/* 댓글 섹션 */}
+                <div className="comment-section">
+                    <Typography className="comment-header">
+                        <ChatBubbleOutlineIcon sx={{ fontSize: '1.2rem' }} />
+                        댓글
+                        <span className="comment-count">{comments.length}</span>
+                    </Typography>
 
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                    댓글 {comments.length}개
-                </Typography>
-
-                <CommentList
-                    comments={comments}
-                    onCommentDelete={handleCommentDelete}
-                />
-
-                <Box sx={{ mt: 2 }}>
-                    <CommentForm
-                        postId={postId}
-                        onCommentSubmit={handleCommentSubmit}
+                    <CommentList
+                        comments={comments}
+                        onCommentDelete={handleCommentDelete}
                     />
-                </Box>
-            </Paper>
-        </Box>
+
+                    <Box sx={{ mt: 2 }}>
+                        <CommentForm
+                            postId={postId}
+                            onCommentSubmit={handleCommentSubmit}
+                        />
+                    </Box>
+                </div>
+            </div>
+        </div>
     );
 };
 

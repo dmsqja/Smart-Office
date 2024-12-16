@@ -101,7 +101,7 @@
     border: 2px dashed var(--light);
     border-radius: var(--border-radius-lg);
     height: fit-content;
-    min-height: 300px;
+    min-height: 100px;
     position: relative;
     transition: all 0.2s ease;
   }

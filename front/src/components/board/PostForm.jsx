@@ -1,9 +1,7 @@
-// components/board/PostForm.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
     Box,
-    Paper,
     TextField,
     Button,
     Stack,
@@ -20,10 +18,11 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { BoardAPI } from '../../utils/boardApi';
+import '../../styles/postForm.css';
 
 const PostForm = () => {
     const navigate = useNavigate();
-    const { boardId, postId } = useParams();  // postId 추가
+    const { boardId, postId } = useParams();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         title: '',
@@ -31,7 +30,7 @@ const PostForm = () => {
         boardId: boardId
     });
     const [files, setFiles] = useState([]);
-    const [existingFiles, setExistingFiles] = useState([]); // 수정 시 기존 첨부파일
+    const [existingFiles, setExistingFiles] = useState([]);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -59,6 +58,7 @@ const PostForm = () => {
 
         fetchPost();
     }, [postId, boardId, navigate]);
+
     const handleFileChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
         setFiles(prev => [...prev, ...selectedFiles]);
@@ -77,6 +77,7 @@ const PostForm = () => {
             alert('파일 삭제에 실패했습니다.');
         }
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -96,7 +97,6 @@ const PostForm = () => {
             } else {
                 await BoardAPI.createPost(formData, files);
             }
-
             navigate(`/boards/${boardId}`);
         } catch (error) {
             console.error('게시글 저장 실패:', error);
@@ -119,19 +119,22 @@ const PostForm = () => {
     };
 
     return (
-        <Box className="container">
-            <Paper elevation={3} sx={{ p: 3 }}>
+        <div className="post-form-page">
+            <div className="post-form-container">
                 <form onSubmit={handleSubmit}>
-                    <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={2}
-                        sx={{ mb: 3 }}
-                    >
-                        <IconButton onClick={handleBack}>
+                    <div className="form-header">
+                        <IconButton
+                            onClick={handleBack}
+                            className="back-button"
+                        >
                             <ArrowBackIcon />
                         </IconButton>
-                        <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
+                        <Typography
+                            variant="h5"
+                            component="h1"
+                            className="form-title"
+                            sx={{ flexGrow: 1 }}
+                        >
                             {postId ? '게시글 수정' : '새 게시글 작성'}
                         </Typography>
                         <Button
@@ -139,113 +142,123 @@ const PostForm = () => {
                             variant="contained"
                             startIcon={<SaveIcon />}
                             disabled={loading}
+                            className="save-button"
                         >
                             {postId ? '수정' : '저장'}
                         </Button>
-                    </Stack>
+                    </div>
 
-                    <Stack spacing={3}>
-                        <TextField
-                            name="title"
-                            label="제목"
-                            value={formData.title}
-                            onChange={handleChange}
-                            required
-                            fullWidth
-                        />
-                        <TextField
-                            name="content"
-                            label="내용"
-                            value={formData.content}
-                            onChange={handleChange}
-                            required
-                            fullWidth
-                            multiline
-                            rows={15}
-                        />
-                    </Stack>
-                    {/* 파일 첨부 섹션 */}
-                    <Box sx={{ mt: 3 }}>
-                        <input
-                            type="file"
-                            multiple
-                            onChange={handleFileChange}
-                            style={{ display: 'none' }}
-                            id="file-input"
-                        />
-                        <label htmlFor="file-input">
-                            <Button
+                    <div className="form-content">
+                        <Stack spacing={3}>
+                            <TextField
+                                className="title-input"
+                                name="title"
+                                label="제목"
+                                value={formData.title}
+                                onChange={handleChange}
+                                required
+                                fullWidth
                                 variant="outlined"
-                                component="span"
-                                startIcon={<AttachFileIcon />}
-                            >
-                                파일 첨부
-                            </Button>
-                        </label>
+                            />
+                            <TextField
+                                className="content-input"
+                                name="content"
+                                label="내용"
+                                value={formData.content}
+                                onChange={handleChange}
+                                required
+                                fullWidth
+                                multiline
+                                rows={15}
+                                variant="outlined"
+                            />
+                        </Stack>
 
-                        {/* 기존 첨부 파일 목록 */}
-                        {existingFiles.length > 0 && (
-                            <List>
-                                <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
-                                    기존 첨부 파일
-                                </Typography>
-                                {existingFiles.map((file) => (
-                                    <ListItem
-                                        key={file.id}
-                                        secondaryAction={
-                                            <IconButton
-                                                edge="end"
-                                                onClick={() => handleExistingFileDelete(file.id)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        }
-                                    >
-                                        <ListItemIcon>
-                                            <InsertDriveFileIcon />
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={file.originalFileName}
-                                            secondary={`${(file.fileSize / 1024 / 1024).toFixed(2)} MB`}
-                                        />
-                                    </ListItem>
-                                ))}
-                            </List>
-                        )}
+                        <div className="file-section">
+                            <input
+                                type="file"
+                                multiple
+                                onChange={handleFileChange}
+                                style={{ display: 'none' }}
+                                id="file-input"
+                            />
+                            <label htmlFor="file-input">
+                                <Button
+                                    variant="outlined"
+                                    component="span"
+                                    startIcon={<AttachFileIcon />}
+                                    className="attach-button"
+                                >
+                                    파일 첨부
+                                </Button>
+                            </label>
 
-                        {/* 새로 첨부한 파일 목록 */}
-                        {files.length > 0 && (
-                            <List>
-                                <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
-                                    새로 첨부한 파일
-                                </Typography>
-                                {files.map((file, index) => (
-                                    <ListItem
-                                        key={index}
-                                        secondaryAction={
-                                            <IconButton
-                                                edge="end"
-                                                onClick={() => handleFileDelete(index)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        }
-                                    >
-                                        <ListItemIcon>
-                                            <InsertDriveFileIcon />
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={file.name}
-                                            secondary={`${(file.size / 1024 / 1024).toFixed(2)} MB`}
-                                        />
-                                    </ListItem>
-                                ))}
-                            </List>
-                        )}
-                    </Box>
+                            {existingFiles.length > 0 && (
+                                <List className="file-list">
+                                    <Typography variant="subtitle2" className="file-list-title">
+                                        기존 첨부 파일
+                                    </Typography>
+                                    {existingFiles.map((file) => (
+                                        <ListItem
+                                            key={file.id}
+                                            className="file-item"
+                                            secondaryAction={
+                                                <IconButton
+                                                    edge="end"
+                                                    onClick={() => handleExistingFileDelete(file.id)}
+                                                    className="delete-button"
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            }
+                                        >
+                                            <ListItemIcon>
+                                                <InsertDriveFileIcon className="file-icon" />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={file.originalFileName}
+                                                secondary={`${(file.fileSize / 1024 / 1024).toFixed(2)} MB`}
+                                            />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            )}
+
+                            {files.length > 0 && (
+                                <List className="file-list">
+                                    <Typography variant="subtitle2" className="file-list-title">
+                                        새로 첨부한 파일
+                                    </Typography>
+                                    {files.map((file, index) => (
+                                        <ListItem
+                                            key={index}
+                                            className="file-item"
+                                            secondaryAction={
+                                                <IconButton
+                                                    edge="end"
+                                                    onClick={() => handleFileDelete(index)}
+                                                    className="delete-button"
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            }
+                                        >
+                                            <ListItemIcon>
+                                                <InsertDriveFileIcon className="file-icon" />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={file.name}
+                                                secondary={`${(file.size / 1024 / 1024).toFixed(2)} MB`}
+                                            />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            )}
+                        </div>
+                    </div>
                 </form>
-            </Paper>
-        </Box>
+            </div>
+        </div>
     );
 };
 

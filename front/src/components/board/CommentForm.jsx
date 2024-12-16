@@ -1,4 +1,4 @@
-// components/board/CommentForm.jsx
+// CommentForm.jsx
 import React, { useState } from 'react';
 import {
     Box,
@@ -7,6 +7,7 @@ import {
     Stack
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import '../../styles/comment.css';
 
 const CommentForm = ({ postId, onCommentSubmit }) => {
     const [content, setContent] = useState('');
@@ -29,19 +30,22 @@ const CommentForm = ({ postId, onCommentSubmit }) => {
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit}>
+        <Box component="form" onSubmit={handleSubmit} className="comment-form">
             <Stack direction="row" spacing={2}>
                 <TextField
+                    className="comment-input"
                     fullWidth
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="댓글을 입력하세요"
                     size="small"
                     disabled={loading}
+                    multiline
+                    maxRows={4}
                 />
                 <Button
                     type="submit"
-                    variant="contained"
+                    className="submit-button"
                     endIcon={<SendIcon />}
                     disabled={loading || !content.trim()}
                 >
