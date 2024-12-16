@@ -57,7 +57,7 @@ const ProfileSection = ({ user: initialUser, stats }) => {
                 onClick={() => setIsModalOpen(true)}
             >
                 {/* 기존 프로필 정보 */}
-                <div className="profile-image-wrapper" style={{ width: '80px', height: '80px', marginBottom: 'var(--spacing-2)' }}>
+                <div className="profile-image-wrapper" style={{ width: '100px', height: '100px', marginBottom: 'var(--spacing-2)' }}>
                     <img src={user.profileImage} alt="profile" className="profile-image" />
                 </div>
                 <div className="user-info">

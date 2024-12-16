@@ -1,4 +1,3 @@
-// components/board/PostList.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
@@ -19,6 +18,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
+import '../../styles/postList.css';
 
 const PostList = () => {
     const { boardId } = useParams();
@@ -52,7 +52,9 @@ const PostList = () => {
         {
             field: 'id',
             headerName: '번호',
-            width: 90
+            width: 90,
+            headerAlign: 'center',
+            align: 'center',
         },
         {
             field: 'title',
@@ -60,10 +62,7 @@ const PostList = () => {
             width: 400,
             renderCell: (params) => (
                 <Box
-                    sx={{
-                        cursor: 'pointer',
-                        '&:hover': { textDecoration: 'underline' }
-                    }}
+                    className="post-title-cell"
                     onClick={() => navigate(`/boards/${boardId}/posts/${params.row.id}`)}
                 >
                     {params.value}
@@ -73,16 +72,19 @@ const PostList = () => {
         {
             field: 'authorEmployeeId',
             headerName: '작성자',
-            width: 150
+            width: 150,
+            headerAlign: 'center',
+            align: 'center',
         },
         {
             field: 'createdAt',
             headerName: '작성일',
             width: 200,
+            headerAlign: 'center',
+            align: 'center',
             valueFormatter: (params) => {
                 try {
                     if (!params.value) return '';
-
                     const date = new Date(params.value);
                     return date.toLocaleString('ko-KR', {
                         year: 'numeric',
@@ -152,14 +154,17 @@ const PostList = () => {
     };
 
     return (
-        <div className="container">
-            <Box sx={{ mb: 4 }}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    {boardName} 게시판
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                    <form onSubmit={handleSearch} style={{ display: 'flex', gap: '1rem', flexGrow: 1 }}>
-                        <FormControl sx={{ minWidth: 120 }}>
+        <div className="post-list-page">
+            <div className="post-list-container">
+                <div className="board-header">
+                    <Typography variant="h4" component="h1" className="board-title">
+                        {boardName} 게시판
+                    </Typography>
+                </div>
+
+                <div className="search-bar-container">
+                    <form onSubmit={handleSearch} className="search-form">
+                        <FormControl className="search-select">
                             <InputLabel>검색 조건</InputLabel>
                             <Select
                                 value={searchType}
@@ -174,16 +179,16 @@ const PostList = () => {
                             </Select>
                         </FormControl>
                         <TextField
+                            className="search-input"
                             size="small"
                             variant="outlined"
                             placeholder="검색어를 입력하세요"
                             value={searchKeyword}
                             onChange={(e) => setSearchKeyword(e.target.value)}
-                            sx={{ flexGrow: 1 }}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton type="submit">
+                                        <IconButton className="search-button" type="submit">
                                             <SearchIcon />
                                         </IconButton>
                                     </InputAdornment>
@@ -192,70 +197,62 @@ const PostList = () => {
                         />
                     </form>
                     <Button
+                        className="create-button"
                         variant="contained"
-                        color="primary"
                         startIcon={<AddIcon />}
                         onClick={handleCreatePost}
                     >
                         글쓰기
                     </Button>
-                </Box>
-            </Box>
+                </div>
 
-            <Box sx={{ width: '100%', height: '100%' }}>
-                <DataGrid
-                    rows={posts}
-                    columns={columns}
-                    pagination
-                    paginationModel={{
-                        page,
-                        pageSize,
-                    }}
-                    onPaginationModelChange={(model) => {
-                        setPage(model.page);
-                        setPageSize(model.pageSize);
-                    }}
-                    pageSizeOptions={[5, 10, 20, 50]}
-                    rowCount={totalElements}
-                    paginationMode="server"
-                    loading={loading}
-                    localeText={{
-                        ...koKR,
-                        MuiTablePagination: {
-                            labelDisplayedRows: ({ from, to, count }) =>
-                                `전체 ${count}개 중 ${from}-${to}`,
-                            labelRowsPerPage: '페이지당 행 수:',
-                        },
-                    }}
-                    components={{
-                        Pagination: (props) => (
-                            <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
-                                <TablePagination
-                                    component="div"
-                                    count={totalElements}
-                                    page={page}
-                                    onPageChange={handlePageChange}
-                                    rowsPerPage={pageSize}
-                                    onRowsPerPageChange={handlePageSizeChange}
-                                    labelRowsPerPage="페이지당 게시글 수"
-                                    labelDisplayedRows={({ from, to, count }) =>
-                                        `${from}-${to} / 총 ${count}개`
-                                    }
-                                    rowsPerPageOptions={[5, 10, 20, 50]}
-                                />
-                            </Box>
-                        ),
-                    }}
-                    sx={{
-                        '& .MuiDataGrid-cell:focus': {
-                            outline: 'none',
-                        },
-                        '& .MuiDataGrid-row:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.04)',
-                        },
-                    }}
-                />
-            </Box>
+                <div className="data-grid-container">
+                    <DataGrid
+                        rows={posts}
+                        columns={columns}
+                        pagination
+                        paginationModel={{
+                            page,
+                            pageSize,
+                        }}
+                        onPaginationModelChange={(model) => {
+                            setPage(model.page);
+                            setPageSize(model.pageSize);
+                        }}
+                        pageSizeOptions={[5, 10, 20, 50]}
+                        rowCount={totalElements}
+                        paginationMode="server"
+                        loading={loading}
+                        localeText={{
+                            ...koKR,
+                            MuiTablePagination: {
+                                labelDisplayedRows: ({ from, to, count }) =>
+                                    `전체 ${count}개 중 ${from}-${to}`,
+                                labelRowsPerPage: '페이지당 행 수:',
+                            },
+                        }}
+                        components={{
+                            Pagination: (props) => (
+                                <Box className="pagination-container">
+                                    <TablePagination
+                                        component="div"
+                                        count={totalElements}
+                                        page={page}
+                                        onPageChange={handlePageChange}
+                                        rowsPerPage={pageSize}
+                                        onRowsPerPageChange={handlePageSizeChange}
+                                        labelRowsPerPage="페이지당 게시글 수"
+                                        labelDisplayedRows={({ from, to, count }) =>
+                                            `${from}-${to} / 총 ${count}개`
+                                        }
+                                        rowsPerPageOptions={[5, 10, 20, 50]}
+                                    />
+                                </Box>
+                            ),
+                        }}
+                    />
+                </div>
+            </div>
         </div>
     );
 };

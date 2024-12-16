@@ -1,4 +1,4 @@
-import defaultProfileImage from '../assets/profile1.png';
+import defaultProfileImage from '../assets/profile1(before).png';
 
 export const mockUser = {
     name: "김지원",

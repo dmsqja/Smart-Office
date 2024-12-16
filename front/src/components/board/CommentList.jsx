@@ -1,4 +1,4 @@
-// components/board/CommentList.jsx
+// CommentList.jsx
 import React from 'react';
 import {
     List,
@@ -9,21 +9,23 @@ import {
     Stack
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import '../../styles/comment.css';
 
 const CommentList = ({ comments, onCommentDelete }) => {
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
     return (
-        <List>
+        <List className="comment-list">
             {comments.map((comment) => (
                 <ListItem
                     key={comment.id}
                     alignItems="flex-start"
+                    className="comment-item"
                     secondaryAction={
                         userInfo.employeeId === comment.authorEmployeeId && (
                             <IconButton
                                 edge="end"
-                                color="error"
+                                className="delete-button"
                                 onClick={() => onCommentDelete(comment.id)}
                             >
                                 <DeleteIcon />
@@ -33,16 +35,20 @@ const CommentList = ({ comments, onCommentDelete }) => {
                 >
                     <ListItemText
                         primary={
-                            <Stack direction="row" spacing={2} alignItems="center">
-                                <Typography component="span" variant="subtitle2">
+                            <Stack direction="row" spacing={2} alignItems="center" className="comment-header">
+                                <Typography className="comment-author" component="span">
                                     {comment.authorEmployeeId}
                                 </Typography>
-                                <Typography component="span" variant="caption" color="text.secondary">
+                                <Typography className="comment-date" component="span">
                                     {new Date(comment.createdAt).toLocaleString('ko-KR')}
                                 </Typography>
                             </Stack>
                         }
-                        secondary={comment.content}
+                        secondary={
+                            <Typography className="comment-content" component="p">
+                                {comment.content}
+                            </Typography>
+                        }
                     />
                 </ListItem>
             ))}
