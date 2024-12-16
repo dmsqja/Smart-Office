@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import defaultProfileImage from '../../assets/profile1.png';
 import React, { useState, useEffect, useRef } from 'react';
 import ProfileSection from './ProfileSection';
@@ -8,7 +7,7 @@ import CalendarForm from '../calendar/CalendarForm';
 import MapWidget from './MapWidget';
 import MsgWidget from './MsgWidget';
 import WidgetSelector from './WidgetSelector';
-import { mockUser, mockStats, mockActivities } from '../../mock/mockData';
+import { mockStats, mockActivities } from '../../mock/mockData';
 import '../../styles/dashboard.css';
 import { Cloud, Sun, CloudRain } from 'lucide-react';
 import { fetchWeatherData } from '../../utils/WeatherUtils';
@@ -89,7 +88,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
             <div className="widget-header">
                 <h3>{config.title}</h3>
                 <div className="widget-controls" ref={menuRef}>
-                    <button 
+                    <button
                         className="widget-control-button"
                         onClick={() => setShowMenu(!showMenu)}
                     >
@@ -103,7 +102,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                             }}>
                                 <span>위젯 변경</span>
                             </button>
-                            <button 
+                            <button
                                 className="danger"
                                 onClick={() => {
                                     onRemove();
@@ -129,7 +128,6 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                 }}
                 availableWidgets={[
                     ...getAvailableWidgets(),
-                    // 현재 위젯도 선택 가능하도록 포함
                     WIDGET_CONFIG[widgetId]
                 ]}
             />
@@ -138,7 +136,14 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
 };
 
 const Main = () => {
-    const [user, setUser] = useState(mockUser);
+    const [user, setUser] = useState({
+        name: "",
+        position: "",
+        department: "",
+        employeeId: "",
+        email: "",
+        profileImage: defaultProfileImage
+    });
     const [stats, setStats] = useState(mockStats);
     const [activities, setActivities] = useState(mockActivities);
     const [loading, setLoading] = useState(true);
@@ -152,27 +157,43 @@ const Main = () => {
     };
 
     useEffect(() => {
-        const fetchUserData = async () => {
+        const getUserFromSession = async () => {
             try {
-                setTimeout(() => {
-                    setUser(mockUser);
-                    setStats(mockStats);
-                    setActivities(mockActivities);
-                    setLoading(false);
-                }, 500);
-            } catch (error) {
-                setError('사용자 정보를 불러오는데 실패했습니다.');
+                const userInfoStr = sessionStorage.getItem('userInfo');
+                const userData = JSON.parse(userInfoStr);
+
+                setUser({
+                    name: userData.name,
+                    position: userData.position,
+                    department: userData.department,
+                    employeeId: userData.employeeId,
+                    email: userData.email,
+                    profileImage: defaultProfileImage
+                });
+
+                if (userData.passwordChangeRequired) {
+                    window.location.href = '/password-change';
+                }
+
+                setStats(mockStats);
+                setActivities(mockActivities);
                 setLoading(false);
+            } catch (error) {
+                console.error('Failed to get user data from session:', error);
+                setError('사용자 정보를 불러오는데 실패했습니다.');
+                window.location.href = '/';
             }
         };
 
+        // 저장된 위젯 설정 불러오기
         const savedWidgets = localStorage.getItem('gridWidgets');
         if (savedWidgets) {
             setGridCells(JSON.parse(savedWidgets));
         }
 
-        fetchUserData();
+        getUserFromSession();
 
+        // 날씨 정보 가져오기
         const getWeather = async (position) => {
             try {
                 const { latitude, longitude } = position.coords;
@@ -235,8 +256,8 @@ const Main = () => {
                         <ProfileSection user={user} stats={stats} />
                     </div>
                     <div className="mini-calendar-card">
-                        <div className="card-title flex items-center justify-between mb-0" 
-                            style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+                        <div className="card-title flex items-center justify-between mb-0"
+                             style={{ paddingLeft: '16px', paddingRight: '16px' }}>
                             <span className="text-gray-600 text-base font-medium">
                                 {currentDate.getFullYear()}.{currentDate.getMonth() + 1}.{currentDate.getDate()}
                             </span>
@@ -248,15 +269,12 @@ const Main = () => {
                             )}
                         </div>
                         <div style={{ height: '280px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
-                            <CalendarForm 
+                            <CalendarForm
                                 height="100%"
-                                minimode={true} 
+                                minimode={true}
                                 onNavigate={handleNavigate}
                             />
                         </div>
-                    </div>
-                    <div className="weather-card">
-                        <WeatherWidget />
                     </div>
                 </div>
 
@@ -265,8 +283,8 @@ const Main = () => {
                         {gridCells.map((widgetId, index) => {
                             if (index > getActiveWidgetCount() && !widgetId) return null;
                             return (
-                                <div key={index} 
-                                    className={`grid-cell ${widgetId ? 'occupied' : ''}`}>
+                                <div key={index}
+                                     className={`grid-cell ${widgetId ? 'occupied' : ''}`}>
                                     {widgetId ? (
                                         <Widget
                                             widgetId={widgetId}
