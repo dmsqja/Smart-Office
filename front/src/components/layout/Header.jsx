@@ -455,6 +455,7 @@ const Header = ({ setIsMenuOpen }) => {
             if (response.status === 200) {
                 // 세션스토리지에서 사용자 정보 제거
                 sessionStorage.removeItem('userInfo');
+                localStorage.removeItem('chatMessages');
                 navigate('/');
             }
         } catch (error) {
