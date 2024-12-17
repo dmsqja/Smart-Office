@@ -1,4 +1,6 @@
+// 실제 데이터
 import defaultProfileImage from '../../assets/profile1.png';
+import backgroundImage from '../../assets/backgroundImage.jpg';
 import React, { useState, useEffect, useRef } from 'react';
 import ProfileSection from './ProfileSection';
 import StatusGrid from './StatusGrid';
@@ -88,7 +90,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
             <div className="widget-header">
                 <h3>{config.title}</h3>
                 <div className="widget-controls" ref={menuRef}>
-                    <button
+                    <button 
                         className="widget-control-button"
                         onClick={() => setShowMenu(!showMenu)}
                     >
@@ -102,7 +104,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                             }}>
                                 <span>위젯 변경</span>
                             </button>
-                            <button
+                            <button 
                                 className="danger"
                                 onClick={() => {
                                     onRemove();
@@ -128,6 +130,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                 }}
                 availableWidgets={[
                     ...getAvailableWidgets(),
+                    // 현재 위젯도 선택 가능하도록 포함
                     WIDGET_CONFIG[widgetId]
                 ]}
             />
@@ -148,7 +151,7 @@ const Main = () => {
     const [activities, setActivities] = useState(mockActivities);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [gridCells, setGridCells] = useState(Array(4).fill(null));
+    const [gridCells, setGridCells] = useState(Array(3).fill(null));
     const [currentDate, setCurrentDate] = useState(new Date());
     const [weather, setWeather] = useState(null);
 
@@ -160,19 +163,28 @@ const Main = () => {
         const getUserFromSession = async () => {
             try {
                 const userInfoStr = sessionStorage.getItem('userInfo');
-                const userData = JSON.parse(userInfoStr);
+                if (!userInfoStr) {
+                    throw new Error('No user information found');
+                }
 
+                const userData = JSON.parse(userInfoStr);
                 setUser({
                     name: userData.name,
                     position: userData.position,
                     department: userData.department,
                     employeeId: userData.employeeId,
                     email: userData.email,
-                    profileImage: defaultProfileImage
+                    profileImage: userData.profileImage || defaultProfileImage
                 });
 
                 if (userData.passwordChangeRequired) {
                     window.location.href = '/password-change';
+                    return;
+                }
+
+                const savedWidgets = localStorage.getItem('gridWidgets');
+                if (savedWidgets) {
+                    setGridCells(JSON.parse(savedWidgets));
                 }
 
                 setStats(mockStats);
@@ -185,15 +197,6 @@ const Main = () => {
             }
         };
 
-        // 저장된 위젯 설정 불러오기
-        const savedWidgets = localStorage.getItem('gridWidgets');
-        if (savedWidgets) {
-            setGridCells(JSON.parse(savedWidgets));
-        }
-
-        getUserFromSession();
-
-        // 날씨 정보 가져오기
         const getWeather = async (position) => {
             try {
                 const { latitude, longitude } = position.coords;
@@ -204,12 +207,17 @@ const Main = () => {
             }
         };
 
+        getUserFromSession();
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(getWeather);
         }
     }, []);
 
     const getAvailableWidgets = () => {
+        const activeWidgets = gridCells.filter(cell => cell !== null).length;
+        if (activeWidgets >= 3) return [];
+
         return Object.values(WIDGET_CONFIG).filter(
             widget => !gridCells.includes(widget.id)
         );
@@ -247,62 +255,82 @@ const Main = () => {
     if (error) return <div className="dashboard-content container"><div className="error">{error}</div></div>;
 
     const widgetData = { stats, activities };
+    const gridAreas = ['main', 'sub1', 'sub2'];  // 정해진 영역만 사용
 
     return (
-        <div className="dashboard-content container">
-            <div className="dashboard-grid">
-                <div className="dashboard-column">
-                    <div className="profile-card">
-                        <ProfileSection user={user} stats={stats} />
-                    </div>
-                    <div className="mini-calendar-card">
-                        <div className="card-title flex items-center justify-between mb-0"
-                             style={{ paddingLeft: '16px', paddingRight: '16px' }}>
-                            <span className="text-gray-600 text-base font-medium">
-                                {currentDate.getFullYear()}.{currentDate.getMonth() + 1}.{currentDate.getDate()}
-                            </span>
-                            {weather && (
-                                <span className="flex items-center gap-1.5 text-lg font-semibold" style={{ color: '#4b5563' }}>
-                                    {getWeatherIcon(weather.sky, weather.precipitation)}
-                                    {weather.temperature}°
-                                </span>
-                            )}
-                        </div>
-                        <div style={{ height: '400px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
-                            <CalendarForm
-                                height="100%"
-                                minimode={true}
-                                onNavigate={handleNavigate}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="dashboard-column">
-                    <div className="grid-layout">
-                        {gridCells.map((widgetId, index) => {
-                            if (index > getActiveWidgetCount() && !widgetId) return null;
-                            return (
-                                <div key={index}
-                                     className={`grid-cell ${widgetId ? 'occupied' : ''}`}>
-                                    {widgetId ? (
-                                        <Widget
-                                            widgetId={widgetId}
-                                            data={widgetData}
-                                            onRemove={() => handleRemoveWidget(index)}
-                                            getAvailableWidgets={getAvailableWidgets}
-                                            handleAddWidget={handleAddWidget}
-                                            gridCells={gridCells}
-                                        />
-                                    ) : (
-                                        <EmptyCell
-                                            onAddWidget={(widgetId) => handleAddWidget(index, widgetId)}
-                                            availableWidgets={getAvailableWidgets()}
-                                        />
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 relative">
+            <div
+                className="absolute inset-0"
+                style={{
+                    backgroundImage: `url(${backgroundImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'top',
+                    backgroundRepeat: 'no-repeat',
+                    opacity: 0.15,
+                    filter: 'blur(1px)',
+                    zIndex: 0
+                }}
+            />
+            <div className="dashboard-wrapper relative min-h-screen px-6">
+                <div className="dashboard-content container">
+                    <div className="dashboard-grid">
+                        <div className="dashboard-column">
+                            <div className="profile-card">
+                                <ProfileSection user={user} stats={stats} />
+                            </div>
+                            <div className="mini-calendar-card">
+                                <div className="card-title flex items-center justify-between mb-0" 
+                                    style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+                                    <span className="text-gray-600 text-base font-medium">
+                                        {currentDate.getFullYear()}.{currentDate.getMonth() + 1}.{currentDate.getDate()}
+                                    </span>
+                                    {weather && (
+                                        <span className="flex items-center gap-1.5 text-lg font-semibold" style={{ color: '#4b5563' }}>
+                                            {getWeatherIcon(weather.sky, weather.precipitation)}
+                                            {weather.temperature}°
+                                        </span>
                                     )}
                                 </div>
-                            );
-                        })}
+                                <div style={{ height: '280px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
+                                    <CalendarForm 
+                                        height="100%"
+                                        minimode={true} 
+                                        onNavigate={handleNavigate}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="dashboard-column">
+                            <div className="grid-layout">
+                                {gridAreas.map((area, index) => {
+                                    const widgetId = gridCells[index];
+                                    if (!widgetId && getActiveWidgetCount() >= 3) return null;
+
+                                    return (
+                                        <div key={index} 
+                                            className={`grid-cell ${widgetId ? 'occupied' : ''}`}
+                                            style={{ gridArea: area }}>
+                                            {widgetId ? (
+                                                <Widget
+                                                    widgetId={widgetId}
+                                                    data={widgetData}
+                                                    onRemove={() => handleRemoveWidget(index)}
+                                                    getAvailableWidgets={getAvailableWidgets}
+                                                    handleAddWidget={handleAddWidget}
+                                                    gridCells={gridCells}
+                                                />
+                                            ) : (
+                                                <EmptyCell
+                                                    onAddWidget={(widgetId) => handleAddWidget(index, widgetId)}
+                                                    availableWidgets={getAvailableWidgets()}
+                                                />
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -311,3 +339,4 @@ const Main = () => {
 };
 
 export default Main;
+// 실제 데이터
