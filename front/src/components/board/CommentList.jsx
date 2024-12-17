@@ -37,7 +37,7 @@ const CommentList = ({ comments, onCommentDelete }) => {
                         primary={
                             <Stack direction="row" spacing={2} alignItems="center" className="comment-header">
                                 <Typography className="comment-author" component="span">
-                                    {comment.authorEmployeeId}
+                                    {comment.authorName}
                                 </Typography>
                                 <Typography className="comment-date" component="span">
                                     {new Date(comment.createdAt).toLocaleString('ko-KR')}
