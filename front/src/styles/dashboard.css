@@ -91,19 +91,23 @@
   .grid-layout {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, auto);
+    grid-auto-rows: minmax(400px, 1fr);
     gap: var(--spacing-4);
     margin-top: 0;
+    width: 100%;
+    height: auto;
   }
   
   .grid-cell {
+    min-height: 400px;
+    height: 100%;
     background: rgba(255, 255, 255, 0.5);
     border: 2px dashed var(--light);
     border-radius: var(--border-radius-lg);
-    height: fit-content;
-    min-height: 100px;
     position: relative;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    display: flex;
+    overflow: hidden;
   }
   
   .grid-cell.occupied {
@@ -121,10 +125,12 @@
   
   /* Empty Cell 스타일 */
   .empty-cell {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
     background: white;
     border: 2px dashed var(--light);
     border-radius: var(--border-radius-lg);
-    min-height: 300px;
     transition: all 0.2s ease;
     cursor: pointer;
     display: flex;
@@ -146,7 +152,8 @@
      Widget Base
      ========================================================================== */
   .widget-container {
-    height: fit-content;
+    height: 100%;
+    width: 100%;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -155,6 +162,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.2s ease;
     position: relative;
+    overflow: hidden;
   }
   
   .widget-container:hover {
@@ -178,7 +186,7 @@
   
   .widget-content {
     flex: 1;
-    overflow: auto;
+    overflow-y: auto;
     padding: var(--spacing-4);
   }
   
@@ -284,7 +292,7 @@
   .modal-header h3 {
     margin: 0;
     font-size: 1.25rem;
-    color: var(--dark);
+    color: var (--dark);
   }
   
   .modal-body {
@@ -346,6 +354,8 @@
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-4);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    overflow-y: auto;
   }
   
   .activity-list {
@@ -387,6 +397,8 @@
     min-width: 0;
     max-width: 100%;
     max-height: 400px;
+    height: 100%;
+    overflow-y: auto;
   }
   
   .status-card-title {
@@ -526,7 +538,7 @@
      Message Widget
      ========================================================================== */
   .messenger-widget-container {
-    height: 400px;
+    height: 100%;
     border-radius: var(--border-radius-lg);
     background: white;
     overflow: hidden;
@@ -580,6 +592,128 @@
     background: white;
     border-top: 1px solid var(--light);
   }
+
+  /* Message Widget 스타일 수정 */
+  .messenger-widget-container.mobile-style {
+    height: 100%;
+    border-radius: var(--border-radius-lg);
+    background: white;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .messenger-widget-container.mobile-style .messenger-container {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .messenger-widget-container.mobile-style .chat-list {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--light);
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
+  .messenger-widget-container.mobile-style .content-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .messenger-widget-container.mobile-style .mail-content {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .messenger-widget-container.mobile-style .content-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .messenger-widget-container.mobile-style .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    height: calc(100% - 120px);
+  }
+
+  .messenger-widget-container.mobile-style .input-container {
+    padding: var(--spacing-2);
+    border-top: 1px solid var(--light);
+  }
+
+  /* 모바일 스타일에서 선택된 채팅일 때의 레이아웃 */
+  .messenger-widget-container.mobile-style .chat-list.hidden {
+    display: none;
+  }
+
+  .messenger-widget-container.mobile-style .content-container.active {
+    display: flex;
+  }
+
+  .messenger-widget-container.mobile-style .mail-content {
+    height: calc(100% - 48px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .messenger-widget-container.mobile-style .email-list {
+    padding: 0;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .messenger-widget-container.mobile-style .email-items {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .messenger-widget-container.mobile-style .chat-header,
+  .messenger-widget-container.mobile-style .mobile-chat-header {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-3);
+    gap: var(--spacing-3);
+    border-bottom: 1px solid var(--light);
+    background: white;
+  }
+
+  .messenger-widget-container.mobile-style .back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--gray);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .messenger-widget-container.mobile-style .back-button:hover {
+    background-color: var(--light);
+    color: var(--primary);
+  }
+
+  .messenger-widget-container.mobile-style .chat-header-info h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  /* Widget 크기 조절 */
+  .messenger-widget-container .widget-content {
+    padding: 0;
+    height: 100%;
+  }
   
   /* ==========================================================================
      Refresh Indicator
@@ -618,12 +752,21 @@
   @media (max-width: 1200px) {
     .dashboard-grid {
       grid-template-columns: 300px 1fr;
+      gap: var(--spacing-3);
+    }
+
+    .grid-layout {
+      gap: var(--spacing-3);
     }
   }
   
   @media (max-width: 992px) {
     .dashboard-grid {
       grid-template-columns: 1fr;
+    }
+
+    .grid-layout {
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .status-grid-container {
@@ -638,7 +781,11 @@
   
     .grid-layout {
       grid-template-columns: 1fr;
-      grid-template-rows: repeat(4, minmax(300px, 1fr));
+      grid-auto-rows: minmax(350px, 1fr);
+    }
+  
+    .grid-cell, .empty-cell {
+      min-height: 350px;
     }
   
     .empty-cell {
@@ -652,11 +799,11 @@
   
     .map-widget,
     .map-widget-container {
-      height: 300px !important;
+      height: 100% !important;
     }
   
     .messenger-widget-container {
-      height: 300px;
+      height: 100%;
     }
 
     .messenger-widget-container .chat-list {
@@ -682,6 +829,10 @@
   
     .dashboard-column {
       gap: var(--spacing-3);
+    }
+  
+    .grid-cell, .empty-cell {
+      height: 300px;
     }
   
     .map-widget {
@@ -713,7 +864,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 0.75rem;
-    color: var(--gray);
+    color: var (--gray);
     margin-bottom: 0.25rem;
   }
 
@@ -765,4 +916,9 @@
 
   .save-button:hover {
     color: var(--success);
+  }
+
+  .widget-size {
+    min-height: 400px;
+    max-height: 600px;
   }
