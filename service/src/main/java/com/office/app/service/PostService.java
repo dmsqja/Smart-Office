@@ -173,12 +173,16 @@ public class PostService {
     }
 
     private PostDTO convertToDTO(Post post) {
+        User author = userRepository.findById(post.getAuthorEmployeeId())
+                .orElse(null);
+        log.info("Post:{}",post);
         return PostDTO.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .boardId(post.getBoardId())
                 .authorEmployeeId(post.getAuthorEmployeeId())
+                .authorName(author != null ? author.getName() : "Unknown User")
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
