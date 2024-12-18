@@ -178,7 +178,12 @@
     }
 
     .post-content {
-        padding: 1.5rem 1rem;
+        padding: 2rem 1.5rem;
+        line-height: 1.8;
+        font-size: 1.1rem;
+        color: var(--dark);
+        min-height: 300px;
+        white-space: pre-wrap; /* 추가 */
     }
 
     .comment-section {
@@ -187,5 +192,64 @@
 
     .action-buttons {
         flex-direction: column;
+    }
+}
+/* Attachments Section */
+.attachments-section {
+    padding: 1.5rem;
+    background-color: var(--light);
+    margin: 1.5rem;
+    border-radius: var(--border-radius);
+    animation: fadeIn 0.3s ease-in;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    color: var(--dark);
+    margin-bottom: 1rem !important;
+}
+
+.attachment-item {
+    background: white;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid var(--light);
+    padding: 0.5rem !important;
+}
+
+.attachment-item:hover {
+    transform: translateX(5px);
+    border-color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.download-button {
+    color: var(--primary) !important;
+    transition: all 0.3s ease !important;
+}
+
+.download-button:hover {
+    background: var(--gradient) !important;
+    color: white !important;
+    transform: scale(1.1);
+}
+
+/* Responsive Design - 기존 미디어 쿼리에 추가 */
+@media (max-width: 768px) {
+    .attachments-section {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem !important;
+    }
+
+    .attachment-item {
+        padding: 0.3rem !important;
     }
 }

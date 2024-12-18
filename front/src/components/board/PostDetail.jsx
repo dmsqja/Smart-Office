@@ -6,12 +6,18 @@ import {
     Button,
     IconButton,
     Stack,
-    Divider
+    Divider,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DownloadIcon from '@mui/icons-material/Download';
 import { BoardAPI } from '../../utils/boardApi';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
@@ -23,6 +29,7 @@ const PostDetail = () => {
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [attachments, setAttachments] = useState([]); // 첨부파일 상태
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
     const fetchPost = async () => {
@@ -31,6 +38,15 @@ const PostDetail = () => {
             setPost(response.data);
         } catch (error) {
             console.error('게시글을 불러오는데 실패했습니다:', error);
+        }
+    };
+
+    const fetchAttachments = async () => {
+        try {
+            const response = await BoardAPI.getPostAttachments(postId);
+            setAttachments(response.data);
+        } catch (error) {
+            console.error('첨부파일을 불러오는데 실패했습니다:', error);
         }
     };
 
@@ -53,6 +69,26 @@ const PostDetail = () => {
         navigate(`/boards/${boardId}`);
     };
 
+    const handleDownload = async (fileId, fileName) => {
+        try {
+            const response = await BoardAPI.downloadAttachment(postId, fileId);
+
+            // Blob 생성 및 다운로드
+            const blob = new Blob([response.data]);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('파일 다운로드 실패:', error);
+            alert('파일 다운로드에 실패했습니다.');
+        }
+    };
+
     const fetchComments = async () => {
         try {
             const response = await BoardAPI.getComments(postId);
@@ -65,7 +101,7 @@ const PostDetail = () => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-            await Promise.all([fetchPost(), fetchComments()]);
+            await Promise.all([fetchPost(), fetchComments(), fetchAttachments()]);
             setLoading(false);
         };
         fetchData();
@@ -151,7 +187,7 @@ const PostDetail = () => {
                         alignItems="center"
                     >
                         <Typography className="info-text">
-                            작성자: {post?.authorEmployeeId}
+                            작성자: {post?.authorName}
                         </Typography>
                         <Typography className="info-text">
                             작성일: {new Date(post?.createdAt).toLocaleString('ko-KR')}
@@ -159,8 +195,55 @@ const PostDetail = () => {
                     </Stack>
                 </Box>
 
+                {/* 첨부파일 섹션 */}
+                {attachments.length > 0 && (
+                    <Box className="attachments-section">
+                        <Typography className="section-title">
+                            <AttachFileIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+                            첨부파일
+                            <span className="comment-count">{attachments.length}</span>
+                        </Typography>
+                        <List>
+                            {attachments.map((file) => (
+                                <ListItem
+                                    key={file.id}
+                                    className="attachment-item"
+                                >
+                                    <ListItemIcon>
+                                        <AttachFileIcon
+                                            sx={{
+                                                color: 'var(--primary)',
+                                                opacity: 0.7
+                                            }}
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={
+                                            <Typography sx={{ color: 'var(--dark)', fontWeight: 500 }}>
+                                                {file.originalFileName}
+                                            </Typography>
+                                        }
+                                        secondary={
+                                            <Typography sx={{ color: 'var(--gray)', fontSize: '0.85rem' }}>
+                                                {`${(file.fileSize / 1024 / 1024).toFixed(2)} MB`}
+                                            </Typography>
+                                        }
+                                    />
+                                    <IconButton
+                                        className="download-button"
+                                        onClick={() => handleDownload(file.id, file.originalFileName)}
+                                        size="small"
+                                    >
+                                        <DownloadIcon />
+                                    </IconButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
+                )}
+
                 {/* 게시글 내용 */}
-                <div className="post-content">
+                <div className="post-content" style={{whiteSpace: 'pre-wrap'}}>
                     {post?.content}
                 </div>
 

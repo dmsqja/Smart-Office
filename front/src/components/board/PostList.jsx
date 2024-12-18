@@ -70,7 +70,7 @@ const PostList = () => {
             )
         },
         {
-            field: 'authorEmployeeId',
+            field: 'authorName',
             headerName: '작성자',
             width: 150,
             headerAlign: 'center',
@@ -84,8 +84,9 @@ const PostList = () => {
             align: 'center',
             valueFormatter: (params) => {
                 try {
-                    if (!params.value) return '';
-                    const date = new Date(params.value);
+                    const date = new Date(params);
+                    if (isNaN(date.getTime())) return '-';
+
                     return date.toLocaleString('ko-KR', {
                         year: 'numeric',
                         month: '2-digit',
@@ -96,12 +97,11 @@ const PostList = () => {
                     }).replace(/\./g, '-').replace('시', ':');
                 } catch (error) {
                     console.error('날짜 포맷팅 에러:', error);
-                    return params.value;
+                    return '-';
                 }
             }
         }
     ];
-
     const fetchPosts = async () => {
         setLoading(true);
         try {
@@ -121,6 +121,7 @@ const PostList = () => {
                     pageSize
                 );
             }
+            console.log('서버 응답:', response.data); // 서버에서 오는 데이터 확인
             setPosts(response.data.content);
             setTotalElements(response.data.totalElements);
         } catch (error) {
@@ -129,7 +130,6 @@ const PostList = () => {
             setLoading(false);
         }
     };
-
     useEffect(() => {
         fetchPosts();
     }, [boardId, page, pageSize, searchKeyword, searchType]);
@@ -149,7 +149,7 @@ const PostList = () => {
     };
 
     const handlePageSizeChange = (event) => {
-        setPageSize(parseInt(event.target.value, 10));
+        setPageSize(parseInt(event.target.value, 5));
         setPage(0);
     };
 

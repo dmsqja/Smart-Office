@@ -16,6 +16,7 @@ public class PostDTO {
     private String title;
     private String content;
     private String authorEmployeeId;
+    private String authorName;
     private Long boardId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

@@ -1,6 +1,7 @@
 package com.office.controller;
 
 import com.office.app.dto.PageResponse;
+import com.office.app.dto.PostAttachmentDownloadDTO;
 import com.office.app.dto.PostDTO;
 import com.office.app.entity.Post;
 import com.office.app.entity.PostAttachment;
@@ -11,9 +12,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +25,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -125,5 +131,28 @@ public class PostController {
         String employeeId = authentication.getName();
         postService.deletePost(postId, employeeId);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "첨부파일 다운로드", description = "게시글의 첨부파일을 다운로드합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "파일 다운로드 성공"),
+            @ApiResponse(responseCode = "404", description = "파일을 찾을 수 없음"),
+            @ApiResponse(responseCode = "500", description = "서버 오류")
+    })
+    @GetMapping("/{postId}/attachments/{fileId}/download")
+    public ResponseEntity<Resource> downloadAttachment(
+            @Parameter(description = "게시글 ID") @PathVariable Long postId,
+            @Parameter(description = "파일 ID") @PathVariable Long fileId,
+            Authentication authentication) throws FileNotFoundException {
+        String employeeId = authentication.getName();
+
+        PostAttachmentDownloadDTO downloadInfo =
+                postAttachmentService.downloadAttachment(postId, fileId, employeeId);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(downloadInfo.getContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + URLEncoder.encode(downloadInfo.getOriginalFileName(), StandardCharsets.UTF_8) + "\"")
+                .body(downloadInfo.getResource());
     }
 }

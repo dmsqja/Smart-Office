@@ -47,7 +47,13 @@ export const BoardAPI = {
     getPostAttachments: (postId) => axiosInstance.get(`/posts/${postId}/attachments`),
     deletePostAttachment: (postId, fileId) =>
         axiosInstance.delete(`/posts/${postId}/attachments/${fileId}`),
-
+    downloadAttachment: (postId, fileId) =>
+        axiosInstance.get(`/posts/${postId}/attachments/${fileId}/download`, {
+            responseType: 'blob',
+            headers: {
+                'Accept': 'application/octet-stream'
+            }
+        }),
 
     getComments: (postId) => axiosInstance.get(`/comments/${postId}`),
     createComment: (commentData) => axiosInstance.post('/comments', commentData),

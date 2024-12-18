@@ -10,6 +10,7 @@ import com.office.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,7 +49,7 @@ public class OCRResultService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+    @Transactional
     public void deleteResult(Long id, String employeeId) {
         if (!ocrResultRepository.existsByIdAndUser_EmployeeId(id, employeeId)) {
             throw new IllegalArgumentException("OCR result not found or unauthorized");
