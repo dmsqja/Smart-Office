@@ -130,8 +130,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                 }}
                 availableWidgets={[
                     ...getAvailableWidgets(),
-                    // 현재 위젯도 선택 가능하도록 포함
-                    WIDGET_CONFIG[widgetId]
+                    WIDGET_CONFIG[widgetId]  // 현재 위젯도 선택 가능하도록 포함
                 ]}
             />
         </div>
@@ -139,6 +138,7 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
 };
 
 const Main = () => {
+    // 사용자 상태 초기화 변경
     const [user, setUser] = useState({
         name: "",
         position: "",
@@ -177,11 +177,13 @@ const Main = () => {
                     profileImage: userData.profileImage || defaultProfileImage
                 });
 
+                // 비밀번호 변경 필요 시 리다이렉트
                 if (userData.passwordChangeRequired) {
                     window.location.href = '/password-change';
                     return;
                 }
 
+                // 위젯 설정 불러오기
                 const savedWidgets = localStorage.getItem('gridWidgets');
                 if (savedWidgets) {
                     setGridCells(JSON.parse(savedWidgets));
