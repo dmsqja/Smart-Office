@@ -108,11 +108,11 @@
   .grid-layout {
     flex: 1;
     display: grid;
-    grid-template-columns: 300px 1fr;  /* 왼쪽 영역 너비를 300px로 고정하고 오른쪽은 나머지 공간 차지 */
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;  /* 5개의 동일한 크기의 열로 분할 */
     grid-template-rows: repeat(2, 1fr);
     grid-template-areas: 
-        "sub1 main"
-        "sub2 main";
+        "sub1 sub1 main main main"
+        "sub2 sub2 main main main";
     gap: var(--spacing-4);
     margin-top: 0;
     height: 100%;
@@ -589,13 +589,28 @@
      Message Widget
      ========================================================================== */
   .messenger-widget-container {
-    height: 400px;
+    position: relative;  /* 추가: absolute 포지셔닝의 기준점 */
+    height: 100%;
+    max-height: calc(100vh - var(--spacing-4) * 2);
     border-radius: var(--border-radius-lg);
     background: white;
     overflow: hidden;
     display: flex;
+    flex-direction: column;
   }
   
+  .messenger-widget-container .widget-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    margin: 0;
+    max-height: none;
+    border-radius: 0;
+  }
+
   .messenger-widget-container .messenger-container {
     height: 100%;
     margin: 0;
@@ -611,6 +626,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 0; /* 추가: 스크롤이 정상적으로 작동하도록 */
   }
   
   .messenger-widget-container .chat-list {
@@ -623,19 +639,18 @@
     display: none;
   }
   
-  .messenger-widget-container .chat-list-header {
-    padding: var(--spacing-2) var(--spacing-3);
-  }
-  
   .messenger-widget-container .messages-container {
     flex: 1;
     overflow-y: auto;
     padding: var(--spacing-3);
-    height: auto;
-    min-height: 0;
+    height: calc(100% - 100px);  /* 수정: 입력 영역 고려 */
+    min-height: 0; /* 추가: 스크롤이 정상적으로 작동하도록 */
   }
   
   .messenger-widget-container .input-container {
+    height: auto;      /* 수정: 자동 높이 */
+    min-height: 60px;  /* 수정: 최소 높이만 설정 */
+    flex-shrink: 0;    /* 추가: 크기 고정 */
     position: relative;
     bottom: 0;
     left: 0;

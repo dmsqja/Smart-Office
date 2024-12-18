@@ -14,7 +14,6 @@ import '../../styles/dashboard.css';
 import { Cloud, Sun, CloudRain } from 'lucide-react';
 import { fetchWeatherData } from '../../utils/WeatherUtils';
 
-// 위젯 구성 객체
 const WIDGET_CONFIG = {
     status: {
         id: 'status',
@@ -129,8 +128,9 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                     setIsOpen(false);
                 }}
                 availableWidgets={[
-                    ...getAvailableWidgets(),
-                    WIDGET_CONFIG[widgetId]  // 현재 위젯도 선택 가능하도록 포함
+                    ...getAvailableWidgets(widgetId),
+                    // 현재 위젯도 선택 가능하도록 포함
+                    WIDGET_CONFIG[widgetId]
                 ]}
             />
         </div>
@@ -138,7 +138,6 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
 };
 
 const Main = () => {
-    // 사용자 상태 초기화 변경
     const [user, setUser] = useState({
         name: "",
         position: "",
@@ -177,13 +176,11 @@ const Main = () => {
                     profileImage: userData.profileImage || defaultProfileImage
                 });
 
-                // 비밀번호 변경 필요 시 리다이렉트
                 if (userData.passwordChangeRequired) {
                     window.location.href = '/password-change';
                     return;
                 }
 
-                // 위젯 설정 불러오기
                 const savedWidgets = localStorage.getItem('gridWidgets');
                 if (savedWidgets) {
                     setGridCells(JSON.parse(savedWidgets));
@@ -216,7 +213,13 @@ const Main = () => {
         }
     }, []);
 
-    const getAvailableWidgets = () => {
+    const getAvailableWidgets = (excludeWidgetId = null) => {
+        if (excludeWidgetId) {
+            return Object.values(WIDGET_CONFIG).filter(
+                widget => widget.id !== excludeWidgetId && !gridCells.includes(widget.id)
+            );
+        }
+
         const activeWidgets = gridCells.filter(cell => cell !== null).length;
         if (activeWidgets >= 3) return [];
 
@@ -257,7 +260,7 @@ const Main = () => {
     if (error) return <div className="dashboard-content container"><div className="error">{error}</div></div>;
 
     const widgetData = { stats, activities };
-    const gridAreas = ['main', 'sub1', 'sub2'];  // 정해진 영역만 사용
+    const gridAreas = ['main', 'sub1', 'sub2'];
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 relative">
