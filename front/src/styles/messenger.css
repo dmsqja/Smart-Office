@@ -159,32 +159,9 @@
     height: 100%;
     overflow-y: auto;
     background: white;
-    border-radius: var(--radius-lg);
-    margin: 0;  /* 마진 제거 */
-    padding: var(--spacing-2);  /* 패딩 추가 */
-}
-
-.email-list {
-    height: 100%;
-    border-radius: 0;
-    background: var(--surface);
-    overflow-y: auto;  /* overflow-y 추가 */
-}
-
-.email-items {
-    height: calc(100% - 48px);  /* 헤더 높이를 제외한 높이 설정 */
-    overflow-y: auto;
-}
-
-/* 위젯 모드에서의 이메일 목록 */
-.widget-container .email-list {
-    max-height: calc(100vh - 300px);  /* 위젯 모드에서의 최대 높이 설정 */
-    overflow-y: auto;
-}
-
-.widget-container .mail-content {
-    height: 100%;
-    overflow: hidden;
+    border-radius: var(--border-radius-lg);
+    margin: var(--spacing-3);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .mail-list-header {
@@ -316,6 +293,7 @@
     padding: 1px var(--spacing-2);
 }
 
+/* 이메일 상세보기 */
 /* 이메일 상세보기 */
 .email-detail {
     display: flex;

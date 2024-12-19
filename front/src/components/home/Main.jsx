@@ -126,7 +126,10 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                     handleAddWidget(gridCells.indexOf(widgetId), newWidgetId);
                     setIsOpen(false);
                 }}
-                availableWidgets={getAvailableWidgets(widgetId)}
+                availableWidgets={[
+                    ...getAvailableWidgets(widgetId),
+                    WIDGET_CONFIG[widgetId]
+                ]}
             />
         </div>
     );
