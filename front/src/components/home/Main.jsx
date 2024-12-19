@@ -129,7 +129,6 @@ const Widget = ({ widgetId, data, onRemove, getAvailableWidgets, handleAddWidget
                 }}
                 availableWidgets={[
                     ...getAvailableWidgets(widgetId),
-                    // 현재 위젯도 선택 가능하도록 포함
                     WIDGET_CONFIG[widgetId]
                 ]}
             />
