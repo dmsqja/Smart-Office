@@ -370,6 +370,11 @@ const EmailForm = ({ isWidget }) => {
   const renderEmailList = () => (
     <div className="email-list">
       <div className="email-list-header">
+        {!isWidget && (
+          <div className="email-list-actions">
+            {/* 기존 헤더 내용 */}
+          </div>
+        )}
       </div>
       <div className="email-items">
         {emails[mailboxTab].map(email => (
@@ -379,29 +384,22 @@ const EmailForm = ({ isWidget }) => {
             onClick={() => setSelectedEmail(email)}
           >
             <div className="email-item-header">
-              <div className="email-item-sender">
-                {getPriorityIcon(email.priority)}
-                <span>{email.sender}</span>
-              </div>
-              <div className="email-item-time">
-                {new Date(email.timestamp).toLocaleDateString()}
-              </div>
+              {getPriorityIcon(email.priority)}
+              <span className="email-item-sender">{email.sender}</span>
+              <span className="email-item-time">
+                {isWidget 
+                  ? new Date(email.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                  : new Date(email.timestamp).toLocaleDateString()
+                }
+              </span>
             </div>
             <div className="email-item-subject">{email.subject}</div>
-            <div className="email-item-preview">
-              {email.content.substring(0, 100)}...
-            </div>
-            {email.attachments.length > 0 && (
-              <div className="email-item-attachments">
-                <Paperclip size={14} />
-                <span>{email.attachments.length}개의 첨부파일</span>
-              </div>
-            )}
-            {email.labels.length > 0 && (
-              <div className="email-item-labels">
-                {email.labels.map((label, index) => (
-                  <span key={index} className="email-label-small">{label}</span>
-                ))}
+            {!isWidget && email.attachments.length > 0 && (
+              <div className="email-item-footer">
+                <div className="email-item-attachments">
+                  <Paperclip size={14} />
+                  <span>{email.attachments.length}개의 첨부파일</span>
+                </div>
               </div>
             )}
           </div>

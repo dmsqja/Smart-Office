@@ -1,4 +1,3 @@
-// 실제 데이터
 import defaultProfileImage from '../../assets/profile1.png';
 import backgroundImage from '../../assets/backgroundImage.jpg';
 import React, { useState, useEffect, useRef } from 'react';
@@ -270,8 +269,7 @@ const Main = () => {
                     backgroundSize: 'cover',
                     backgroundPosition: 'top',
                     backgroundRepeat: 'no-repeat',
-                    opacity: 0.15,
-                    filter: 'blur(1px)',
+                    opacity: 0.5,
                     zIndex: 0
                 }}
             />
@@ -343,4 +341,3 @@ const Main = () => {
 };
 
 export default Main;
-// 실제 데이터
