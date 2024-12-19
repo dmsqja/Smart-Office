@@ -277,9 +277,7 @@ const Main = () => {
                 <div className="dashboard-content container">
                     <div className="dashboard-grid">
                         <div className="dashboard-column">
-                            <div className="profile-card">
-                                <ProfileSection user={user} stats={stats} />
-                            </div>
+                            <ProfileSection user={user} stats={stats} />
                             <div className="mini-calendar-card">
                                 <div className="card-title flex items-center justify-between mb-0" 
                                     style={{ paddingLeft: '16px', paddingRight: '16px' }}>
@@ -293,7 +291,7 @@ const Main = () => {
                                         </span>
                                     )}
                                 </div>
-                                <div style={{ height: '280px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
+                                <div style={{ height: '400px', padding: '0 var(--spacing-2) var(--spacing-2)' }}>
                                     <CalendarForm 
                                         height="100%"
                                         minimode={true} 
