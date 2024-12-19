@@ -865,53 +865,99 @@
     opacity: 0;
     visibility: hidden;
 }
+
 /* 게시판 메뉴 스타일 */
 .board-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    padding: 0.75rem 1rem;
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--border-radius);
     transition: all 0.3s ease;
 }
 
+.board-toggle:hover {
+    background-color: rgba(30, 48, 243, 0.1);
+}
+
+.board-toggle.active {
+    background-color: rgba(30, 48, 243, 0.1);
+    color: var(--primary);
+}
+
+/* 화살표 아이콘 애니메이션 */
 .board-arrow {
     margin-left: auto;
     transition: transform 0.3s ease;
     flex-shrink: 0;
 }
 
+.board-toggle.active .board-arrow {
+    transform: rotate(-180deg);
+}
+
+/* 서브메뉴 컨테이너 */
 .board-submenu {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    background-color: rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: rgba(0, 0, 0, 0.02);
+    margin: 0 var(--spacing-2);
+    border-radius: var(--border-radius);
 }
 
 .board-submenu.open {
-    max-height: 500px; /* 충분한 높이 */
+    max-height: 500px;
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
 }
 
+/* 서브메뉴 아이템 */
 .board-submenu-item {
+    padding: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
     padding-left: 2.5rem;
 }
 
+.board-submenu.open .board-submenu-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 서브메뉴 링크 */
 .board-link {
     display: block;
-    padding: 0.5rem 1rem;
-    color: inherit;
+    padding: var(--spacing-2) var(--spacing-4);
+    color: var(--gray);
     text-decoration: none;
     transition: all 0.3s ease;
+    border-radius: var(--border-radius);
+    margin: var(--spacing-1) var(--spacing-2);
 }
 
 .board-link:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(30, 48, 243, 0.05);
+    color: var(--primary);
 }
 
 .board-link.active {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(30, 48, 243, 0.1);
     color: var(--primary);
+    font-weight: 500;
 }
+
+/* 애니메이션 딜레이 (순차적 나타나기) */
+.board-submenu-item:nth-child(1) { transition-delay: 0.05s; }
+.board-submenu-item:nth-child(2) { transition-delay: 0.1s; }
+.board-submenu-item:nth-child(3) { transition-delay: 0.15s; }
+.board-submenu-item:nth-child(4) { transition-delay: 0.2s; }
+.board-submenu-item:nth-child(5) { transition-delay: 0.25s; }
+.board-submenu-item:nth-child(6) { transition-delay: 0.3s; }
+.board-submenu-item:nth-child(7) { transition-delay: 0.35s; }
+.board-submenu-item:nth-child(8) { transition-delay: 0.4s; }
 
 /* 로딩 스타일 */
 .board-submenu-item.loading {
