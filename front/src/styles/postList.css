@@ -1,6 +1,6 @@
 /* PostList.css */
 .post-list-page {
-    background-color: var(--light);
+    background-color: var(--background);
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
     animation: fadeIn 0.3s ease-in;
 }
@@ -9,9 +9,9 @@
     width: 95%;
     margin: 1.5rem auto;
     padding: 2rem;
-    background: white;
-    border-radius: var(--border-radius-lg);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
     min-height: calc(100vh - var(--header-height) - var(--footer-height) - 3rem);
     display: flex;
     flex-direction: column;
