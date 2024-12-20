@@ -1,9 +1,9 @@
-// NavLink 제거 (사용하지 않음)
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import { fetchWeatherData } from '../../utils/WeatherUtils';
+import VerifyModal from '../ai/VerifyModal';
 import '../../styles/layout.css';
 
 const Header = ({ setIsMenuOpen }) => {
@@ -571,6 +571,11 @@ const Header = ({ setIsMenuOpen }) => {
         }
     }, []);
 
+    const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+
+    const handleVerifyClick = () => {
+        setIsVerifyModalOpen(true);
+
     const clearSearch = () => {
         setSearchTerm('');
         setSearchResults([]);
@@ -638,6 +643,25 @@ const Header = ({ setIsMenuOpen }) => {
                     )}
                 </div>
                 <div className="header-right">
+                    <button
+                        className="check-in-btn"
+                        onClick={handleVerifyClick}
+                        style={{
+                            padding: '8px 16px',
+                            marginRight: '16px',
+                            backgroundColor: '#4CAF50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px'
+                        }}
+                    >
+                        <i className="fas fa-user-check"></i>
+                        <span>출근하기</span>
+                    </button>
                     {!weatherLoading && weather && (
                         <div className="weather-info-mini">
                             <span className="weather-temp">{weather.temperature}°</span>
@@ -736,6 +760,10 @@ const Header = ({ setIsMenuOpen }) => {
                     </div>
                 </div>
             )}
+            <VerifyModal 
+                open={isVerifyModalOpen}
+                onClose={() => setIsVerifyModalOpen(false)}
+            />
         </header>
     );
 };
