@@ -25,6 +25,7 @@ const Sidebar = ({isMenuOpen, setIsMenuOpen}) => {
     const menuItems = [
         {path: "/home", label: "Home", icon: "fas fa-home"},
         {path: "/calendar", label: "Calendar", icon: "fas fa-calendar"},
+        {path: "/chat", label: "Chat", icon: "fas fa-chat"},
         {path: "/messenger", label: "Messenger", icon: "fas fa-comment"},
         {path: "/file", label: "File", icon: "fas fa-file"},
         {path: "/meeting", label: "Meeting", icon: "fas fa-video"},
