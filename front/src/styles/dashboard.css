@@ -112,7 +112,8 @@
         "sub1 sub1 main main main"
         "sub2 sub2 main main main";
     gap: var(--spacing-4);
-    height: 650px; /* 전체 그리드의 고정 높이 설정 */
+    height: 580px;
+    margin-bottom: var(--spacing-4);
  }
  
  .grid-cell {
@@ -133,13 +134,13 @@
  /* 최근활동 영역 스타일 */
  .grid-cell:nth-child(2) {
     grid-area: sub1;
-    height: 325px; /* 전체 높이의 절반에서 gap 고려 */
+    height: 427.58px;
  }
  
  /* 근태현황 영역 스타일 */
  .grid-cell:nth-child(3) {
     grid-area: sub2;
-    height: 325px; /* 전체 높이의 절반에서 gap 고려 */
+    height: 336px;
  }
  
  .grid-cell.occupied {

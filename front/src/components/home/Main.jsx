@@ -194,6 +194,13 @@ const Main = () => {
             }
         };
 
+        const savedWidgets = localStorage.getItem('gridWidgets');
+        if (savedWidgets) {
+            setGridCells(JSON.parse(savedWidgets));
+        }
+
+        fetchUserData();
+
         const getWeather = async (position) => {
             try {
                 const { latitude, longitude } = position.coords;
@@ -273,7 +280,7 @@ const Main = () => {
                     zIndex: 0
                 }}
             />
-            <div className="dashboard-wrapper relative min-h-screen px-6">
+            <div className="dashboard-wrapper relative min-h-screen">
                 <div className="dashboard-content container">
                     <div className="dashboard-grid">
                         <div className="dashboard-column">
